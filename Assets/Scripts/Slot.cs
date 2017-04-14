@@ -6,11 +6,14 @@ using UnityEngine.UI;
 public class Slot : MonoBehaviour {
 	//data variables
 	public int positionID = -1;
-	public int setID = -1;
+	public int charID = -1;
 
 	//references
+	[HeaderAttribute("References")]
 	[SerializeField]
 	Image background;
+	[SerializeField]
+	ButtonLane lane;
 
 	//temp
 	List<Color> colors = new List<Color>() {
@@ -20,19 +23,23 @@ public class Slot : MonoBehaviour {
 		Color.magenta
 	};
 
-	public void set_IDs(int positionID, int setID) {
+	public void set_IDs(int positionID, int charID) {
 		this.positionID = positionID;
-		set_setID (setID);
+		set_charID (charID);
 	}
 
-	public void set_setID(int new_set) {
-		this.setID = new_set;
+	public void set_charID(int new_set) {
+		this.charID = new_set;
 		updateBackground ();
 	}
 
 	void updateBackground() {
-		if (setID != -1) {
-			this.background.color = colors [setID];
+		if (charID != -1) {
+			this.background.color = colors [charID];
 		}
+	}
+
+	public void toggle_lane() {
+		lane.toggle_lane(!lane.active);
 	}
 }

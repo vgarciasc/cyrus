@@ -15,13 +15,17 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	IEnumerator test_killing_slots() {
-		yield return new WaitForSeconds (2f);
+		yield return new WaitForSeconds (1f);
 
 		left.kill_slot (0);
 
-		yield return new WaitForSeconds (2f);
+		yield return new WaitForSeconds (1f);
 
 		left.kill_slot (2);
+
+		yield return new WaitForSeconds (1f);
+
+		left.kill_slot (0);
 	}
 
 	SlotColumn get_other_column(SlotColumn current) {
@@ -31,7 +35,7 @@ public class ArenaManager : MonoBehaviour {
 	List<Slot> get_targets(SlotColumn column, int slotID) {
 		List<int> positions_occupied_by_slot = new List<int> ();
 		for (int i = 0; i < column.slots.Count; i++) {
-			if (column.slots [i].setID == column.slots [slotID].setID) {
+			if (column.slots [i].charID == column.slots [slotID].charID) {
 				positions_occupied_by_slot.Add (i);
 			}
 		}
