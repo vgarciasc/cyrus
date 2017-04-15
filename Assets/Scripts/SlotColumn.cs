@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using DG.Tweening;
 
 public class SlotColumn : MonoBehaviour {
 	public List<Slot> slots = new List<Slot>();
@@ -23,25 +24,20 @@ public class SlotColumn : MonoBehaviour {
 	}
 
 	void init_characters() {
-		adjust_positions();
 		for (int i = 0; i < characters.Count; i++) {
-			charObj[i].set_data(characters[i]);
+			charObj[i].set_data(i, characters[i]);
+			charObj[i].transform.position = slots[i].transform.position;
+			
 			charObj[i].click_event += register_click;
 		}
 	}
-
-	// CharacterObject get_charobj_by_pos(int posID) {
-	// 	for (int i = 0; i < slots.Count; i++) {
-	// 		if (slots[i].charID == )
-	// 	}
-	// }
-
+	
 	public void kill_slot(CharacterObject charObj) {
 		kill_slot(get_slotID_by_charobj(charObj));
 	}
 
 	public void kill_slot(int slotID) {
-		charObj[slots[slotID].charID].kill();
+		get_charobj_by_slotID(slotID).kill();
 		
 		List<int> real_IDs = new List<int>();		
 		foreach (Slot s in slots) {
@@ -93,23 +89,23 @@ public class SlotColumn : MonoBehaviour {
 		switch (groups) {
 			case 4:
 				for (int i = 0; i < slots.Count; i++) {
-					charObj[i].transform.position = slots[i].transform.position;
+					charObj[i].set_new_pos(slots[i].transform.position);
 				}
 				break;
 			case 3:
-				charObj[slots[0].charID].set_new_pos(slots[0].transform.position);
-				charObj[slots[1].charID].set_new_pos(slots[1].transform.position +
+				get_charobj_by_slotID(0).set_new_pos(slots[0].transform.position);
+				get_charobj_by_slotID(1).set_new_pos(slots[1].transform.position +
 					(slots[2].transform.position - slots[1].transform.position) / 2);
-				charObj[slots[3].charID].set_new_pos(slots[3].transform.position);
+				get_charobj_by_slotID(3).set_new_pos(slots[3].transform.position);
 				break;
 			case 2:
-				charObj[slots[0].charID].set_new_pos(slots[0].transform.position +
+				get_charobj_by_slotID(0).set_new_pos(slots[0].transform.position +
 					(slots[1].transform.position - slots[0].transform.position) / 2);
-				charObj[slots[3].charID].set_new_pos(slots[2].transform.position +
+				get_charobj_by_slotID(3).set_new_pos(slots[2].transform.position +
 					(slots[3].transform.position - slots[2].transform.position) / 2);
 				break;
 			case 1:
-				charObj[slots[0].charID].set_new_pos(slots[1].transform.position +
+				get_charobj_by_slotID(0).set_new_pos(slots[1].transform.position +
 					(slots[2].transform.position - slots[1].transform.position) / 2);
 				break;
 		}
@@ -123,9 +119,44 @@ public class SlotColumn : MonoBehaviour {
 		return charObj.IndexOf(co);
 	}
 
+	public CharacterObject get_charobj_by_slotID(int slotID) {
+		int charID = slots[slotID].charID;
+		foreach (CharacterObject co in charObj) {
+			if (co.charID == charID) {
+				return co;
+			}
+		}
+
+		Debug.Log("Error searching for charObj in slotID " + slotID);
+		return null;
+	}
+
 	public void toggle_all_lanes(bool value) {
 		foreach (CharacterObject co in charObj) {
 			co.lane.toggle_lane(value);
+			co.lane.toggle_cancel(value);
 		}
+	}
+
+	public void swap_characters(CharacterObject char1, CharacterObject char2) {
+		foreach (Slot s in slots) {
+			int c = s.charID;
+			if (c == char1.charID) c = char2.charID;
+			else if (c == char2.charID) c = char1.charID;
+
+			s.set_charID(c);
+		}
+
+		List<CharacterObject> aux = new List<CharacterObject>();
+		foreach (CharacterObject co in charObj) {
+			var c = co;
+			if (co == char1) c = char2;
+			if (co == char2) c = char1;
+
+			aux.Add(c);
+		}
+		charObj = aux;
+
+		adjust_positions();
 	}
 }

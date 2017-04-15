@@ -7,6 +7,7 @@ public enum CharacterClass {NULL, LUTADOR, LADINO, GENERAL, BARDO,
 
 [CreateAssetMenu(menuName = "Custom/CharacterData")]
 public class CharacterData : ScriptableObject {
+	public string nome;
 	public CharacterClass classe;
 	public Sprite sprite;
 	

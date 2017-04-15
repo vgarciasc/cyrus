@@ -1,25 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class AttackManager : MonoBehaviour {
 	[HeaderAttribute("References")]
 	public GameObject attackScreen;
-	public TextMeshProUGUI textLeft, textRight;
-
-	[SerializeField]
-	ClickManager clickManager;
-
+	public Text textLeft, textRight;
 	[HideInInspector]
 	public CharacterObject char_attacking,
 							char_attacked;
 
+	[SerializeField]
+	ClickManager clickManager;
+	[SerializeField]
+	ArenaManager arenaManager;
+
+	public delegate void AttackDelegate(CharacterObject targetter, CharacterObject target);
+	public event AttackDelegate set_new_target_event;
+
 	void Start() {
-		clickManager.start_attack_event += start_attack;
-		clickManager.cancel_attack_event += cancel_attack;
+		clickManager.activate_choosing_attack_target_event += start_attack;
 		clickManager.set_attack_target_event += set_target;
 		clickManager.conclude_attack_event += conclude_attack;
+
+		clickManager.deactivate_choosing_attack_target_event += cancel_attack;
 
 		toggle_screen(false);
 	}
@@ -27,41 +32,38 @@ public class AttackManager : MonoBehaviour {
 	//an attacker has been selected
 	void start_attack(CharacterObject charObj) {
 		char_attacking = charObj;
-		// toggle_screen(true);
+		char_attacked = arenaManager.get_default_attack_target(charObj);
+		set_target(char_attacked);
+		toggle_screen(true);
+	}
+
+	void cancel_attack(CharacterObject charObj) {
+		toggle_screen(false);
+	}
+
+	//attack has not been cancelled, player has pressed OK
+	void conclude_attack() {
+		attack();
+	}
+
+	void attack() {
+		char_attacked.column.kill_slot(char_attacked);
+		toggle_screen(false);
 	}
 
 	//a target has been selected, now we can show info
 	void set_target(CharacterObject charObj) {
-		//can't attack allies
-		if (charObj.column == char_attacking.column) {
+		if (!is_target_valid(charObj)) {
 			return;
 		}
 
 		char_attacked = charObj;
 		textRight.text = get_char_info(char_attacking);
 		textLeft.text = get_char_info(char_attacked);
-		toggle_screen(true);
-	}
 
-	void cancel_attack(CharacterObject charObj) {
-		reset_attack();
-	}
-
-	//attack has not been cancelled, player has pressed OK
-	void conclude_attack() {
-		Debug.Log("Attack is occurring.");
-		attack();
-	}
-
-	void attack() {
-		char_attacked.column.kill_slot(char_attacked);
-		reset_attack();
-	}
-
-	void reset_attack() {
-		char_attacked = null;
-		char_attacking = null;
-		toggle_screen(false);
+		if (set_new_target_event != null) {
+			set_new_target_event(char_attacking, char_attacked);
+		}
 	}
 
 	string get_char_info(CharacterObject charObj) {
@@ -72,6 +74,13 @@ public class AttackManager : MonoBehaviour {
 	}
 
 	void toggle_screen(bool value) {
+		if (value == false) {
+			char_attacked = null;
+		}
 		attackScreen.SetActive(value);
+	}
+
+	public bool is_target_valid(CharacterObject target) {
+		return arenaManager.get_attack_targets(char_attacking).Contains(target);
 	}
 }

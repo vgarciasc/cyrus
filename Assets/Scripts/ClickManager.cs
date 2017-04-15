@@ -13,56 +13,154 @@ public class ClickManager : MonoBehaviour {
 	ArenaManager arenaManager;
 	[SerializeField]
 	AttackManager attackManager;
+	[SerializeField]
+	SwapManager swapManager;
 
 	//delegates
 	public delegate void AttackDelegate(CharacterObject charObj);
-	public event AttackDelegate start_attack_event,
-								cancel_attack_event,
+	public event AttackDelegate activate_choosing_attack_target_event,
+								deactivate_choosing_attack_target_event,
 								set_attack_target_event;
+	public delegate void SwapDelegate(CharacterObject charObj);
+	public event SwapDelegate activate_choosing_swap_target_event,
+								deactivate_choosing_swap_target_event,
+								set_swap_target_event;
+	public delegate void AttribDelegate(CharacterObject charObj);
+	public event AttribDelegate activate_choosing_attrib_target_event,
+								deactivate_choosing_attrib_target_event,
+								set_attrib_target_event;
 	public delegate void VoidDelegate();
-	public event VoidDelegate show_duel_info_event,
-							conclude_attack_event;
+	public event VoidDelegate deactivate_all_lanes,
+							conclude_attack_event,
+							conclude_swap_event;
 
 	//variables
-	bool attacking = false;
+	enum States {NOTHING, CHOOSING_ACTION, DISPLAYING_ATTACK_INFO,
+				DISPLAYING_CHAR_ATTRIBUTES, SWAPPING_ALLIES, IS_ATTACKING};
+	States currentState;
 
 	public void click_character(CharacterObject charObj) {
-		if (attacking) {
-			if (set_attack_target_event != null) {
-				set_attack_target_event(charObj);
-			}
+		switch (currentState) {
+			case States.CHOOSING_ACTION:
+				charObj.column.toggle_all_lanes(false);
+				charObj.lane.toggle(true);
+				break;
 
-			if (show_duel_info_event != null) {
-				show_duel_info_event();
-			}
+			case States.NOTHING:
+				currentState = States.CHOOSING_ACTION;
+				charObj.column.toggle_all_lanes(false);
+				charObj.lane.toggle(true);
+				break;
 
-			// attack(charObj);
+			case States.DISPLAYING_ATTACK_INFO:
+				if (set_attack_target_event != null) {
+					set_attack_target_event(charObj);
+				}
+				break;
+
+			case States.DISPLAYING_CHAR_ATTRIBUTES:
+				if (set_attrib_target_event != null) {
+					set_attrib_target_event(charObj);
+				}
+				break;
+
+			case States.SWAPPING_ALLIES:
+				if (swapManager.is_swap_valid(charObj)) {
+					currentState = States.NOTHING;
+					if (deactivate_choosing_swap_target_event != null) {
+						deactivate_choosing_swap_target_event(charObj);
+					}
+					if (conclude_swap_event != null) {
+						conclude_swap_event();
+					}
+				}
+				break;
 		}
 	}
 
 	public void click_attack_button(CharacterObject charObj) {
-		if (!attacking) {
-			if (start_attack_event != null) {
-				start_attack_event(charObj);
-			}
-
-			attacking = true;
+		switch (currentState) {
+			case States.CHOOSING_ACTION:
+				currentState = States.DISPLAYING_ATTACK_INFO;
+				if (deactivate_all_lanes != null) {
+					deactivate_all_lanes();
+				}				
+				if (activate_choosing_attack_target_event != null) {
+					activate_choosing_attack_target_event(charObj);
+				}
+				break;
 		}
-		else {
-			if (cancel_attack_event != null) {
-				cancel_attack_event(charObj);
-			}
+	}
 
-			attacking = false;
+	public void click_swap_button(CharacterObject charObj) {
+		switch (currentState) {
+			case States.CHOOSING_ACTION:
+				currentState = States.SWAPPING_ALLIES;
+				if (deactivate_all_lanes != null) {
+					deactivate_all_lanes();
+				}				
+				if (activate_choosing_swap_target_event != null) {
+					activate_choosing_swap_target_event(charObj);
+				}
+				break;
+		}
+	}
+
+	public void click_attrib_button(CharacterObject charObj) {
+		switch (currentState) {
+			case States.CHOOSING_ACTION:
+				currentState = States.DISPLAYING_CHAR_ATTRIBUTES;
+				if (activate_choosing_attrib_target_event != null) {
+					activate_choosing_attrib_target_event(charObj);
+				}
+				if (deactivate_all_lanes != null) {
+					deactivate_all_lanes();
+				}				
+				break;
 		}
 	}
 
 	public void click_confirmation_button() {
-		if (attacking) {
-			attacking = false;
-			if (conclude_attack_event != null) {
-				conclude_attack_event();
-			}
+		switch (currentState) {
+			case States.DISPLAYING_ATTACK_INFO:
+				currentState = States.NOTHING;
+				if (conclude_attack_event != null) {
+					conclude_attack_event();
+				}
+				break;
+		}
+	}
+
+	public void click_cancel_button(CharacterObject charObj) {
+		switch (currentState) {
+			case States.CHOOSING_ACTION:
+				currentState = States.NOTHING;
+				charObj.lane.toggle(false);
+				break;
+
+			case States.DISPLAYING_ATTACK_INFO:
+				currentState = States.CHOOSING_ACTION;
+				charObj.lane.toggle_lane(true);
+				if (deactivate_choosing_attack_target_event != null) {
+					deactivate_choosing_attack_target_event(charObj);
+				}
+				break;
+
+			case States.DISPLAYING_CHAR_ATTRIBUTES:
+				currentState = States.CHOOSING_ACTION;
+				charObj.lane.toggle_lane(true);
+				if (deactivate_choosing_attrib_target_event != null) {
+					deactivate_choosing_attrib_target_event(charObj);
+				}
+				break;
+
+			case States.SWAPPING_ALLIES:
+				currentState = States.NOTHING;
+				charObj.lane.toggle(false);
+				if (deactivate_choosing_swap_target_event != null) {
+					deactivate_choosing_swap_target_event(charObj);
+				}
+				break;
 		}
 	}
 }
