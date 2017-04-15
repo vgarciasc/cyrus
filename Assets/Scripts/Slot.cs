@@ -11,9 +11,9 @@ public class Slot : MonoBehaviour {
 	//references
 	[HeaderAttribute("References")]
 	[SerializeField]
-	Image background;
+	SlotColumn column;
 	[SerializeField]
-	ButtonLane lane;
+	Image background;
 
 	//temp
 	List<Color> colors = new List<Color>() {
@@ -37,9 +37,5 @@ public class Slot : MonoBehaviour {
 		if (charID != -1) {
 			this.background.color = colors [charID];
 		}
-	}
-
-	public void toggle_lane() {
-		lane.toggle_lane(!lane.active);
 	}
 }

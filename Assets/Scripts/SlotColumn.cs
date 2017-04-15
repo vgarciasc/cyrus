@@ -26,6 +26,7 @@ public class SlotColumn : MonoBehaviour {
 		adjust_positions();
 		for (int i = 0; i < characters.Count; i++) {
 			charObj[i].set_data(characters[i]);
+			charObj[i].click_event += register_click;
 		}
 	}
 
@@ -34,6 +35,10 @@ public class SlotColumn : MonoBehaviour {
 	// 		if (slots[i].charID == )
 	// 	}
 	// }
+
+	public void kill_slot(CharacterObject charObj) {
+		kill_slot(get_slotID_by_charobj(charObj));
+	}
 
 	public void kill_slot(int slotID) {
 		charObj[slots[slotID].charID].kill();
@@ -107,6 +112,20 @@ public class SlotColumn : MonoBehaviour {
 				charObj[slots[0].charID].set_new_pos(slots[1].transform.position +
 					(slots[2].transform.position - slots[1].transform.position) / 2);
 				break;
+		}
+	}
+
+	void register_click(CharacterObject co) {
+		ClickManager.getClickManager().click_character(co);
+	}
+
+	int get_slotID_by_charobj(CharacterObject co) {
+		return charObj.IndexOf(co);
+	}
+
+	public void toggle_all_lanes(bool value) {
+		foreach (CharacterObject co in charObj) {
+			co.lane.toggle_lane(value);
 		}
 	}
 }

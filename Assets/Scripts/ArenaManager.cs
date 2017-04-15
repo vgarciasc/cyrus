@@ -10,8 +10,12 @@ public class ArenaManager : MonoBehaviour {
 	[SerializeField]
 	SlotColumn right = new SlotColumn();
 
+	public static ArenaManager getArenaManager() {
+		return (ArenaManager) HushPuppy.safeFindComponent("GameController", "ArenaManager");
+	}
+
 	void Start() {
-		StartCoroutine (test_killing_slots());
+		// StartCoroutine (test_killing_slots());
 	}
 
 	IEnumerator test_killing_slots() {
@@ -28,7 +32,7 @@ public class ArenaManager : MonoBehaviour {
 		left.kill_slot (0);
 	}
 
-	SlotColumn get_other_column(SlotColumn current) {
+	public SlotColumn get_other_column(SlotColumn current) {
 		return current == left? right : left;
 	}
 
