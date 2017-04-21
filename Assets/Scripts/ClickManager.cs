@@ -15,6 +15,8 @@ public class ClickManager : MonoBehaviour {
 	AttackManager attackManager;
 	[SerializeField]
 	SwapManager swapManager;
+	[SerializeField]
+	EnemyManager enemyManager;
 
 	//delegates
 	public delegate void AttackDelegate(CharacterObject charObj);
@@ -36,8 +38,13 @@ public class ClickManager : MonoBehaviour {
 
 	//variables
 	enum States {NOTHING, CHOOSING_ACTION, DISPLAYING_ATTACK_INFO,
-				DISPLAYING_CHAR_ATTRIBUTES, SWAPPING_ALLIES, IS_ATTACKING};
+				DISPLAYING_CHAR_ATTRIBUTES, SWAPPING_ALLIES, IS_ATTACKING,
+				ENEMY_TURN};
 	States currentState;
+
+	void Start() {
+		enemyManager.end_enemy_attack_event += end_enemy_turn;
+	}
 
 	public void click_character(CharacterObject charObj) {
 		switch (currentState) {
@@ -81,12 +88,14 @@ public class ClickManager : MonoBehaviour {
 	public void click_attack_button(CharacterObject charObj) {
 		switch (currentState) {
 			case States.CHOOSING_ACTION:
-				currentState = States.DISPLAYING_ATTACK_INFO;
-				if (deactivate_all_lanes != null) {
-					deactivate_all_lanes();
-				}				
-				if (activate_choosing_attack_target_event != null) {
-					activate_choosing_attack_target_event(charObj);
+				if (charObj.has_actions()) {
+					currentState = States.DISPLAYING_ATTACK_INFO;
+					if (deactivate_all_lanes != null) {
+						deactivate_all_lanes();
+					}				
+					if (activate_choosing_attack_target_event != null) {
+						activate_choosing_attack_target_event(charObj);
+					}
 				}
 				break;
 		}
@@ -95,12 +104,14 @@ public class ClickManager : MonoBehaviour {
 	public void click_swap_button(CharacterObject charObj) {
 		switch (currentState) {
 			case States.CHOOSING_ACTION:
-				currentState = States.SWAPPING_ALLIES;
-				if (deactivate_all_lanes != null) {
-					deactivate_all_lanes();
-				}				
-				if (activate_choosing_swap_target_event != null) {
-					activate_choosing_swap_target_event(charObj);
+				if (charObj.has_actions()) {
+					currentState = States.SWAPPING_ALLIES;
+					if (deactivate_all_lanes != null) {
+						deactivate_all_lanes();
+					}				
+					if (activate_choosing_swap_target_event != null) {
+						activate_choosing_swap_target_event(charObj);
+					}
 				}
 				break;
 		}
@@ -128,6 +139,19 @@ public class ClickManager : MonoBehaviour {
 					conclude_attack_event();
 				}
 				break;
+		}
+	}
+
+	public void click_endturn_button() {
+		switch (currentState) {
+			//just end the turn
+			default:
+				currentState = States.ENEMY_TURN;
+				arenaManager.refresh_character_actions();
+				if (deactivate_all_lanes != null) {
+					deactivate_all_lanes();
+				}	
+				break;	
 		}
 	}
 
@@ -160,6 +184,15 @@ public class ClickManager : MonoBehaviour {
 				if (deactivate_choosing_swap_target_event != null) {
 					deactivate_choosing_swap_target_event(charObj);
 				}
+				break;
+		}
+	}
+
+	public void end_enemy_turn() {
+		switch (currentState) {
+			case States.ENEMY_TURN:
+				currentState = States.NOTHING;
+
 				break;
 		}
 	}

@@ -138,15 +138,43 @@ public class ArenaManager : MonoBehaviour {
 		public List<CharacterObject> get_swap_targets(CharacterObject targetter) {
 			List<CharacterObject> targets = new List<CharacterObject>();
 
-			int index = targetter.column.charObj.IndexOf(targetter);
-			if (index > 0) {
-				targets.Add(targetter.column.charObj[index - 1]);
-			}
-			if (index < targetter.column.charObj.Count - 1) {
-				targets.Add(targetter.column.charObj[index + 1]);
+			CharacterObject previous = null;
+			bool is_next = false;
+
+			for (int i = 0; i < targetter.column.charObj.Count; i++) {
+				if (targetter.column.charObj[i].charID == targetter.charID) {
+					if (previous != null) {
+						targets.Add(previous);
+					}
+
+					is_next = true;
+					continue;
+				}
+
+				if (is_next && 
+					targetter.column.charObj[i].gameObject.activeSelf) {
+					targets.Add(targetter.column.charObj[i]);
+					break;
+				}
+
+				if (targetter.column.charObj[i].gameObject.activeSelf) {
+					previous = targetter.column.charObj[i];
+				}
 			}
 
 			return targets;
+		}
+	#endregion
+
+	#region actions
+		public void refresh_character_actions() {
+			foreach (CharacterObject co in left.charObj) {
+				co.refresh_actions();
+			}
+
+			foreach (CharacterObject co in right.charObj) {
+				co.refresh_actions();
+			}
 		}
 	#endregion
 }

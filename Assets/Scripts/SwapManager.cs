@@ -30,6 +30,7 @@ public class SwapManager : MonoBehaviour {
 	}
 
 	void swap() {
+		char_swap1.use_action();
 		char_swap1.column.swap_characters(char_swap1, char_swap2);
 	}
 

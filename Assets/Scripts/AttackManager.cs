@@ -29,58 +29,71 @@ public class AttackManager : MonoBehaviour {
 		toggle_screen(false);
 	}
 
-	//an attacker has been selected
-	void start_attack(CharacterObject charObj) {
-		char_attacking = charObj;
-		char_attacked = arenaManager.get_default_attack_target(charObj);
-		set_target(char_attacked);
-		toggle_screen(true);
-	}
-
-	void cancel_attack(CharacterObject charObj) {
-		toggle_screen(false);
-	}
-
-	//attack has not been cancelled, player has pressed OK
-	void conclude_attack() {
-		attack();
-	}
-
-	void attack() {
-		char_attacked.column.kill_slot(char_attacked);
-		toggle_screen(false);
-	}
-
-	//a target has been selected, now we can show info
-	void set_target(CharacterObject charObj) {
-		if (!is_target_valid(charObj)) {
-			return;
+	#region attack mechanics
+		//an attacker has been selected
+		void start_attack(CharacterObject charObj) {
+			char_attacking = charObj;
+			char_attacked = arenaManager.get_default_attack_target(charObj);
+			set_target(char_attacked);
+			toggle_screen(true);
 		}
 
-		char_attacked = charObj;
-		textRight.text = get_char_info(char_attacking);
-		textLeft.text = get_char_info(char_attacked);
-
-		if (set_new_target_event != null) {
-			set_new_target_event(char_attacking, char_attacked);
+		void cancel_attack(CharacterObject charObj) {
+			toggle_screen(false);
 		}
-	}
 
-	string get_char_info(CharacterObject charObj) {
-		string aux = "";
-		aux += "FOR: " + charObj.data.FOR;
-		aux += "\nAGI: " + charObj.data.AGI;
-		return aux;
-	}
-
-	void toggle_screen(bool value) {
-		if (value == false) {
-			char_attacked = null;
+		void conclude_attack() {
+			char_attacking.use_action();
+			attack();
 		}
-		attackScreen.SetActive(value);
-	}
 
-	public bool is_target_valid(CharacterObject target) {
-		return arenaManager.get_attack_targets(char_attacking).Contains(target);
-	}
+		void attack() {
+			// char_attacked.column.kill_slot(char_attacked);
+			char_attacking.attack_motion();
+			if (char_attacked.take_hit(calculate_damage(char_attacked, char_attacking))) {
+				char_attacked.column.kill_slot(char_attacked);	
+			}
+
+			toggle_screen(false);
+		}
+
+		int calculate_damage(CharacterObject attacker, CharacterObject attacked) {
+			return attacker.data.FOR - attacked.data.DEF;
+		}
+	#endregion
+
+	#region attack info
+		//a target has been selected, now we can show info
+		void set_target(CharacterObject charObj) {
+			if (!is_target_valid(charObj)) {
+				return;
+			}
+
+			char_attacked = charObj;
+			textRight.text = get_char_info(char_attacking);
+			textLeft.text = get_char_info(char_attacked);
+
+			if (set_new_target_event != null) {
+				set_new_target_event(char_attacking, char_attacked);
+			}
+		}
+
+		string get_char_info(CharacterObject charObj) {
+			string aux = "";
+			aux += "FOR: " + charObj.data.FOR;
+			aux += "\nAGI: " + charObj.data.AGI;
+			return aux;
+		}
+
+		void toggle_screen(bool value) {
+			if (value == false) {
+				char_attacked = null;
+			}
+			attackScreen.SetActive(value);
+		}
+
+		public bool is_target_valid(CharacterObject target) {
+			return arenaManager.get_attack_targets(char_attacking).Contains(target);
+		}
+	#endregion
 }

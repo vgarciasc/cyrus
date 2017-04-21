@@ -12,11 +12,14 @@ public class CharacterData : ScriptableObject {
 	public Sprite sprite;
 	
 	[Header("Atributos")]
-	public int VIT;
-	public int FOR;
-	public int DEF; 
-	public int INT;
-	public int RES;
-	public int AGI;
-	public int DES;
+	public int VIT = 5;
+	public int FOR = 5;
+	public int DEF = 5; 
+	public int INT = 5;
+	public int RES = 5;
+	public int AGI = 5;
+	public int DES = 5;
+
+	[Header("Health")]
+	public int maxHealth = 20;
 }
