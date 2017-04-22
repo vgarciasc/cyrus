@@ -6,6 +6,7 @@ using DG.Tweening;
 
 public class CharacterObject : MonoBehaviour {
 	public int charID = -1;
+	public bool invertedSprite = false;
 
 	[HideInInspector]
 	public CharacterData data;
@@ -120,25 +121,35 @@ public class CharacterObject : MonoBehaviour {
 	#endregion
 
 	#region attack
-		public void attack_motion() {
-			StartCoroutine(attack_motion_());
-		}
+		#region motions
+			IEnumerator back_and_forth_motion(int distance, bool backwards, float duration) {
+				int mod = 1;
+				if (invertedSprite) mod *= -1;
+				if (backwards) mod *= -1;
 
-		IEnumerator attack_motion_() {
-			transform.DOMoveX(this.transform.position.x - 20, 0.3f);
-			yield return new WaitForSeconds(0.3f);
-			transform.DOMoveX(this.transform.position.x + 20, 0.3f);
-		}
+				transform.DOMoveX(this.transform.position.x + mod * distance, duration);
+				yield return new WaitForSeconds(duration);
+				transform.DOMoveX(this.transform.position.x - mod * distance, duration);
+			}
+
+			public void attack_motion() {
+				StartCoroutine(back_and_forth_motion(20, false, 0.3f));
+			}
+
+			public void counter_attack_motion() {
+				StartCoroutine(back_and_forth_motion(10, false, 0.2f));
+			}
+		#endregion motions
 	
-		//returns true if dead
-		public bool take_hit(int damage) {
+		public void take_hit(int damage) {
 			health.add_health(- damage);
 			if (health.hp == 0) {
 				kill();
-				return true;
 			}
+		}
 
-			return false;
+		public bool is_dead() {
+			return health.hp <= 0;
 		}
 
 		public void kill() {

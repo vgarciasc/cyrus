@@ -53,7 +53,7 @@ public class TurnManager : MonoBehaviour {
 	}
 
 	void StartEnemyTurn() {
-		enemyManager.attack();
+		enemyManager.enemy_turn();
 		arenaManager.refresh_character_actions();
 	}
 

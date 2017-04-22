@@ -24,7 +24,17 @@ public class SwapManager : MonoBehaviour {
 		char_swap1 = swapper;
 	}
 
+	void cancel_swap() {
+		char_swap1 = null;
+		char_swap2 = null;
+	}
+
 	void end_swap(CharacterObject swap_target) {
+		if (swap_target == char_swap1) {
+			cancel_swap();
+			return;
+		}
+
 		char_swap2 = swap_target;
 		swap();
 	}

@@ -30,36 +30,74 @@ public class AttackManager : MonoBehaviour {
 	}
 
 	#region attack mechanics
-		//an attacker has been selected
-		void start_attack(CharacterObject charObj) {
-			char_attacking = charObj;
-			char_attacked = arenaManager.get_default_attack_target(charObj);
-			set_target(char_attacked);
-			toggle_screen(true);
+		IEnumerator attack_counterattack() {
+			normal_attack();
+
+			if (char_attacked.is_dead()) {
+				char_attacked.column.kill_slot(char_attacked);
+				yield break;
+			}			
+
+			yield return new WaitForSeconds(0.3f);
+
+			counter_attack();
+
+			if (char_attacked.is_dead()) {
+				char_attacked.column.kill_slot(char_attacked);
+				yield break;
+			}
 		}
 
-		void cancel_attack(CharacterObject charObj) {
-			toggle_screen(false);
-		}
-
-		void conclude_attack() {
+		void normal_attack() {
 			char_attacking.use_action();
-			attack();
+			char_attacking.attack_motion();
+
+			char_attacked.take_hit(calculate_damage(char_attacked, char_attacking));
 		}
 
-		void attack() {
-			// char_attacked.column.kill_slot(char_attacked);
-			char_attacking.attack_motion();
-			if (char_attacked.take_hit(calculate_damage(char_attacked, char_attacking))) {
-				char_attacked.column.kill_slot(char_attacked);	
+		void counter_attack() {
+			var aux = char_attacking;
+			char_attacking = char_attacked;
+			char_attacked = aux;
+
+			char_attacking.use_action();
+			char_attacking.counter_attack_motion();
+
+			char_attacked.take_hit(calculate_damage(char_attacked, char_attacking));
+		}
+
+		#region player
+			//an attacker has been selected
+			void start_attack(CharacterObject charObj) {
+				char_attacking = charObj;
+				char_attacked = arenaManager.get_default_attack_target(charObj);
+				set_target(char_attacked);
+				toggle_screen(true);
 			}
 
-			toggle_screen(false);
-		}
+			void cancel_attack(CharacterObject charObj) {
+				toggle_screen(false);
+			}
 
-		int calculate_damage(CharacterObject attacker, CharacterObject attacked) {
-			return attacker.data.FOR - attacked.data.DEF;
-		}
+			void conclude_attack() {
+				StartCoroutine(attack_counterattack());
+				toggle_screen(false);
+			}
+
+			//to be encapsulated in another class
+			int calculate_damage(CharacterObject attacker, CharacterObject attacked) {
+				return attacker.data.FOR - attacked.data.DEF;
+			}
+		#endregion
+		
+		#region enemy
+			public void enemy_attack(CharacterObject enemy) {
+				char_attacking = enemy;
+				char_attacked = arenaManager.get_default_attack_target(enemy);
+				
+				StartCoroutine(attack_counterattack());
+			}
+		#endregion
 	#endregion
 
 	#region attack info
@@ -86,9 +124,6 @@ public class AttackManager : MonoBehaviour {
 		}
 
 		void toggle_screen(bool value) {
-			if (value == false) {
-				char_attacked = null;
-			}
 			attackScreen.SetActive(value);
 		}
 
