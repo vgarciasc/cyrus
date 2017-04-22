@@ -15,6 +15,8 @@ public class AttackManager : MonoBehaviour {
 	ClickManager clickManager;
 	[SerializeField]
 	ArenaManager arenaManager;
+	[SerializeField]
+	ViolenceCalculator calculator;
 
 	public delegate void AttackDelegate(CharacterObject targetter, CharacterObject target);
 	public event AttackDelegate set_new_target_event;
@@ -52,7 +54,9 @@ public class AttackManager : MonoBehaviour {
 			char_attacking.use_action();
 			char_attacking.attack_motion();
 
-			char_attacked.take_hit(calculate_damage(char_attacked, char_attacking));
+			char_attacked.take_hit(calculator.effective_damage(char_attacked,
+				char_attacking,
+				AttackModule.NORMAL_ATTACK));
 		}
 
 		void counter_attack() {
@@ -63,7 +67,9 @@ public class AttackManager : MonoBehaviour {
 			char_attacking.use_action();
 			char_attacking.counter_attack_motion();
 
-			char_attacked.take_hit(calculate_damage(char_attacked, char_attacking));
+			char_attacked.take_hit(calculator.effective_damage(char_attacked,
+				char_attacking,
+				AttackModule.COUNTER_ATTACK));
 		}
 
 		#region player
@@ -108,18 +114,29 @@ public class AttackManager : MonoBehaviour {
 			}
 
 			char_attacked = charObj;
-			textRight.text = get_char_info(char_attacking);
-			textLeft.text = get_char_info(char_attacked);
+			textRight.text = get_char_info(false);
+			textLeft.text = get_char_info(true);
 
 			if (set_new_target_event != null) {
 				set_new_target_event(char_attacking, char_attacked);
 			}
 		}
 
-		string get_char_info(CharacterObject charObj) {
+		string get_char_info(bool counter) {
+			AttackModule mod = AttackModule.NORMAL_ATTACK;
+			if (counter) mod = AttackModule.COUNTER_ATTACK; 
+
 			string aux = "";
-			aux += "FOR: " + charObj.data.FOR;
-			aux += "\nAGI: " + charObj.data.AGI;
+			aux += "\nDMG: <color=gray>" + calculator.theoretical_damage(counter? char_attacking : char_attacked,
+															counter? char_attacked : char_attacking,
+															mod) + "</color>";
+			aux += "\nACC: <color=gray>" + calculator.accuracy_prob(counter? char_attacking : char_attacked,
+															counter? char_attacked : char_attacking,
+															mod) + "%</color>";
+			aux += "\n\n";
+			if (counter) aux += "<color=red>COUNTER!</color>";
+			else aux += "<color=red><<<<</color>";
+			
 			return aux;
 		}
 

@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\CharacterHealth.cs" />
      <Compile Include="Assets\Scripts\CharacterObject.cs" />
      <Compile Include="Assets\Scripts\ClickManager.cs" />
+     <Compile Include="Assets\Scripts\CombatLogManager.cs" />
      <Compile Include="Assets\Scripts\EnemyManager.cs" />
      <Compile Include="Assets\Scripts\HushPuppy.cs" />
      <Compile Include="Assets\Scripts\LaneManager.cs" />
@@ -61,6 +62,8 @@
      <Compile Include="Assets\Scripts\StatsManager.cs" />
      <Compile Include="Assets\Scripts\SwapManager.cs" />
      <Compile Include="Assets\Scripts\TurnManager.cs" />
+     <Compile Include="Assets\Scripts\ViolenceCalculator.cs" />
+     <Compile Include="Assets\Scripts\WeaponData.cs" />
      <None Include="Assets\DOTween\DOTween50.xml" />
      <None Include="Assets\DOTween\DOTween46.xml" />
      <None Include="Assets\DOTween\readme.txt" />

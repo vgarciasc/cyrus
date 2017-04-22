@@ -12,7 +12,7 @@ public class CharacterHealth : MonoBehaviour {
 			max = 10;
 
 	public void init(CharacterData data) {
-		this.max = data.maxHealth;
+		this.max = data.VIT;
 		this.hp = max;
 		updateIndicator();
 	}

@@ -10,6 +10,8 @@ public class CharacterObject : MonoBehaviour {
 
 	[HideInInspector]
 	public CharacterData data;
+	[HideInInspector]
+	public WeaponData weapon;
 	
 	[HeaderAttribute("References")]
 	public Image sprite;
@@ -36,7 +38,8 @@ public class CharacterObject : MonoBehaviour {
 		public void set_data(int charID, CharacterData data) {
 			this.charID = charID;
 			this.data = data;
-			
+			this.weapon = data.weapon;
+
 			health.init(data);
 			init();
 		}

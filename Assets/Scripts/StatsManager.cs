@@ -7,13 +7,15 @@ public class StatsManager : MonoBehaviour {
 	[SerializeField]
 	GameObject statsScreen;
 	[SerializeField]
-	Text statsText;
-	[SerializeField]
 	Image statsPortrait;
+	[SerializeField]
+	Text characterName;
+	[SerializeField]
+	Text statsInfo;
 	[SerializeField]
 	ClickManager clickManager;
 
-	CharacterObject focusedCharacter;
+	CharacterObject focused;
 
 	void Start() {
 		toggle_screen(false);
@@ -29,12 +31,12 @@ public class StatsManager : MonoBehaviour {
 		}
 
 		void set_attrib_target(CharacterObject charObj) {
-			focusedCharacter = charObj;
+			focused = charObj;
 			update_screen();
 		}
 
 		void show_attrib_screen(CharacterObject charObj) {
-			focusedCharacter = charObj;
+			focused = charObj;
 			toggle_screen(true);
 			update_screen();
 		}
@@ -50,8 +52,22 @@ public class StatsManager : MonoBehaviour {
 		}
 
 		void update_screen() {
-			statsText.text = focusedCharacter.data.nome;
-			statsPortrait.sprite = focusedCharacter.data.sprite;
+			string aux = "";
+			aux += focused.data.nome.ToString().ToUpper();
+			aux += "<color=gray>\n\n" + focused.data.classe.ToString().ToLower() + "</color>";
+			characterName.text = aux;
+
+			statsPortrait.sprite = focused.data.sprite;
+			
+			aux = "";
+			aux += "HP: <color=gray>" + focused.health.hp + "/" + focused.data.VIT;
+			aux += "</color>\nFOR: <color=gray>" + focused.data.FOR;
+			aux += "</color>\nDEF: <color=gray>" + focused.data.DEF;
+			aux += "</color>\nINT: <color=gray>" + focused.data.INT;
+			aux += "</color>\nRES: <color=gray>" + focused.data.RES;
+			aux += "</color>\nAGI: <color=gray>" + focused.data.AGI;
+			aux += "</color>\nDES: <color=gray>" + focused.data.DES + "</color>";
+			statsInfo.text = aux;
 		}
 	#endregion
 }

@@ -47,4 +47,9 @@ public class SwapManager : MonoBehaviour {
 	public bool is_swap_valid(CharacterObject swap_target) {
 		return (arenaManager.get_swap_targets(char_swap1).Contains(swap_target));
 	}
+
+	public void random_swap(CharacterObject swapper) {
+		start_swap(swapper);
+		end_swap(arenaManager.get_swap_targets(swapper)[0]);
+	}
 }

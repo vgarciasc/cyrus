@@ -8,6 +8,8 @@ public class EnemyManager : MonoBehaviour {
 	SlotColumn column;
 	[SerializeField]
 	AttackManager attackManager;
+	[SerializeField]
+	SwapManager swapManager;
 
 	//delegates
 	public delegate void AttackDelegate();
@@ -25,15 +27,33 @@ public class EnemyManager : MonoBehaviour {
 			start_enemy_attack_event();
 		}
 
-		for (int i = 0; i < column.charObj.Count; i++) {
-			var character = column.charObj[i];
-			
-			//dead characters dont attack
-			if (!character.gameObject.activeSelf) {
-				continue;
+		List<CharacterObject> aux = new List<CharacterObject>();
+		foreach (CharacterObject c in column.charObj) {
+			if (c.gameObject.activeSelf) {
+				aux.Add(c);
+			}
+		}
+
+		List<CharacterObject> enemies = new List<CharacterObject>();
+		while (aux.Count > 0) {
+			int index = Random.Range(0, aux.Count - 1);
+			enemies.Add(aux[index]);
+			aux.RemoveAt(index);
+		}
+
+		for (int i = 0; i < enemies.Count; i++) {
+			var character = enemies[i];
+
+			int dice = Random.Range(0, 13);
+			switch (dice) {
+				default:
+					attackManager.enemy_attack(character);
+					break;
+				case 0:
+					swapManager.random_swap(character);
+					break;
 			}
 
-			attackManager.enemy_attack(character);
 			yield return new WaitForSeconds(1f);
 		}
 
