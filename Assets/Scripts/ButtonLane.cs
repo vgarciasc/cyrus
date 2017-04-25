@@ -26,6 +26,8 @@ public class ButtonLane : MonoBehaviour {
 		ClickManager cm = ClickManager.getClickManager();
 
 		cm.deactivate_all_lanes += deactivate_lane;
+		cm.deactivate_all_cancels += deactivate_cancel;
+		cm.deactivate_all_lanes_cancels += deactivate_everything;
 
 		cm.conclude_attack_event += deactivate_cancel;
 		cm.conclude_attack_event += deactivate_lane;
@@ -111,4 +113,9 @@ public class ButtonLane : MonoBehaviour {
 			cancelButton.SetActive(value);
 		}
 	#endregion
+
+	void deactivate_everything() {
+		toggle_cancel(false);
+		toggle_lane(false);
+	}
 }

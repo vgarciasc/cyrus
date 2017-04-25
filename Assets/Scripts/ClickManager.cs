@@ -33,8 +33,11 @@ public class ClickManager : MonoBehaviour {
 								set_attrib_target_event;
 	public delegate void VoidDelegate();
 	public event VoidDelegate deactivate_all_lanes,
+							deactivate_all_cancels,
+							deactivate_all_lanes_cancels,
 							conclude_attack_event,
-							conclude_swap_event;
+							conclude_swap_event,
+							conclude_turn_event;
 
 	//variables
 	enum States {NOTHING, CHOOSING_ACTION, DISPLAYING_ATTACK_INFO,
@@ -49,13 +52,17 @@ public class ClickManager : MonoBehaviour {
 	public void click_character(CharacterObject charObj) {
 		switch (currentState) {
 			case States.CHOOSING_ACTION:
-				charObj.column.toggle_all_lanes(false);
+				if (deactivate_all_lanes != null) {
+					deactivate_all_lanes();
+				}	
+				if (deactivate_all_lanes != null) {
+					deactivate_all_cancels();
+				}	
 				charObj.lane.toggle(true);
 				break;
 
 			case States.NOTHING:
 				currentState = States.CHOOSING_ACTION;
-				charObj.column.toggle_all_lanes(false);
 				charObj.lane.toggle(true);
 				break;
 
@@ -66,6 +73,9 @@ public class ClickManager : MonoBehaviour {
 				break;
 
 			case States.DISPLAYING_CHAR_ATTRIBUTES:
+				arenaManager.get_other_column(charObj.column).toggle_all_lanes(false);
+				charObj.column.toggle_all_lanes(false);
+				charObj.lane.toggle_cancel(true);
 				if (set_attrib_target_event != null) {
 					set_attrib_target_event(charObj);
 				}
@@ -144,13 +154,30 @@ public class ClickManager : MonoBehaviour {
 
 	public void click_endturn_button() {
 		switch (currentState) {
-			//just end the turn
+			case States.DISPLAYING_CHAR_ATTRIBUTES:
+				currentState = States.ENEMY_TURN;
+				if (deactivate_all_lanes_cancels != null) {
+					deactivate_all_lanes_cancels();
+				}		
+				if (deactivate_choosing_attrib_target_event != null) {
+					deactivate_choosing_attrib_target_event(null);
+				}
+				if (conclude_turn_event != null) {
+					conclude_turn_event();
+				}
+				break;
+
 			default:
 				currentState = States.ENEMY_TURN;
-				arenaManager.refresh_character_actions();
-				if (deactivate_all_lanes != null) {
-					deactivate_all_lanes();
+				if (deactivate_all_lanes_cancels != null) {
+					deactivate_all_lanes_cancels();
 				}	
+				if (deactivate_choosing_attack_target_event != null) {
+					deactivate_choosing_attack_target_event(null);
+				}
+				if (conclude_turn_event != null) {
+					conclude_turn_event();
+				}
 				break;	
 		}
 	}
@@ -179,8 +206,8 @@ public class ClickManager : MonoBehaviour {
 				break;
 
 			case States.SWAPPING_ALLIES:
-				currentState = States.NOTHING;
-				charObj.lane.toggle(false);
+				currentState = States.CHOOSING_ACTION;
+				charObj.lane.toggle_lane(true);
 				if (deactivate_choosing_swap_target_event != null) {
 					deactivate_choosing_swap_target_event(charObj);
 				}

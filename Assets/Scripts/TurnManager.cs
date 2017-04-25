@@ -16,11 +16,14 @@ public class TurnManager : MonoBehaviour {
 	EnemyManager enemyManager;
 	[SerializeField]
 	ArenaManager arenaManager;
+	[SerializeField]
+	ClickManager clickManager;
 
 	void Start() {
 		endPlayerTurnButton.SetActive(false);
 
 		enemyManager.end_enemy_attack_event += EndEnemyTurn;
+		clickManager.conclude_turn_event += EndPlayerTurn;
 
 		StartCoroutine(handleTurns());
 	}
