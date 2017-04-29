@@ -16,6 +16,8 @@ public class AttackManager : MonoBehaviour {
 	[SerializeField]
 	ArenaManager arenaManager;
 	[SerializeField]
+	SkillManager skillManager;
+	[SerializeField]
 	ViolenceCalculator calculator;
 
 	public delegate void AttackDelegate(CharacterObject targetter, CharacterObject target);
@@ -54,9 +56,20 @@ public class AttackManager : MonoBehaviour {
 			char_attacking.use_action();
 			char_attacking.attack_motion();
 
-			char_attacked.take_hit(calculator.effective_damage(char_attacked,
-				char_attacking,
-				AttackModule.NORMAL_ATTACK));
+			Damage dmg = new Damage(
+				calculator.effective_damage(
+					char_attacking,
+					char_attacked,
+					AttackModule.NORMAL_ATTACK),
+				skillManager.on_attack_buffs(
+					char_attacking,
+					char_attacked,
+					AttackModule.NORMAL_ATTACK)
+				);
+
+			//remove debuffs that should not be applied if the attack missed
+
+			char_attacked.take_hit(dmg);
 		}
 
 		void counter_attack() {
@@ -67,9 +80,20 @@ public class AttackManager : MonoBehaviour {
 			char_attacking.use_action();
 			char_attacking.counter_attack_motion();
 
-			char_attacked.take_hit(calculator.effective_damage(char_attacked,
-				char_attacking,
-				AttackModule.COUNTER_ATTACK));
+			Damage dmg = new Damage(
+				calculator.effective_damage(
+					char_attacking,
+					char_attacked,
+					AttackModule.COUNTER_ATTACK),
+				skillManager.on_attack_buffs(
+					char_attacking,
+					char_attacked,
+					AttackModule.COUNTER_ATTACK)
+				);
+			
+			//remove debuffs that should not be applied if the attack missed
+
+			char_attacked.take_hit(dmg);
 		}
 
 		#region player

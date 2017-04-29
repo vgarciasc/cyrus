@@ -10,15 +10,19 @@ public class ButtonLane : MonoBehaviour {
 	[HeaderAttribute("References")]
 	public CharacterObject character;
 	public GameObject buttonContainer;
-	public GameObject cancelButton;
-	
+	public GameObject skillButtonPrefab;
+
 	[HeaderAttribute("Lane Button References")]
 	public GameObject attackButton;
 	public GameObject viewInfoButton;
 	public GameObject swapButton;
+	public GameObject cancelButton;
+
+	List<SkillLaneButton> skillButtons = new List<SkillLaneButton>();
 
 	void Start() {
 		init_delegates();
+		init_skills();
 		toggle(false);
 	}
 
@@ -34,6 +38,26 @@ public class ButtonLane : MonoBehaviour {
 
 		cm.conclude_swap_event += deactivate_cancel;
 		cm.conclude_swap_event += deactivate_lane;
+	}
+
+	void init_skills() {
+		if (character.column.enemyColumn) {
+			return;
+		}
+
+		for (int i = 0; i < character.skills.Count; i++) {
+			if (!character.skills[i].hasButton) {
+				continue;
+			}
+			
+			GameObject aux = Instantiate(skillButtonPrefab,
+				buttonContainer.transform,
+				false);
+			SkillLaneButton slb = aux.GetComponent<SkillLaneButton>();
+			skillButtons.Add(slb);
+				
+			slb.init(character, character.skills[i]);
+		}
 	}
 
 	#region register clicks
@@ -80,10 +104,18 @@ public class ButtonLane : MonoBehaviour {
 		if (character.has_actions()) {
 			toggle_active(attackButton, true);
 			toggle_active(swapButton, true);
+
+			foreach (SkillLaneButton slb in skillButtons) {
+				toggle_active(slb.gameObject, true);
+			}
 		}
 		else {
 			toggle_active(attackButton, false);
 			toggle_active(swapButton, false);
+
+			foreach (SkillLaneButton slb in skillButtons) {
+				toggle_active(slb.gameObject, false);
+			}
 		}
 	}
 

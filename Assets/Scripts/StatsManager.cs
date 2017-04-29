@@ -60,13 +60,20 @@ public class StatsManager : MonoBehaviour {
 			statsPortrait.sprite = focused.data.sprite;
 			
 			aux = "";
-			aux += "HP: <color=gray>" + focused.health.hp + "/" + focused.data.VIT;
-			aux += "</color>\nFOR: <color=gray>" + focused.data.FOR;
-			aux += "</color>\nDEF: <color=gray>" + focused.data.DEF;
-			aux += "</color>\nINT: <color=gray>" + focused.data.INT;
-			aux += "</color>\nRES: <color=gray>" + focused.data.RES;
-			aux += "</color>\nAGI: <color=gray>" + focused.data.AGI;
-			aux += "</color>\nDES: <color=gray>" + focused.data.DES + "</color>";
+			aux += "HP: <color=gray>" + focused.health.hp + "/" + focused.status.getVIT();
+			aux += "</color>\nFOR: <color=gray>" + focused.status.getFOR();
+			aux += "</color>\nDEF: <color=gray>" + focused.status.getDEF();
+			aux += "</color>\nINT: <color=gray>" + focused.status.getINT();
+			aux += "</color>\nRES: <color=gray>" + focused.status.getRES();
+			aux += "</color>\nAGI: <color=gray>" + focused.status.getAGI();
+			aux += "</color>\nDES: <color=gray>" + focused.status.getDES() + "</color>";
+			
+			aux += "\n\n";
+			for (int i = 0; i < focused.status.buffs.Count; i++) {
+				aux += "<color=magenta>" + focused.status.buffs[i].ToString() + "</color> (" +
+					focused.status.buffs[i].turnsLeft + " turns left) \n";
+			}
+
 			statsInfo.text = aux;
 		}
 	#endregion

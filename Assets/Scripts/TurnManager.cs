@@ -19,6 +19,9 @@ public class TurnManager : MonoBehaviour {
 	[SerializeField]
 	ClickManager clickManager;
 
+	public delegate void VoidDelegate();
+	public event VoidDelegate another_turn;
+
 	void Start() {
 		endPlayerTurnButton.SetActive(false);
 
@@ -30,18 +33,20 @@ public class TurnManager : MonoBehaviour {
 
 	IEnumerator handleTurns() {
 		while (true) {
-
 			StartPlayerTurn();
+
+			//player turn
 			yield return new WaitUntil(() => end_player_turn);
 			end_player_turn = false;
+			//player turn
 
 			StartEnemyTurn();
-			
-			//pretend enemy is attacking
-			yield return new WaitForSeconds(1.0f);
 
+			//enemy turn
+			yield return new WaitForSeconds(1.0f);
 			yield return new WaitUntil(() => end_enemy_turn);
 			end_enemy_turn = false;
+			//enemy turn
 		}
 	}
 
@@ -53,6 +58,10 @@ public class TurnManager : MonoBehaviour {
 	public void EndPlayerTurn() {
 		endPlayerTurnButton.SetActive(false);
 		end_player_turn = true;
+
+		if (another_turn != null) {
+			another_turn();
+		}
 	}
 
 	void StartEnemyTurn() {
@@ -62,5 +71,9 @@ public class TurnManager : MonoBehaviour {
 
 	void EndEnemyTurn() {
 		end_enemy_turn = true;
+
+		if (another_turn != null) {
+			another_turn();
+		}
 	}
 }

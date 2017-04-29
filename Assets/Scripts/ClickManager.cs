@@ -17,6 +17,8 @@ public class ClickManager : MonoBehaviour {
 	SwapManager swapManager;
 	[SerializeField]
 	EnemyManager enemyManager;
+	[SerializeField]
+	SkillManager skillManager;
 
 	//delegates
 	public delegate void AttackDelegate(CharacterObject charObj);
@@ -210,6 +212,21 @@ public class ClickManager : MonoBehaviour {
 				charObj.lane.toggle_lane(true);
 				if (deactivate_choosing_swap_target_event != null) {
 					deactivate_choosing_swap_target_event(charObj);
+				}
+				break;
+		}
+	}
+
+	public void click_skill_button(CharacterObject charObj, SkillData skill) {
+		switch (currentState) {
+			case States.CHOOSING_ACTION:
+				switch (skill.targetingStyle) {
+					case SkillTargeting.ON_ATTACK:
+						currentState = States.NOTHING;
+						
+						charObj.lane.toggle_lane(false);
+						skillManager.cast(charObj, skill);
+						break;
 				}
 				break;
 		}

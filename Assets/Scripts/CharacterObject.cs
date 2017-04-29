@@ -11,11 +11,16 @@ public class CharacterObject : MonoBehaviour {
 	[HideInInspector]
 	public CharacterData data;
 	[HideInInspector]
-	public WeaponData weapon;
-	
-	[HeaderAttribute("References")]
-	public Image sprite;
 	public CharacterHealth health;
+	[HideInInspector]
+	public CharacterStatus status;
+	[HideInInspector]
+	public WeaponData weapon;
+	[HideInInspector]
+	public List<SkillData> skills = new List<SkillData>();
+	
+	[HeaderAttribute("Components")]
+	public Image sprite;
 	public SlotColumn column;
 	public ButtonLane lane;
 	public GameObject targetLowPriority;
@@ -26,10 +31,12 @@ public class CharacterObject : MonoBehaviour {
 	public delegate void ClickDelegate(CharacterObject co);
 	public event ClickDelegate click_event;
 
-	Image img;
 	int actions_left = 1;
 
 	void Start() {
+		health = this.GetComponent<CharacterHealth>();
+		status = this.GetComponent<CharacterStatus>();
+
 		toggle_lane(false);
 		toggle_targets(false);
 	}
@@ -39,6 +46,7 @@ public class CharacterObject : MonoBehaviour {
 			this.charID = charID;
 			this.data = data;
 			this.weapon = data.weapon;
+			this.skills = data.skills;
 
 			health.init(data);
 			init();
@@ -49,8 +57,12 @@ public class CharacterObject : MonoBehaviour {
 		}
 
 		void init() {
-			img = sprite.GetComponentInChildren<Image>();
-			img.sprite = data.sprite;
+			sprite = sprite.GetComponentInChildren<Image>();
+			sprite.sprite = data.sprite;
+			init_delegates();
+		}
+
+		void init_delegates() {
 		}
 	#endregion
 
@@ -144,8 +156,10 @@ public class CharacterObject : MonoBehaviour {
 			}
 		#endregion motions
 	
-		public void take_hit(int damage) {
-			health.add_health(- damage);
+		public void take_hit(Damage dmg) {
+			health.add_health(- dmg.amount);
+			take_buffs(dmg.buffs);
+
 			if (health.hp == 0) {
 				kill();
 			}
@@ -157,6 +171,12 @@ public class CharacterObject : MonoBehaviour {
 
 		public void kill() {
 			this.gameObject.SetActive(false);
+		}
+	#endregion
+
+	#region buffs
+		public void take_buffs(List<Buff> buffs) {
+			status.insert(buffs);
 		}
 	#endregion
 

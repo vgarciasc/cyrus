@@ -10,6 +10,7 @@ public class CharacterData : ScriptableObject {
 	public string nome;
 	public CharacterClass classe;
 	public Sprite sprite;
+	public List<SkillData> skills = new List<SkillData>();
 
 	//TEMPORARIO
 	public WeaponData weapon;

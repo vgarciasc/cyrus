@@ -5,6 +5,8 @@ using UnityEngine;
 using DG.Tweening;
 
 public class SlotColumn : MonoBehaviour {
+	public bool enemyColumn = false;
+
 	public List<Slot> slots = new List<Slot>();
 	public List<CharacterData> characters = new List<CharacterData>();
 	public List<CharacterObject> charObj = new List<CharacterObject>();
