@@ -12,4 +12,10 @@ public class SkillData : ScriptableObject {
 	public SkillTargeting targetingStyle = SkillTargeting.NULL;
 	public List<Buff> buffs = new List<Buff>();
 	public bool hasButton = true;
+
+	[HeaderAttribute("ON ATTACK Triggering Skills")]
+	[TooltipAttribute("If this skill is activated 'ON ATTACK', does it activate when the attack misses?")]
+	public bool activateEvenWhenAttackMisses = false;
+	[TooltipAttribute("If this skill is activated 'ON ATTACK', does it activate when the attack is a counter attack?")]
+	public bool activateEvenWhenCounterAttack = false;
 }

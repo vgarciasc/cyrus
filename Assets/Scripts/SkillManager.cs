@@ -13,21 +13,40 @@ public class SkillManager : MonoBehaviour {
 			"</color>' used <color=gray>" + skill.title.ToUpper() + "</color>.");
 	}
 
-	public List<Buff> on_attack_buffs(CharacterObject attacker,
-						CharacterObject defender,
-						AttackModule module) {
-		List<Buff> buffs = new List<Buff>();
+	#region on_attack
+		public List<Buff> on_attack_buffs(CharacterObject attacker,
+							CharacterObject defender,
+							AttackModule module) {
+			List<Buff> buffs = new List<Buff>();
 
-		for (int i = 0; i < attacker.skills.Count; i++) {
-			if (attacker.skills[i].targetingStyle == SkillTargeting.ON_ATTACK) {
-				buffs.AddRange(attacker.skills[i].buffs);
+			for (int i = 0; i < attacker.skills.Count; i++) {
+				if (on_attack_should_activate(attacker, defender, module, attacker.skills[i])) {
+					buffs.AddRange(attacker.skills[i].buffs);
 
-				log.insert("<color=magenta>SKILL</color>: '<color=gray>" + attacker.data.nome +
-				"</color>' used <color=gray>" + attacker.skills[i].title.ToUpper() + "</color> on '<color=gray>" +
-				defender.data.nome + "'</color>.");
+					log.insert("<color=magenta>SKILL</color>: '<color=gray>" + attacker.data.nome +
+					"</color>' used <color=gray>" + attacker.skills[i].title.ToUpper() + "</color> on '<color=gray>" +
+					defender.data.nome + "'</color>.");
+				}
 			}
+
+			return buffs;
 		}
 
-		return buffs;
-	}
+		public bool on_attack_should_activate(CharacterObject attacker,
+							CharacterObject defender,
+							AttackModule module,
+							SkillData skill) {
+			
+			if (skill.targetingStyle != SkillTargeting.ON_ATTACK) {
+				return false;
+			}
+
+			if (module == AttackModule.COUNTER_ATTACK &&
+				!skill.activateEvenWhenCounterAttack) {
+				return false;
+			}
+
+			return true;
+		}
+	#endregion
 }

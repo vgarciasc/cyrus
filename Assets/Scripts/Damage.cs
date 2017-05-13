@@ -10,4 +10,9 @@ public class Damage : System.Object {
 		this.amount = amount;
 		this.buffs = buffs;
 	}
+
+	public Damage(Damage dmg) {
+		this.amount = dmg.amount;
+		this.buffs = dmg.buffs;
+	}
 }

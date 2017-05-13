@@ -156,9 +156,8 @@ public class CharacterObject : MonoBehaviour {
 			}
 		#endregion motions
 	
-		public void take_hit(Damage dmg) {
-			health.add_health(- dmg.amount);
-			take_buffs(dmg.buffs);
+		public void take_hit(int amount) {
+			health.add_health(- amount);
 
 			if (health.hp == 0) {
 				kill();

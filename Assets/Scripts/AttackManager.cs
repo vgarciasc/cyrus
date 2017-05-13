@@ -80,20 +80,22 @@ public class AttackManager : MonoBehaviour {
 			char_attacking.use_action();
 			char_attacking.counter_attack_motion();
 
-			Damage dmg = new Damage(
-				calculator.effective_damage(
-					char_attacking,
-					char_attacked,
-					AttackModule.COUNTER_ATTACK),
-				skillManager.on_attack_buffs(
-					char_attacking,
-					char_attacked,
-					AttackModule.COUNTER_ATTACK)
-				);
+			int hit = calculator.effective_damage(
+				char_attacking,
+				char_attacked,
+				AttackModule.COUNTER_ATTACK);
 			
-			//remove debuffs that should not be applied if the attack missed
+			skillManager.on_give_attack(
+				char_attacking,
+				char_attacked,
+				AttackModule.NORMAL_ATTACK);
 
-			char_attacked.take_hit(dmg);
+			skillManager.on_receive_attack(
+				char_attacking,
+				char_attacked,
+				AttackModule.NORMAL_ATTACK);
+
+			char_attacked.take_hit(hit);
 		}
 
 		#region player
