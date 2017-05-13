@@ -1,10 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ArenaManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\BuffContainer.cs">
     <Files>
-      <File FileName="Assets\Scripts\ArenaManager.cs" Line="35" Column="40" />
+      <File FileName="Assets\Scripts\ArenaManager.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\SlotColumn.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Slot.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\BuffContainer.cs" Line="7" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

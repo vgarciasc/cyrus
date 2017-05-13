@@ -108,6 +108,14 @@ public class ArenaManager : MonoBehaviour {
 	#endregion
 
 	#region getters
+		public SlotColumn get_player_column() {
+			return right;
+		}
+
+		public SlotColumn get_enemy_column() {
+			return left;
+		}
+
 		public SlotColumn get_other_column(SlotColumn current) {
 			return current == left? right : left;
 		}
@@ -137,29 +145,16 @@ public class ArenaManager : MonoBehaviour {
 
 		public List<CharacterObject> get_swap_targets(CharacterObject targetter) {
 			List<CharacterObject> targets = new List<CharacterObject>();
-
-			CharacterObject previous = null;
-			bool is_next = false;
-
-			for (int i = 0; i < targetter.column.charObj.Count; i++) {
-				if (targetter.column.charObj[i].charID == targetter.charID) {
-					if (previous != null) {
-						targets.Add(previous);
-					}
-
-					is_next = true;
-					continue;
-				}
-
-				if (is_next && 
-					targetter.column.charObj[i].gameObject.activeSelf) {
-					targets.Add(targetter.column.charObj[i]);
+			
+			switch (targetter.status.getSwapTargets()) {
+				case AllyTarget.ADJACENT:
+					targets.AddRange(targetter.column.get_adjacent_characters(targetter));
 					break;
-				}
-
-				if (targetter.column.charObj[i].gameObject.activeSelf) {
-					previous = targetter.column.charObj[i];
-				}
+				case AllyTarget.EVERYONE:
+					targets.AddRange(targetter.column.get_column_characters_except_targetter(targetter));
+					break;
+				case AllyTarget.NONE:
+					break;
 			}
 
 			return targets;

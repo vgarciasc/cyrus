@@ -161,4 +161,46 @@ public class SlotColumn : MonoBehaviour {
 
 		adjust_positions();
 	}
+
+	public List<CharacterObject> get_adjacent_characters(CharacterObject co) {
+		List<CharacterObject> targets = new List<CharacterObject>();
+
+		CharacterObject previous = null;
+		bool is_next = false;
+			
+		for (int i = 0; i < co.column.charObj.Count; i++) {
+			if (co.column.charObj[i].charID == co.charID) {
+				if (previous != null) {
+					targets.Add(previous);
+				}
+
+				is_next = true;
+				continue;
+			}
+
+			if (is_next && 
+				co.column.charObj[i].gameObject.activeSelf) {
+				targets.Add(co.column.charObj[i]);
+				break;
+			}
+
+			if (co.column.charObj[i].gameObject.activeSelf) {
+				previous = co.column.charObj[i];
+			}
+		}
+
+		return targets;
+	}
+
+	public List<CharacterObject> get_column_characters_except_targetter(CharacterObject co) {
+		List<CharacterObject> targets = new List<CharacterObject>();
+
+		for (int i = 0; i < charObj.Count; i++) {
+			if (charObj[i].gameObject.activeSelf && charObj[i] != co) {
+				targets.Add(charObj[i]);
+			}
+		}
+
+		return targets;
+	}
 }

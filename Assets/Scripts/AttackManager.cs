@@ -8,15 +8,17 @@ public class AttackManager : MonoBehaviour {
 	public GameObject attackScreen;
 	public Text textLeft, textRight;
 	[HideInInspector]
-	public CharacterObject char_attacking,
-							char_attacked;
+	public CharacterObject char_attacker,
+							char_defender;
 
 	[SerializeField]
 	ClickManager clickManager;
 	[SerializeField]
 	ArenaManager arenaManager;
 	[SerializeField]
-	SkillManager skillManager;
+	BuffManager buffManager;
+	[SerializeField]
+	SkillManagerDeluxe skillManager;
 	[SerializeField]
 	ViolenceCalculator calculator;
 
@@ -35,75 +37,86 @@ public class AttackManager : MonoBehaviour {
 
 	#region attack mechanics
 		IEnumerator attack_counterattack() {
-			normal_attack();
+			yield return StartCoroutine(simple_attack());
 
-			if (char_attacked.is_dead()) {
-				char_attacked.column.kill_slot(char_attacked);
+			if (char_defender.is_dead()) {
+				char_defender.column.kill_slot(char_defender);
 				yield break;
 			}			
 
 			yield return new WaitForSeconds(0.3f);
 
-			counter_attack();
+			yield return StartCoroutine(simple_counter());
 
-			if (char_attacked.is_dead()) {
-				char_attacked.column.kill_slot(char_attacked);
+			if (char_defender.is_dead()) {
+				char_defender.column.kill_slot(char_defender);
 				yield break;
 			}
 		}
 
-		void normal_attack() {
-			char_attacking.use_action();
-			char_attacking.attack_motion();
+		IEnumerator simple_attack() {
+			char_attacker.use_action();
 
-			Damage dmg = new Damage(
-				calculator.effective_damage(
-					char_attacking,
-					char_attacked,
-					AttackModule.NORMAL_ATTACK),
-				skillManager.on_attack_buffs(
-					char_attacking,
-					char_attacked,
-					AttackModule.NORMAL_ATTACK)
-				);
+			yield return StartCoroutine(char_attacker.attack_motion());
 
-			//remove debuffs that should not be applied if the attack missed
+			Damage dmg = calculator.effective_damage(
+				char_attacker,
+				char_defender,
+				AttackModule.NORMAL_ATTACK
+			);
 
-			char_attacked.take_hit(dmg);
+			// buffManager.on_attack_buffs(
+			// 	char_attacking,
+			// 	char_attacked,
+			// 	AttackModule.NORMAL_ATTACK)
+
+			PassiveSkillManager passive = skillManager.passiveManager;
+			var on_attack = StartCoroutine(passive.on_attack(char_attacker, char_defender, dmg));
+			yield return on_attack;
+
+			/*
+				update attacker, defender and damage after on_attack
+				char_attacker = skillManager.passiveManager.attacker;			
+			
+			 */
+
+			char_defender.take_hit(dmg.amount);
+			
+			yield break;
 		}
 
-		void counter_attack() {
-			var aux = char_attacking;
-			char_attacking = char_attacked;
-			char_attacked = aux;
+		IEnumerator simple_counter() {
+			var aux = char_attacker;
+			char_attacker = char_defender;
+			char_defender = aux;
 
-			char_attacking.use_action();
-			char_attacking.counter_attack_motion();
+			char_attacker.use_action();
+			yield return StartCoroutine(char_attacker.counter_attack_motion());
 
-			int hit = calculator.effective_damage(
-				char_attacking,
-				char_attacked,
+			Damage dmg = calculator.effective_damage(
+				char_attacker,
+				char_defender,
 				AttackModule.COUNTER_ATTACK);
-			
-			skillManager.on_give_attack(
-				char_attacking,
-				char_attacked,
-				AttackModule.NORMAL_ATTACK);
 
-			skillManager.on_receive_attack(
-				char_attacking,
-				char_attacked,
-				AttackModule.NORMAL_ATTACK);
+			char_defender.take_hit(dmg.amount);
 
-			char_attacked.take_hit(hit);
+			//TODO: CHANGE TO FIT SIMPLE_ATTACK MODEL
+
+			yield break;
+		}
+
+		IEnumerator block(CharacterObject blocker) {
+			yield return StartCoroutine(blocker.block_attack_motion_start(char_defender));
+
+			yield break;
 		}
 
 		#region player
 			//an attacker has been selected
 			void start_attack(CharacterObject charObj) {
-				char_attacking = charObj;
-				char_attacked = arenaManager.get_default_attack_target(charObj);
-				set_target(char_attacked);
+				char_attacker = charObj;
+				char_defender = arenaManager.get_default_attack_target(charObj);
+				set_target(char_defender);
 				toggle_screen(true);
 			}
 
@@ -123,11 +136,11 @@ public class AttackManager : MonoBehaviour {
 		#endregion
 		
 		#region enemy
-			public void enemy_attack(CharacterObject enemy) {
-				char_attacking = enemy;
-				char_attacked = arenaManager.get_default_attack_target(enemy);
+			public IEnumerator enemy_attack(CharacterObject enemy) {
+				char_attacker = enemy;
+				char_defender = arenaManager.get_default_attack_target(enemy);
 				
-				StartCoroutine(attack_counterattack());
+				yield return StartCoroutine(attack_counterattack());
 			}
 		#endregion
 	#endregion
@@ -139,12 +152,12 @@ public class AttackManager : MonoBehaviour {
 				return;
 			}
 
-			char_attacked = charObj;
+			char_defender = charObj;
 			textRight.text = get_char_info(false);
 			textLeft.text = get_char_info(true);
 
 			if (set_new_target_event != null) {
-				set_new_target_event(char_attacking, char_attacked);
+				set_new_target_event(char_attacker, char_defender);
 			}
 		}
 
@@ -153,11 +166,11 @@ public class AttackManager : MonoBehaviour {
 			if (counter) mod = AttackModule.COUNTER_ATTACK; 
 
 			string aux = "";
-			aux += "\nDMG: <color=gray>" + calculator.theoretical_damage(counter? char_attacking : char_attacked,
-															counter? char_attacked : char_attacking,
+			aux += "\nDMG: <color=gray>" + calculator.theoretical_damage(counter? char_attacker : char_defender,
+															counter? char_defender : char_attacker,
 															mod) + "</color>";
-			aux += "\nACC: <color=gray>" + calculator.accuracy_prob(counter? char_attacking : char_attacked,
-															counter? char_attacked : char_attacking,
+			aux += "\nACC: <color=gray>" + calculator.accuracy_prob(counter? char_attacker : char_defender,
+															counter? char_defender : char_attacker,
 															mod) + "%</color>";
 			aux += "\n\n";
 			if (counter) aux += "<color=red>COUNTER!</color>";
@@ -171,7 +184,7 @@ public class AttackManager : MonoBehaviour {
 		}
 
 		public bool is_target_valid(CharacterObject target) {
-			return arenaManager.get_attack_targets(char_attacking).Contains(target);
+			return arenaManager.get_attack_targets(char_attacker).Contains(target);
 		}
 	#endregion
 }

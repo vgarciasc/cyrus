@@ -11,9 +11,11 @@ public class ViolenceCalculator : MonoBehaviour {
 
 	string log_info = "";
 
-	public int effective_damage(CharacterObject attacker,
+	public Damage effective_damage(CharacterObject attacker,
 								CharacterObject defender,
 								AttackModule mod) {
+
+		Damage dmg = new Damage();
 
 		var aux = "";
 		int accuracy = accuracy_prob(attacker, defender, mod);
@@ -23,24 +25,28 @@ public class ViolenceCalculator : MonoBehaviour {
 			log.insert(aux + "'<color=gray>" + attacker.data.nome +
 						"</color>' has not passed the accuracy test (<color=gray>" + 
 						accuracy + "%</color>).");
-			return 0;
+			dmg.amount = 0;
+			return dmg;
 		}
 
-		int damage = theoretical_damage(attacker, defender, mod);
+		int amount = theoretical_damage(attacker, defender, mod);
 		int crit = critical_prob(attacker, defender, mod);
 		if (pass_test(crit)) {
 			if (mod == AttackModule.COUNTER_ATTACK) aux = "<color=red>COUNTER: </color>";
 			else if (mod == AttackModule.NORMAL_ATTACK) aux = "<color=green>NORMAL: </color>";
 			log.insert(aux + "'<color=gray>" + attacker.data.nome + "</color>' has passed the critical test (<color=gray>"
 						+ crit + "%</color>).");
-			damage *= 2;
+			amount *= 2;
+			dmg.crit = true;
 		}
 
 		if (mod == AttackModule.COUNTER_ATTACK) aux = "<color=red>COUNTER: </color>";
 		else if (mod == AttackModule.NORMAL_ATTACK) aux = "<color=green>NORMAL: </color>";
 		log.insert(aux + "'<color=gray>" + attacker.data.nome + "</color>' hits '<color=gray>" + defender.data.nome +
-				"</color>' for <color=gray>" + damage + "</color> damage. " + log_info);
-		return damage;
+				"</color>' for <color=gray>" + amount + "</color> damage. " + log_info);
+		
+		dmg.amount = amount;
+		return dmg;
 	}
 
 	public int theoretical_damage(CharacterObject attacker,
@@ -112,8 +118,16 @@ public class ViolenceCalculator : MonoBehaviour {
 			prob += (int) (attacker.weapon.accuracy * 100 / 2);
 			prob += (int) (attacker.weapon.criticalBonus * 100);
 
-			if (mod == AttackModule.COUNTER_ATTACK) prob /= 2;
+			if (mod == AttackModule.COUNTER_ATTACK) {
+				prob /= 2;
+			}
 
+			float multiplier = attacker.status.getCritMultiplier();
+			if (multiplier != 0) {
+				prob = (int) (prob * multiplier);
+			}
+
+			prob = Mathf.Clamp(prob, 0, 100);
 			return prob;
 		}
 	#endregion

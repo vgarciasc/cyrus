@@ -18,14 +18,20 @@ public class CharacterObject : MonoBehaviour {
 	public WeaponData weapon;
 	[HideInInspector]
 	public List<SkillData> skills = new List<SkillData>();
-	
+
+	public static float swapWaitTime = 0.6f;
+
+	public List<PassiveSkillData> skillsDeluxe = new List<PassiveSkillData>();
+
 	[HeaderAttribute("Components")]
 	public Image sprite;
 	public SlotColumn column;
 	public ButtonLane lane;
+	public BuffContainer buffContainer;
 	public GameObject targetLowPriority;
 	public GameObject targetHiPriority;
 	public GameObject inactiveMask;
+	public Label label;
 
 	//delegates
 	public delegate void ClickDelegate(CharacterObject co);
@@ -34,8 +40,7 @@ public class CharacterObject : MonoBehaviour {
 	int actions_left = 1;
 
 	void Start() {
-		health = this.GetComponent<CharacterHealth>();
-		status = this.GetComponent<CharacterStatus>();
+		init_references();
 
 		toggle_lane(false);
 		toggle_targets(false);
@@ -50,16 +55,21 @@ public class CharacterObject : MonoBehaviour {
 
 			health.init(data);
 			init();
+			init_delegates();
 		}
 
 		public void set_new_pos(Vector3 position) {
-			this.transform.DOMove(position, 0.6f);
+			this.transform.DOMove(position, swapWaitTime);
 		}
 
 		void init() {
 			sprite = sprite.GetComponentInChildren<Image>();
 			sprite.sprite = data.sprite;
-			init_delegates();
+		}
+
+		void init_references() {
+			health = this.GetComponent<CharacterHealth>();
+			status = this.GetComponent<CharacterStatus>();
 		}
 
 		void init_delegates() {
@@ -145,14 +155,29 @@ public class CharacterObject : MonoBehaviour {
 				transform.DOMoveX(this.transform.position.x + mod * distance, duration);
 				yield return new WaitForSeconds(duration);
 				transform.DOMoveX(this.transform.position.x - mod * distance, duration);
+				yield return new WaitForSeconds(duration);
 			}
 
-			public void attack_motion() {
-				StartCoroutine(back_and_forth_motion(20, false, 0.3f));
+			public IEnumerator attack_motion() {
+				yield return StartCoroutine(back_and_forth_motion(20, false, 0.3f));
 			}
 
-			public void counter_attack_motion() {
-				StartCoroutine(back_and_forth_motion(10, false, 0.2f));
+			public IEnumerator counter_attack_motion() {
+				yield return StartCoroutine(back_and_forth_motion(10, false, 0.2f));
+			}
+
+			public IEnumerator block_attack_motion_start(CharacterObject toBlock) {
+				int mod = 1;
+				if (invertedSprite) mod *= -1;
+
+				transform.DOMoveX(this.transform.position.x + mod * 150, 0.3f);
+				yield return new WaitForSeconds(0.3f);
+				transform.DOMoveY(toBlock.transform.position.y, 0.3f);
+				yield return new WaitForSeconds(0.3f);
+			}
+
+			public IEnumerator block_attack_motion_end() {
+				yield break;
 			}
 		#endregion motions
 	
@@ -175,7 +200,10 @@ public class CharacterObject : MonoBehaviour {
 
 	#region buffs
 		public void take_buffs(List<Buff> buffs) {
-			status.insert(buffs);
+			if (status != null) {
+				init_references();
+				status.insert(buffs);
+			}
 		}
 	#endregion
 

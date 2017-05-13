@@ -16,8 +16,8 @@ public class EnemyManager : MonoBehaviour {
 	public event AttackDelegate start_enemy_attack_event,
 								end_enemy_attack_event;
 
-	public void enemy_turn() {
-		StartCoroutine(handle_turn());
+	public IEnumerator enemy_turn() {
+		yield return StartCoroutine(handle_turn());
 	}
 
 	IEnumerator handle_turn() {
@@ -27,6 +27,7 @@ public class EnemyManager : MonoBehaviour {
 			start_enemy_attack_event();
 		}
 
+		//get all enemies
 		List<CharacterObject> aux = new List<CharacterObject>();
 		foreach (CharacterObject c in column.charObj) {
 			if (c.gameObject.activeSelf) {
@@ -34,6 +35,7 @@ public class EnemyManager : MonoBehaviour {
 			}
 		}
 
+		//puts enemies in random order
 		List<CharacterObject> enemies = new List<CharacterObject>();
 		while (aux.Count > 0) {
 			int index = Random.Range(0, aux.Count - 1);
@@ -41,16 +43,21 @@ public class EnemyManager : MonoBehaviour {
 			aux.RemoveAt(index);
 		}
 
+		Coroutine toWait = null;
+
+		//make enemy attack
 		for (int i = 0; i < enemies.Count; i++) {
 			var character = enemies[i];
 
 			int dice = Random.Range(0, 13);
 			switch (dice) {
 				default:
-					attackManager.enemy_attack(character);
+					toWait = StartCoroutine(attackManager.enemy_attack(character));
+					yield return toWait;
 					break;
 				case 0:
-					swapManager.random_swap(character);
+					toWait = StartCoroutine(swapManager.random_swap(character));
+					yield return toWait;
 					break;
 			}
 

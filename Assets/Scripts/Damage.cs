@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Damage : System.Object {
-	public int amount;
+	public int amount = 0;
+	public bool crit = false;
 	public List<Buff> buffs = new List<Buff>();
 
 	public Damage(int amount, List<Buff> buffs) {
@@ -15,4 +16,6 @@ public class Damage : System.Object {
 		this.amount = dmg.amount;
 		this.buffs = dmg.buffs;
 	}
+
+	public Damage() {}
 }

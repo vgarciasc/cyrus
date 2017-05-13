@@ -1,0 +1,135 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI;
+using UnityEngine;
+using DG.Tweening;
+
+public class BuffManager : MonoBehaviour {
+	[SerializeField]
+	CombatLogManager log;
+
+	#region on_attack
+		public List<Buff> on_attack_buffs(CharacterObject attacker,
+							CharacterObject defender,
+							AttackModule module) {
+			List<Buff> buffs = new List<Buff>();
+
+			for (int i = 0; i < attacker.skills.Count; i++) {
+				if (on_attack_should_activate(attacker, defender, module, attacker.skills[i])) {
+					buffs.AddRange(attacker.skills[i].buffs);
+
+					log.insert("<color=magenta>SKILL</color>: '<color=gray>" + attacker.data.nome +
+					"</color>' used <color=gray>" + attacker.skills[i].title.ToUpper() + "</color> on '<color=gray>" +
+					defender.data.nome + "'</color>.");
+				}
+			}
+
+			return buffs;
+		}
+
+		public bool on_attack_should_activate(CharacterObject attacker,
+							CharacterObject defender,
+							AttackModule module,
+							SkillData skill) {
+			
+			if (skill.targetingStyle != SkillTargeting.ON_ATTACK) {
+				return false;
+			}
+
+			if (module == AttackModule.COUNTER_ATTACK &&
+				!skill.activateEvenWhenCounterAttack) {
+				return false;
+			}
+
+			return true;
+		}
+	#endregion
+
+	public IEnumerator ApplyBuff(CharacterObject attacker,
+								CharacterObject defender,
+								Damage dmg,
+								PassiveSkillData skill,
+								Effect eff,
+								CharacterObject skill_caster) {		
+
+		Debug.Log("Buff '" + eff.buff + "' applied.");
+		List<CharacterObject> targets_aux = new List<CharacterObject>();
+		
+		//show label
+		if (eff.alsoShowLabel || eff.kind == EffectKind.LABEL_SHOW) {
+			StartCoroutine(skill_caster.label.showLabel(skill.name));
+		}
+
+		//build targets
+		for (int i = 0; i < eff.targets.Count; i++) {
+			var target = eff.targets[i];
+			switch (target) {
+				case TargetKind.LAST_ATTACKER:
+					targets_aux.Add(attacker);
+					break;
+				case TargetKind.LAST_DEFENDER:
+					targets_aux.Add(defender);
+					break;
+				case TargetKind.ADJACENT_TO_CASTER:
+					targets_aux.AddRange(skill_caster.column.get_adjacent_characters(skill_caster));
+					break;
+				case TargetKind.CASTER:
+					targets_aux.Add(skill_caster);
+					break;
+			}
+		}
+
+		//show buff or debuff animation (arrows up and down)
+		Coroutine toWait = null;
+		if (eff.showBuffDebuffAnimation) {
+			for (int i = 0; i < targets_aux.Count; i++) {
+				toWait = StartCoroutine(FadeIn_Up_FadeOut(targets_aux[i], eff.buff));
+			}
+
+			if (toWait != null) {
+				yield return toWait;
+			}
+		}
+
+		//apply buffs
+		for (int i = 0; i < targets_aux.Count; i++) {
+			CharacterObject target = targets_aux[i];
+			target.take_buffs(new List<Buff> {eff.buff});
+		}
+	}
+
+	IEnumerator FadeIn_Up_FadeOut(CharacterObject character, Buff buff) {
+		BuffContainer container = character.buffContainer;
+		GameObject buffObject;
+
+		if (buff.gender == BuffGender.BUFF) {
+			buffObject = container.buff;
+		} else /*if (buff.gender == BuffGender.DEBUFF)*/ {
+			buffObject = container.debuff;
+		}
+
+		buffObject.gameObject.SetActive(true);
+		setOpacity(buffObject, 0f);
+
+		Image bg = buffObject.GetComponentInChildren<Image>();
+		Vector2 buffOriginalPosition = bg.transform.localPosition;
+
+		Color fullOpacityBG = HushPuppy.getColorWithOpacity(bg.color, 1f);
+		Color zeroOpacityBG = HushPuppy.getColorWithOpacity(bg.color, 0f);
+
+		bg.DOColor(fullOpacityBG, 0.5f);
+		bg.transform.DOLocalMoveY(bg.transform.localPosition.y + 20f * bg.transform.localScale.y, 0.5f);
+		yield return new WaitForSeconds(0.5f);
+
+		bg.DOColor(zeroOpacityBG, 0.5f);
+		yield return new WaitForSeconds(0.5f);
+
+		bg.transform.localPosition = buffOriginalPosition;
+		buffObject.gameObject.SetActive(false);
+	}
+
+	void setOpacity(GameObject buffContainer, float value) {
+		Image bg = buffContainer.GetComponentInChildren<Image>();
+		bg.color = HushPuppy.getColorWithOpacity(bg.color, value);
+	}
+}

@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AllyTarget {
+	NONE, //cannot swap with anybody
+	ADJACENT, //default
+	EVERYONE //character can swap with everyone
+};
+
 public class SwapManager : MonoBehaviour {
 	[SerializeField]
 	ClickManager clickManager;
@@ -48,8 +54,17 @@ public class SwapManager : MonoBehaviour {
 		return (arenaManager.get_swap_targets(char_swap1).Contains(swap_target));
 	}
 
-	public void random_swap(CharacterObject swapper) {
+	public IEnumerator random_swap(CharacterObject swapper) {
 		start_swap(swapper);
 		end_swap(arenaManager.get_swap_targets(swapper)[0]);
+		
+		Coroutine toWait = null;
+		toWait = StartCoroutine(wait_swap_end());
+
+		yield return toWait;
+	}
+
+	public IEnumerator wait_swap_end() {
+		yield return new WaitForSeconds(CharacterObject.swapWaitTime);
 	}
 }

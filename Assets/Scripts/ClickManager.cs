@@ -17,8 +17,6 @@ public class ClickManager : MonoBehaviour {
 	SwapManager swapManager;
 	[SerializeField]
 	EnemyManager enemyManager;
-	[SerializeField]
-	SkillManager skillManager;
 
 	//delegates
 	public delegate void AttackDelegate(CharacterObject charObj);
@@ -225,7 +223,7 @@ public class ClickManager : MonoBehaviour {
 						currentState = States.NOTHING;
 						
 						charObj.lane.toggle_lane(false);
-						skillManager.cast(charObj, skill);
+						// skillManager.cast(charObj, skill);
 						break;
 				}
 				break;

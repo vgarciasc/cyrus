@@ -18,6 +18,10 @@ public class TurnManager : MonoBehaviour {
 	ArenaManager arenaManager;
 	[SerializeField]
 	ClickManager clickManager;
+	[SerializeField]
+	BuffManager buffManager;
+	[SerializeField]
+	SkillManagerDeluxe skillManager;
 
 	public delegate void VoidDelegate();
 	public event VoidDelegate another_turn;
@@ -32,15 +36,21 @@ public class TurnManager : MonoBehaviour {
 	}
 
 	IEnumerator handleTurns() {
+		Coroutine aux = null;
+		yield return StartCoroutine(skillManager.passiveManager.on_match_start());
+
 		while (true) {
 			StartPlayerTurn();
+
+			aux = StartCoroutine(skillManager.passiveManager.on_turn_start(arenaManager.get_player_column()));
+			yield return aux;
 
 			//player turn
 			yield return new WaitUntil(() => end_player_turn);
 			end_player_turn = false;
 			//player turn
 
-			StartEnemyTurn();
+			yield return StartCoroutine(StartEnemyTurn());
 
 			//enemy turn
 			yield return new WaitForSeconds(1.0f);
@@ -64,9 +74,9 @@ public class TurnManager : MonoBehaviour {
 		}
 	}
 
-	void StartEnemyTurn() {
-		enemyManager.enemy_turn();
+	IEnumerator StartEnemyTurn() {
 		arenaManager.refresh_character_actions();
+		yield return enemyManager.enemy_turn();
 	}
 
 	void EndEnemyTurn() {
