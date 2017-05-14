@@ -54,6 +54,13 @@ public class SwapManager : MonoBehaviour {
 		return (arenaManager.get_swap_targets(char_swap1).Contains(swap_target));
 	}
 
+	public IEnumerator swap_characters(CharacterObject co1, CharacterObject co2) {
+		start_swap(co1);
+		end_swap(co2);
+
+		yield return wait_swap_end();
+	}
+
 	public IEnumerator random_swap(CharacterObject swapper) {
 		start_swap(swapper);
 		end_swap(arenaManager.get_swap_targets(swapper)[0]);

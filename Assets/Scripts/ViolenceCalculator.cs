@@ -5,6 +5,10 @@ using UnityEngine;
 public enum AttackModule {NORMAL_ATTACK, COUNTER_ATTACK};
 public enum AttackKind {PHYSICAL, MAGICAL};
 
+public class AttackBonus {
+	public float totalMultiplier = 1f;
+}
+
 public class ViolenceCalculator : MonoBehaviour {
 	[SerializeField]
 	CombatLogManager log;
@@ -15,7 +19,8 @@ public class ViolenceCalculator : MonoBehaviour {
 
 	public Damage effective_damage(CharacterObject attacker,
 								CharacterObject defender,
-								AttackModule mod) {
+								AttackModule mod,
+								AttackBonus bonus) {
 
 		Damage dmg = new Damage();
 
@@ -59,6 +64,11 @@ public class ViolenceCalculator : MonoBehaviour {
 				"</color>' for <color=gray>" + amount + "</color> damage. " + log_info);
 		
 		dmg.amount = amount;
+
+		if (bonus != null) {
+			dmg.amount = (int) (dmg.amount * bonus.totalMultiplier);
+		}
+
 		return dmg;
 	}
 
@@ -111,7 +121,11 @@ public class ViolenceCalculator : MonoBehaviour {
 		}
 	}
 
-	public bool pass_test(float probability) {
+	public static bool pass_test(float probability) {
+		if (probability <= 1f && probability >= 0f) {
+			probability *= 100f;
+		}
+		
 		return (Random.Range(0, 100) <= probability);
 	}
 

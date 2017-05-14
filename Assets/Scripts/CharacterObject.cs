@@ -22,6 +22,7 @@ public class CharacterObject : MonoBehaviour {
 	public static float swapWaitTime = 0.6f;
 
 	public List<PassiveSkillData> skillsDeluxe = new List<PassiveSkillData>();
+	public List<ActiveSkillData> activeSkills = new List<ActiveSkillData>();
 
 	[HeaderAttribute("Components")]
 	public Image sprite;

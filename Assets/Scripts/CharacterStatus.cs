@@ -90,13 +90,23 @@ public class CharacterStatus : MonoBehaviour {
 
 		public AllyTarget getSwapTargets() {
 			for (int i = 0; i < buffs.Count; i++) {
-				Debug.Log(buffs[i].kind + ": " + buffs[i].swapTarget);
 				if (buffs[i].kind == BuffType.SWAP_TARGETTING) {
 					return buffs[i].swapTarget;
 				}
 			}
 
 			return AllyTarget.ADJACENT; //the default
+		}
+
+		public bool getSwappable() {
+			for (int i = 0; i < buffs.Count; i++) {
+				Debug.Log(buffs[i].kind + ": " + buffs[i].swapTarget);
+				if (buffs[i].kind == BuffType.SWAP_BLOCKING) {
+					return false;
+				}
+			}
+
+			return true;
 		}
 	#endregion
 }

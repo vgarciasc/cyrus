@@ -36,8 +36,8 @@ public class AttackManager : MonoBehaviour {
 	}
 
 	#region attack mechanics
-		IEnumerator attack_counterattack() {
-			yield return StartCoroutine(simple_attack());
+		IEnumerator complete_attack(AttackBonus bonus) {
+			yield return StartCoroutine(simple_attack(bonus));
 
 			if (char_defender.is_dead()) {
 				char_defender.column.kill_slot(char_defender);
@@ -45,8 +45,12 @@ public class AttackManager : MonoBehaviour {
 			}			
 
 			yield return new WaitForSeconds(0.3f);
+			
+			var aux = char_attacker;
+			char_attacker = char_defender;
+			char_defender = aux;
 
-			yield return StartCoroutine(simple_counter());
+			yield return StartCoroutine(simple_counter(bonus));
 
 			if (char_defender.is_dead()) {
 				char_defender.column.kill_slot(char_defender);
@@ -54,7 +58,11 @@ public class AttackManager : MonoBehaviour {
 			}
 		}
 
-		IEnumerator simple_attack() {
+		IEnumerator simple_attack(AttackBonus bonus) {
+			if (char_attacker.is_dead() || char_defender.is_dead()) {
+				yield break;
+			}
+
 			char_attacker.use_action();
 
 			yield return StartCoroutine(char_attacker.attack_motion());
@@ -62,23 +70,13 @@ public class AttackManager : MonoBehaviour {
 			Damage dmg = calculator.effective_damage(
 				char_attacker,
 				char_defender,
-				AttackModule.NORMAL_ATTACK
+				AttackModule.NORMAL_ATTACK,
+				bonus
 			);
-
-			// buffManager.on_attack_buffs(
-			// 	char_attacking,
-			// 	char_attacked,
-			// 	AttackModule.NORMAL_ATTACK)
 
 			PassiveSkillManager passive = skillManager.passiveManager;
 			var on_attack = StartCoroutine(passive.on_attack(char_attacker, char_defender, dmg));
 			yield return on_attack;
-
-			/*
-				update attacker, defender and damage after on_attack
-				char_attacker = skillManager.passiveManager.attacker;			
-			
-			 */
 
 			char_defender.take_hit(dmg.amount);
 
@@ -89,15 +87,16 @@ public class AttackManager : MonoBehaviour {
 			yield break;
 		}
 
-		IEnumerator simple_counter() {
-			var aux = char_attacker;
-			char_attacker = char_defender;
-			char_defender = aux;
+		IEnumerator simple_counter(AttackBonus bonus) {
+			if (char_attacker.is_dead() || char_defender.is_dead()) {
+				yield break;
+			}
 
 			Damage dmg = calculator.effective_damage(
 				char_attacker,
 				char_defender,
-				AttackModule.COUNTER_ATTACK);
+				AttackModule.COUNTER_ATTACK,
+				bonus);
 
 			char_attacker.use_action();
 			var motion = StartCoroutine(char_attacker.counter_attack_motion());
@@ -136,7 +135,7 @@ public class AttackManager : MonoBehaviour {
 			}
 
 			void conclude_attack() {
-				StartCoroutine(attack_counterattack());
+				StartCoroutine(complete_attack(null));
 				toggle_screen(false);
 			}
 
@@ -151,7 +150,7 @@ public class AttackManager : MonoBehaviour {
 				char_attacker = enemy;
 				char_defender = arenaManager.get_default_attack_target(enemy);
 				
-				yield return StartCoroutine(attack_counterattack());
+				yield return StartCoroutine(complete_attack(null));
 			}
 		#endregion
 	#endregion
@@ -196,6 +195,38 @@ public class AttackManager : MonoBehaviour {
 
 		public bool is_target_valid(CharacterObject target) {
 			return arenaManager.get_attack_targets(char_attacker).Contains(target);
+		}
+	#endregion
+
+	#region skill interfaces
+		public IEnumerator complete_attack(CharacterObject attacker,
+										CharacterObject defender,
+										AttackBonus bonus) {
+			
+			this.char_attacker = attacker;
+			this.char_defender = defender;
+			
+			yield return complete_attack(bonus);
+		}
+
+		public IEnumerator simple_attack(CharacterObject attacker,
+										CharacterObject defender,
+										AttackBonus bonus) {
+			
+			this.char_attacker = attacker;
+			this.char_defender = defender;
+			
+			yield return simple_attack(bonus);
+		}
+
+		public IEnumerator simple_counter(CharacterObject attacker,
+										CharacterObject defender,
+										AttackBonus bonus) {
+			
+			this.char_attacker = attacker;
+			this.char_defender = defender;
+			
+			yield return simple_counter(bonus);
 		}
 	#endregion
 }

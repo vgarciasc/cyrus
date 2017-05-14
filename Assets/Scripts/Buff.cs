@@ -13,7 +13,8 @@ public enum BuffType {
 	CRIT_MULTIPLIER, //multiplies probability of critical hits
 	SWAP_TARGETTING, //changes what allies the user can swap with
 	BLOCK_CHANCE, //adds to probability of defending an ally from an attack
-	IGNORE_CHANCE //adds to probability of blocking entire attack
+	IGNORE_CHANCE, //adds to probability of blocking entire attack
+	SWAP_BLOCKING //changes if the user can be swapped with
 };
 
 public enum BuffGender {BUFF, DEBUFF, NONE};
@@ -30,6 +31,8 @@ public class Buff : System.Object {
 	[HideInInspector]
 	public int turnsLeft = 0;
 	public bool stackable = true;
+	[RangeAttribute(0f, 1f)]
+	public float probability = 1f;
 
 	//swap targetting
 	public AllyTarget swapTarget = AllyTarget.ADJACENT;

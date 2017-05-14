@@ -46,18 +46,14 @@ public class ButtonLane : MonoBehaviour {
 			return;
 		}
 
-		for (int i = 0; i < character.skills.Count; i++) {
-			if (!character.skills[i].hasButton) {
-				continue;
-			}
-			
+		for (int i = 0; i < character.activeSkills.Count; i++) {
 			GameObject aux = Instantiate(skillButtonPrefab,
 				buttonContainer.transform,
 				false);
 			SkillLaneButton slb = aux.GetComponent<SkillLaneButton>();
 			skillButtons.Add(slb);
 				
-			slb.init(character, character.skills[i]);
+			slb.init(character, character.activeSkills[i]);
 		}
 	}
 

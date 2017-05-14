@@ -39,6 +39,10 @@ public class PassiveSkillManager : MonoBehaviour {
 		CharacterObject skill_caster;
 
 		for (int i = 0; i < column.charObj.Count; i++) {
+			if (column.charObj[i].is_dead()) {
+				continue;
+			}
+
 			for (int j = 0; j < column.charObj[i].skillsDeluxe.Count; j++) {
 				PassiveSkillData psv = column.charObj[i].skillsDeluxe[j];
 				skill_caster = column.charObj[i];
@@ -175,12 +179,12 @@ public class PassiveSkillManager : MonoBehaviour {
 			TriggerKind trigger = psv.triggers[j].kind;
 
 			//ON_MAKE_ATTACK
-			if (caster_is_attacker && trigger == TriggerKind.ON_MAKE_ATTACK) {
+			if (trigger == TriggerKind.ON_MAKE_ATTACK && caster_is_attacker) {
 				should_cast_OR = true;
 				continue;
 			}
 			//ON_RECEIVE_ATTACK
-			if (!caster_is_attacker && trigger == TriggerKind.ON_RECEIVE_ATTACK) {
+			if (trigger == TriggerKind.ON_RECEIVE_ATTACK && !caster_is_attacker) {
 				should_cast_OR = true;
 				continue;
 			}
@@ -258,12 +262,12 @@ public class PassiveSkillManager : MonoBehaviour {
 			TriggerKind trigger = psv.triggers[j].kind;
 
 			//ON_MAKE_ATTACK
-			if (caster_is_attacker && trigger == TriggerKind.ON_MAKE_ATTACK) {
+			if (trigger == TriggerKind.ON_MAKE_ATTACK && caster_is_attacker) {
 				should_cast_OR = true;
 				continue;
 			}
 			//ON_RECEIVE_ATTACK
-			else if (!caster_is_attacker && trigger == TriggerKind.ON_RECEIVE_ATTACK) {
+			else if (trigger == TriggerKind.ON_RECEIVE_ATTACK && !caster_is_attacker) {
 				should_cast_OR = true;
 				continue;
 			}

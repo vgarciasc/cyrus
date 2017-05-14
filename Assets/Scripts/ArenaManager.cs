@@ -157,7 +157,15 @@ public class ArenaManager : MonoBehaviour {
 					break;
 			}
 
-			return targets;
+			List<CharacterObject> aux = new List<CharacterObject>();
+
+			for (int i = 0; i < targets.Count; i++) {
+				if (targets[i].status.getSwappable()) {
+					aux.Add(targets[i]);
+				}
+			}
+
+			return aux;
 		}
 	#endregion
 

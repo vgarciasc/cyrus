@@ -19,7 +19,7 @@ public class Slot : MonoBehaviour {
 	List<Color> colors = new List<Color>() {
 		Color.red,
 		Color.blue,
-		Color.green,
+		Color.cyan,
 		Color.magenta
 	};
 

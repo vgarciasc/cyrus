@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\ActiveSkillData.cs" />
      <Compile Include="Assets\Scripts\ActiveSkillManager.cs" />
      <Compile Include="Assets\Scripts\ArenaManager.cs" />
      <Compile Include="Assets\Scripts\AttackManager.cs" />
@@ -61,6 +62,7 @@
      <Compile Include="Assets\Scripts\CombatLogManager.cs" />
      <Compile Include="Assets\Scripts\Damage.cs" />
      <Compile Include="Assets\Scripts\Effect.cs" />
+     <Compile Include="Assets\Scripts\ElementActive.cs" />
      <Compile Include="Assets\Scripts\EnemyManager.cs" />
      <Compile Include="Assets\Scripts\GenericTweenAnimator.cs" />
      <Compile Include="Assets\Scripts\HushPuppy.cs" />
@@ -75,6 +77,7 @@
      <Compile Include="Assets\Scripts\SlotColumn.cs" />
      <Compile Include="Assets\Scripts\StatsManager.cs" />
      <Compile Include="Assets\Scripts\SwapManager.cs" />
+     <Compile Include="Assets\Scripts\TargetManager.cs" />
      <Compile Include="Assets\Scripts\Trigger.cs" />
      <Compile Include="Assets\Scripts\TurnManager.cs" />
      <Compile Include="Assets\Scripts\ViolenceCalculator.cs" />

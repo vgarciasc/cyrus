@@ -17,6 +17,10 @@ public class ClickManager : MonoBehaviour {
 	SwapManager swapManager;
 	[SerializeField]
 	EnemyManager enemyManager;
+	[SerializeField]
+	TargetManager targetManager;
+	[SerializeField]
+	SkillManagerDeluxe skillManager;
 
 	//delegates
 	public delegate void AttackDelegate(CharacterObject charObj);
@@ -42,7 +46,7 @@ public class ClickManager : MonoBehaviour {
 	//variables
 	enum States {NOTHING, CHOOSING_ACTION, DISPLAYING_ATTACK_INFO,
 				DISPLAYING_CHAR_ATTRIBUTES, SWAPPING_ALLIES, IS_ATTACKING,
-				ENEMY_TURN};
+				ENEMY_TURN, TARGET_MANAGER};
 	States currentState;
 
 	void Start() {
@@ -55,7 +59,7 @@ public class ClickManager : MonoBehaviour {
 				if (deactivate_all_lanes != null) {
 					deactivate_all_lanes();
 				}	
-				if (deactivate_all_lanes != null) {
+				if (deactivate_all_cancels != null) {
 					deactivate_all_cancels();
 				}	
 				charObj.lane.toggle(true);
@@ -91,6 +95,10 @@ public class ClickManager : MonoBehaviour {
 						conclude_swap_event();
 					}
 				}
+				break;
+			
+			case States.TARGET_MANAGER:
+				targetManager.click_character(charObj);
 				break;
 		}
 	}
@@ -148,6 +156,10 @@ public class ClickManager : MonoBehaviour {
 				if (conclude_attack_event != null) {
 					conclude_attack_event();
 				}
+				break;
+
+			case States.TARGET_MANAGER:
+				targetManager.click_confirmation_button();
 				break;
 		}
 	}
@@ -212,20 +224,23 @@ public class ClickManager : MonoBehaviour {
 					deactivate_choosing_swap_target_event(charObj);
 				}
 				break;
+
+			case States.TARGET_MANAGER:
+
+				targetManager.click_cancel_button();
+
+				break;				
 		}
 	}
 
-	public void click_skill_button(CharacterObject charObj, SkillData skill) {
+	public void click_skill_button(CharacterObject charObj, ActiveSkillData skill) {
 		switch (currentState) {
 			case States.CHOOSING_ACTION:
-				switch (skill.targetingStyle) {
-					case SkillTargeting.ON_ATTACK:
-						currentState = States.NOTHING;
-						
-						charObj.lane.toggle_lane(false);
-						// skillManager.cast(charObj, skill);
-						break;
-				}
+				currentState = States.TARGET_MANAGER;
+				
+				StartCoroutine(skillManager.activeManager.CastSkill(skill, charObj, null, 0));
+				charObj.lane.toggle_lane(false);
+
 				break;
 		}
 	}
@@ -236,6 +251,30 @@ public class ClickManager : MonoBehaviour {
 				currentState = States.NOTHING;
 
 				break;
+		}
+	}
+
+	public void end_targetting(CharacterObject caster, bool was_cast_successful) {
+		switch (currentState) {
+			case States.TARGET_MANAGER:
+				if (was_cast_successful) {
+					//if is not casting and casting was successful, go to NOTHING
+					currentState = States.NOTHING;	
+
+					if (deactivate_all_cancels != null) {
+						deactivate_all_cancels();
+					}
+					
+					break;
+				}
+				else {
+					//if is not casting and casting was not successful, go back to choosing actions
+					currentState = States.CHOOSING_ACTION;
+
+					caster.lane.toggle_lane(true);
+					
+					break;
+				}
 		}
 	}
 }

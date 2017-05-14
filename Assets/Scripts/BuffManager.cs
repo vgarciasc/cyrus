@@ -116,6 +116,29 @@ public class BuffManager : MonoBehaviour {
 		}
 	}
 
+	public IEnumerator ApplyBuff(CharacterObject target,
+								ActiveSkillData skill,
+								ElementActive elem,
+								CharacterObject caster) {		
+
+		Buff buff = elem.buff;
+
+		Debug.Log("Buff '" + elem.buff + "' applied.");
+		List<CharacterObject> targets_aux = new List<CharacterObject>();
+
+		if (elem.showBuffLabel) {
+			StartCoroutine(caster.label.showLabel(skill.name));
+		}
+
+		//show buff or debuff animation (arrows up and down)
+		Coroutine toWait = null;
+		toWait = StartCoroutine(FadeIn_Up_FadeOut(target, elem.buff));
+		yield return toWait;
+
+		//apply buffs
+		target.take_buffs(new List<Buff> {elem.buff});
+	}
+
 	IEnumerator FadeIn_Up_FadeOut(CharacterObject character, Buff buff) {
 		BuffContainer container = character.buffContainer;
 		GameObject buffObject;
