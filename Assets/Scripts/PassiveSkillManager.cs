@@ -22,8 +22,10 @@ public class PassiveSkillManager : MonoBehaviour {
 				skill_caster = possible_casters[i];
 
 				for (int k = 0; k < psv.triggers.Count; k++) {
+					TriggerKind trigger = psv.triggers[k].kind;
+
 					//ON_START_MATCH
-					if (psv.triggers[k].kind == TriggerKind.ON_START_MATCH) {
+					if (trigger == TriggerKind.ON_START_MATCH) {
 						yield return CastEffects(psv,
 												skill_caster);
 					}
@@ -42,10 +44,17 @@ public class PassiveSkillManager : MonoBehaviour {
 				skill_caster = column.charObj[i];
 
 				for (int k = 0; k < psv.triggers.Count; k++) {
+					TriggerKind trigger = psv.triggers[k].kind;
+					bool should_cast = false;
+
 					//ON_OWN_TURN_START
-					if (psv.triggers[k].kind == TriggerKind.ON_OWN_TURN_START) {
+					if (trigger == TriggerKind.ON_OWN_TURN_START) {
+						should_cast = true;
+					}
+
+					if (should_cast) {
 						yield return CastEffects(psv,
-												skill_caster);
+												skill_caster);	
 					}
 				}
 			}
@@ -63,28 +72,240 @@ public class PassiveSkillManager : MonoBehaviour {
 		for (int i = 0; i < attacker.skillsDeluxe.Count; i++) {
 			PassiveSkillData psv = attacker.skillsDeluxe[i];
 			skill_caster = attacker;
+			
+			if (should_cast(dmg, psv, true)) {
+				yield return CastEffects(attacker,
+										defender,
+										dmg,
+										psv,
+										skill_caster);	
+			}
+		}
 
-			for (int j = 0; j < psv.triggers.Count; j++) {
-				//ON_SUCCESSFUL_ATTACK
-				if (psv.triggers[j].kind == TriggerKind.ON_SUCCESSFUL_ATTACK
-					&& dmg.amount > 0) {
-					yield return CastEffects(attacker,
-											defender,
-											dmg,
-											psv,
-											skill_caster);
-				}
-				//ON_SUCCESSFUL_CRIT
-				if (psv.triggers[j].kind == TriggerKind.ON_SUCCESSFUL_CRIT
-					&& dmg.crit) {
-					yield return CastEffects(attacker,
-											defender,
-											dmg,
-											psv,
-											skill_caster);	
+		for (int i = 0; i < defender.skillsDeluxe.Count; i++) {
+			PassiveSkillData psv = defender.skillsDeluxe[i];
+			skill_caster = defender;
+
+			if (should_cast(dmg, psv, false)) {
+				yield return CastEffects(attacker,
+										defender,
+										dmg,
+										psv,
+										skill_caster);	
+			}
+		}
+	}
+
+	public IEnumerator on_counter_attack(CharacterObject attacker,
+										CharacterObject defender,
+										Damage dmg) {
+		
+		yield return StartCoroutine(on_attack(attacker, defender, dmg));
+
+		yield break;
+	}
+
+	public float Get_Crit_Probability(CharacterObject attacker,
+								CharacterObject defender,
+								AttackModule mod) {
+		
+		float prob = 0;
+
+		for (int i = 0; i < attacker.skillsDeluxe.Count; i++) {
+			PassiveSkillData psv = attacker.skillsDeluxe[i];
+
+			if (should_cast(attacker, defender, mod, psv, true)) {
+				for (int k = 0; k < psv.effects.Count; k++) {
+					prob += BuffManager.getCriticalMultiplier(psv.effects[k].buff);
 				}
 			}
 		}
+
+		for (int i = 0; i < defender.skillsDeluxe.Count; i++) {
+			PassiveSkillData psv = defender.skillsDeluxe[i];
+
+			if (should_cast(attacker, defender, mod, psv, false)) {
+				for (int k = 0; k < psv.effects.Count; k++) {
+					prob += BuffManager.getCriticalMultiplier(psv.effects[k].buff);
+				}
+			}
+		}
+
+		return prob;
+	}
+
+	public float Get_Ignore_Probability(CharacterObject attacker,
+								CharacterObject defender,
+								AttackModule mod) {
+		
+		float prob = 0;
+
+		for (int i = 0; i < attacker.skillsDeluxe.Count; i++) {
+			PassiveSkillData psv = attacker.skillsDeluxe[i];
+
+			if (should_cast(attacker, defender, mod, psv, true)) {
+				for (int k = 0; k < psv.effects.Count; k++) {
+					prob += BuffManager.getIgnoreMultiplier(psv.effects[k].buff);
+				}
+			}
+		}
+
+		for (int i = 0; i < defender.skillsDeluxe.Count; i++) {
+			PassiveSkillData psv = defender.skillsDeluxe[i];
+
+			if (should_cast(attacker, defender, mod, psv, false)) {
+				for (int k = 0; k < psv.effects.Count; k++) {
+					prob += BuffManager.getIgnoreMultiplier(psv.effects[k].buff);
+				}
+			}
+		}
+
+		return prob;
+	}
+
+	//used after attack has been calculated
+	public bool should_cast(Damage dmg,
+							PassiveSkillData psv,
+							bool caster_is_attacker) {
+
+		bool should_cast_OR = false;
+		bool should_cast_AND = true;
+
+		for (int j = 0; j < psv.triggers.Count; j++) {
+			TriggerKind trigger = psv.triggers[j].kind;
+
+			//ON_MAKE_ATTACK
+			if (caster_is_attacker && trigger == TriggerKind.ON_MAKE_ATTACK) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_RECEIVE_ATTACK
+			if (!caster_is_attacker && trigger == TriggerKind.ON_RECEIVE_ATTACK) {
+				should_cast_OR = true;
+				continue;
+			}
+
+			//ON_SUCCESSFUL_ATTACK
+			else if (trigger == TriggerKind.ON_SUCCESSFUL_ATTACK
+				&& dmg.amount > 0) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_CRIT_ATTACK
+			else if (trigger == TriggerKind.ON_CRIT_ATTACK
+				&& dmg.crit) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_PHYSICAL_ATTACK
+			else if (trigger == TriggerKind.ON_PHYSICAL_ATTACK
+				&& dmg.attackKind == AttackKind.PHYSICAL) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_MAGICAL_ATTACK
+			else if (trigger == TriggerKind.ON_MAGICAL_ATTACK
+				&& dmg.attackKind == AttackKind.MAGICAL) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_COUNTER_ATTACK
+			else if (trigger == TriggerKind.ON_SIMPLE_COUNTER
+				&& dmg.attackModule == AttackModule.COUNTER_ATTACK) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_SIMPLE_ATTACK
+			else if (trigger == TriggerKind.ON_SIMPLE_ATTACK
+				&& dmg.attackModule == AttackModule.NORMAL_ATTACK) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_MISS_ATTACK
+			else if (trigger == TriggerKind.ON_MISS_ATTACK
+				&& dmg.amount == 0) {
+				should_cast_OR = true;
+				continue;
+			}
+			else {
+				should_cast_AND = false;
+			}
+		}
+
+		should_cast_AND &= should_cast_OR;
+		bool should_cast = false;
+		if (psv.operation == PassiveSkillData.TriggerOperation.AND && should_cast_AND) {
+			should_cast = true;
+		}
+		else if (psv.operation == PassiveSkillData.TriggerOperation.OR && should_cast_OR) {
+			should_cast = true;
+		}
+
+		return should_cast;
+	}
+
+	//used during attack calculations
+	public bool should_cast(CharacterObject attacker,
+							CharacterObject defender,
+							AttackModule mod,
+							PassiveSkillData psv,
+							bool caster_is_attacker) {
+		
+		bool should_cast_OR = false;
+		bool should_cast_AND = true;
+		
+		for (int j = 0; j < psv.triggers.Count; j++) {
+			TriggerKind trigger = psv.triggers[j].kind;
+
+			//ON_MAKE_ATTACK
+			if (caster_is_attacker && trigger == TriggerKind.ON_MAKE_ATTACK) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_RECEIVE_ATTACK
+			else if (!caster_is_attacker && trigger == TriggerKind.ON_RECEIVE_ATTACK) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_SIMPLE_ATTACK
+			else if (trigger == TriggerKind.ON_SIMPLE_ATTACK &&
+				mod == AttackModule.NORMAL_ATTACK) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_COUNTER_ATTACK
+			else if (trigger == TriggerKind.ON_SIMPLE_COUNTER &&
+				mod == AttackModule.COUNTER_ATTACK) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_PHYSICAL_ATTACK
+			else if (trigger == TriggerKind.ON_PHYSICAL_ATTACK
+				&& ViolenceCalculator.get_attack_kind(attacker, defender, mod) == AttackKind.PHYSICAL) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_MAGICAL_ATTACK
+			else if (trigger == TriggerKind.ON_MAGICAL_ATTACK
+				&& ViolenceCalculator.get_attack_kind(attacker, defender, mod) == AttackKind.MAGICAL) {
+				should_cast_OR = true;
+				continue;
+			}
+			else {
+				should_cast_AND = false;
+			}
+		}
+
+		should_cast_AND &= should_cast_OR;
+		bool should_cast = false;
+		if (psv.operation == PassiveSkillData.TriggerOperation.AND && should_cast_AND) {
+			should_cast = true;
+		}
+		else if (psv.operation == PassiveSkillData.TriggerOperation.OR && should_cast_OR) {
+			should_cast = true;
+		}
+
+		return should_cast;
 	}
 
 	//used majorly on skills activated during battle
@@ -107,6 +328,7 @@ public class PassiveSkillManager : MonoBehaviour {
 						eff,
 						skill_caster);
 					break;
+
 				case EffectKind.LABEL_SHOW:
 					yield return skill_caster.label.showLabel(skill.name);
 					break;

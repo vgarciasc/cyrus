@@ -8,6 +8,8 @@ public enum AttackKind {PHYSICAL, MAGICAL};
 public class ViolenceCalculator : MonoBehaviour {
 	[SerializeField]
 	CombatLogManager log;
+	[SerializeField]
+	PassiveSkillManager passiveManager;
 
 	string log_info = "";
 
@@ -19,6 +21,7 @@ public class ViolenceCalculator : MonoBehaviour {
 
 		var aux = "";
 		int accuracy = accuracy_prob(attacker, defender, mod);
+		
 		if (!pass_test(accuracy)) {
 			if (mod == AttackModule.COUNTER_ATTACK) aux = "<color=red>COUNTER: </color>";
 			else if (mod == AttackModule.NORMAL_ATTACK) aux = "<color=green>NORMAL: </color>";
@@ -29,8 +32,18 @@ public class ViolenceCalculator : MonoBehaviour {
 			return dmg;
 		}
 
+		if (pass_test(ignore_prob(attacker, defender, mod))) {
+			Debug.Log("Attack ignored.");
+			dmg.amount = 0;
+			return dmg;
+		}
+
+		dmg.attackKind = get_attack_kind(attacker, defender, mod);
+		dmg.attackModule = mod;
+
 		int amount = theoretical_damage(attacker, defender, mod);
 		int crit = critical_prob(attacker, defender, mod);
+
 		if (pass_test(crit)) {
 			if (mod == AttackModule.COUNTER_ATTACK) aux = "<color=red>COUNTER: </color>";
 			else if (mod == AttackModule.NORMAL_ATTACK) aux = "<color=green>NORMAL: </color>";
@@ -57,7 +70,7 @@ public class ViolenceCalculator : MonoBehaviour {
 		int defending_attrib;
 		log_info = "";
 
-		switch (attacker.weapon.att) {
+		switch (get_attack_kind(attacker, defender, mod)) {
 			case AttackKind.PHYSICAL: default:
 				attacking_attrib = attacker.data.FOR;
 				defending_attrib = defender.data.DEF;
@@ -84,6 +97,18 @@ public class ViolenceCalculator : MonoBehaviour {
 
 		damage = Mathf.Clamp(damage, 0, damage);
 		return damage;
+	}
+
+	public static AttackKind get_attack_kind(CharacterObject attacker,
+								CharacterObject defender,
+								AttackModule mod) {
+
+		switch (attacker.weapon.att) {
+			case AttackKind.PHYSICAL: default:
+				return AttackKind.PHYSICAL;
+			case AttackKind.MAGICAL:
+				return AttackKind.MAGICAL;
+		}
 	}
 
 	public bool pass_test(float probability) {
@@ -122,12 +147,25 @@ public class ViolenceCalculator : MonoBehaviour {
 				prob /= 2;
 			}
 
-			float multiplier = attacker.status.getCritMultiplier();
+			float multiplier = passiveManager.Get_Crit_Probability(attacker, defender, mod);
 			if (multiplier != 0) {
 				prob = (int) (prob * multiplier);
 			}
 
 			prob = Mathf.Clamp(prob, 0, 100);
+			return prob;
+		}
+	#endregion
+
+	#region ignore
+		public int ignore_prob(CharacterObject attacker,
+								CharacterObject defender,
+								AttackModule mod) {
+			int prob = 0;
+
+			float aux = passiveManager.Get_Ignore_Probability(attacker, defender, mod);
+			prob += (int) (aux * 100);
+
 			return prob;
 		}
 	#endregion

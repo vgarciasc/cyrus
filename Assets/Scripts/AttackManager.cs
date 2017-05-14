@@ -81,6 +81,10 @@ public class AttackManager : MonoBehaviour {
 			 */
 
 			char_defender.take_hit(dmg.amount);
+
+			if (dmg.amount == 0) {
+				yield return StartCoroutine(char_defender.dodge_motion());
+			}
 			
 			yield break;
 		}
@@ -90,17 +94,24 @@ public class AttackManager : MonoBehaviour {
 			char_attacker = char_defender;
 			char_defender = aux;
 
-			char_attacker.use_action();
-			yield return StartCoroutine(char_attacker.counter_attack_motion());
-
 			Damage dmg = calculator.effective_damage(
 				char_attacker,
 				char_defender,
 				AttackModule.COUNTER_ATTACK);
 
-			char_defender.take_hit(dmg.amount);
+			char_attacker.use_action();
+			var motion = StartCoroutine(char_attacker.counter_attack_motion());
+			if (dmg.amount == 0) {
+				StartCoroutine(char_defender.dodge_motion());
+			} 
+			
+			yield return motion;
+			
+			PassiveSkillManager passive = skillManager.passiveManager;
+			var on_attack = StartCoroutine(passive.on_counter_attack(char_attacker, char_defender, dmg));
+			yield return on_attack;
 
-			//TODO: CHANGE TO FIT SIMPLE_ATTACK MODEL
+			char_defender.take_hit(dmg.amount);
 
 			yield break;
 		}

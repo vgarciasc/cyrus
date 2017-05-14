@@ -5,6 +5,24 @@ using UnityEngine;
 using DG.Tweening;
 
 public class BuffManager : MonoBehaviour {
+	public class BuffNumbers {
+		public int amount = 0;
+		public float multiplier = 0;
+	}
+
+	public static BuffNumbers getBuffNumbers(List<Buff> buffs, BuffType type) {
+		BuffNumbers bnumbers = new BuffNumbers();
+
+		for (int i = 0; i < buffs.Count; i++) {
+			if (buffs[i].kind == type) {
+				bnumbers.multiplier += buffs[i].multiplier;
+				bnumbers.amount += buffs[i].amount;
+			}
+		}
+
+		return bnumbers;
+	}
+
 	[SerializeField]
 	CombatLogManager log;
 
@@ -131,5 +149,13 @@ public class BuffManager : MonoBehaviour {
 	void setOpacity(GameObject buffContainer, float value) {
 		Image bg = buffContainer.GetComponentInChildren<Image>();
 		bg.color = HushPuppy.getColorWithOpacity(bg.color, value);
+	}
+
+	public static float getCriticalMultiplier(Buff b) {
+		return getBuffNumbers(new List<Buff> {b}, BuffType.CRIT_MULTIPLIER).multiplier;
+	}
+
+	public static float getIgnoreMultiplier(Buff b) {
+		return getBuffNumbers(new List<Buff> {b}, BuffType.IGNORE_CHANCE).multiplier;
 	}
 }

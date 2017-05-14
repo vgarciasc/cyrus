@@ -179,6 +179,13 @@ public class CharacterObject : MonoBehaviour {
 			public IEnumerator block_attack_motion_end() {
 				yield break;
 			}
+
+			public IEnumerator dodge_motion() {
+				transform.DOMoveY(this.transform.position.y + 15, 0.2f);
+				yield return new WaitForSeconds(0.2f);
+				transform.DOMoveY(this.transform.position.y - 15, 0.2f);
+				yield return new WaitForSeconds(0.2f);
+			}
 		#endregion motions
 	
 		public void take_hit(int amount) {

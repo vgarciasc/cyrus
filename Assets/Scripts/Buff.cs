@@ -12,7 +12,8 @@ public enum BuffType {
 	ATT_VIT,
 	CRIT_MULTIPLIER, //multiplies probability of critical hits
 	SWAP_TARGETTING, //changes what allies the user can swap with
-	BLOCK_CHANCE //adds to probability of defending an ally from an attack
+	BLOCK_CHANCE, //adds to probability of defending an ally from an attack
+	IGNORE_CHANCE //adds to probability of blocking entire attack
 };
 
 public enum BuffGender {BUFF, DEBUFF, NONE};

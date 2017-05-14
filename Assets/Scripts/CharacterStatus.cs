@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterStatus : MonoBehaviour {	
-	
-	class BuffNumbers {
-		public int amount = 0;
-		public float multiplier = 0;
-	}
-
 	public List<Buff> buffs = new List<Buff>();
 
 	[HeaderAttribute("References")]
@@ -40,19 +34,6 @@ public class CharacterStatus : MonoBehaviour {
 			}
 		}
 
-		BuffNumbers getBuffAmount(BuffType type) {
-			BuffNumbers bnumbers = new BuffNumbers();
-
-			for (int i = 0; i < buffs.Count; i++) {
-				if (buffs[i].kind == type) {
-					bnumbers.multiplier += buffs[i].multiplier;
-					bnumbers.amount += buffs[i].amount;
-				}
-			}
-
-			return bnumbers;
-		}
-
 		public void insert(List<Buff> buffs) {
 			for (int i = 0; i < buffs.Count; i++) {
 				if (hasBuff(buffs[i]) && !buffs[i].stackable) {
@@ -76,40 +57,35 @@ public class CharacterStatus : MonoBehaviour {
 	#endregion
 
 	#region getters
+		//caso o raposo comece a ter ideias mais esquisitas, isso aqui deve ser revisitado para 
+		//ficar mais aos moldes de PassiveSkillManager.getCriticalProbability()
+
 		public int getVIT() {
-			return character.data.VIT + getBuffAmount(BuffType.ATT_VIT).amount;
+			return character.data.VIT + BuffManager.getBuffNumbers(buffs, BuffType.ATT_VIT).amount;
 		}
 		
 		public int getFOR() {
-			return character.data.FOR + getBuffAmount(BuffType.ATT_FOR).amount;
+			return character.data.FOR + BuffManager.getBuffNumbers(buffs, BuffType.ATT_FOR).amount;
 		}
 
 		public int getDEF() {
-			return character.data.DEF + getBuffAmount(BuffType.ATT_DEF).amount;
+			return character.data.DEF + BuffManager.getBuffNumbers(buffs, BuffType.ATT_DEF).amount;
 		}
 
 		public int getRES() {
-			return character.data.RES + getBuffAmount(BuffType.ATT_RES).amount;
+			return character.data.RES + BuffManager.getBuffNumbers(buffs, BuffType.ATT_RES).amount;
 		}
 
 		public int getINT() {
-			return character.data.INT + getBuffAmount(BuffType.ATT_INT).amount;
+			return character.data.INT + BuffManager.getBuffNumbers(buffs, BuffType.ATT_INT).amount;
 		}
 
 		public int getAGI() {
-			return character.data.AGI + getBuffAmount(BuffType.ATT_AGI).amount;
+			return character.data.AGI + BuffManager.getBuffNumbers(buffs, BuffType.ATT_AGI).amount;
 		}
 
 		public int getDES() {
-			return character.data.DES + getBuffAmount(BuffType.ATT_DES).amount;
-		}
-
-		public float getBlockChance() {
-			return getBuffAmount(BuffType.BLOCK_CHANCE).multiplier;
-		}
-
-		public float getCritMultiplier() {
-			return getBuffAmount(BuffType.CRIT_MULTIPLIER).multiplier;
+			return character.data.DES + BuffManager.getBuffNumbers(buffs, BuffType.ATT_DES).amount;
 		}
 
 		public AllyTarget getSwapTargets() {
