@@ -19,6 +19,8 @@ public class SkillLaneButton : MonoBehaviour {
 	}
 
 	public void click_skill() {
-		ClickManager.getClickManager().click_skill_button(character, data);
+		if (character.has_actions()) {
+			ClickManager.getClickManager().click_skill_button(character, data);
+		}
 	}
 }

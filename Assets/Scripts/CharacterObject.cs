@@ -18,6 +18,8 @@ public class CharacterObject : MonoBehaviour {
 	public WeaponData weapon;
 	[HideInInspector]
 	public List<SkillData> skills = new List<SkillData>();
+	[HideInInspector]
+	public bool is_blocking = false;
 
 	public static float swapWaitTime = 0.6f;
 
@@ -167,17 +169,32 @@ public class CharacterObject : MonoBehaviour {
 				yield return StartCoroutine(back_and_forth_motion(10, false, 0.2f));
 			}
 
+			Vector2 last_position_before_block;
+
 			public IEnumerator block_attack_motion_start(CharacterObject toBlock) {
+				is_blocking = true;
+
 				int mod = 1;
 				if (invertedSprite) mod *= -1;
 
-				transform.DOMoveX(this.transform.position.x + mod * 150, 0.3f);
+				last_position_before_block = this.transform.position;
+
+				transform.DOMoveX(this.transform.position.x + mod * 100, 0.3f);
 				yield return new WaitForSeconds(0.3f);
 				transform.DOMoveY(toBlock.transform.position.y, 0.3f);
 				yield return new WaitForSeconds(0.3f);
 			}
 
 			public IEnumerator block_attack_motion_end() {
+				is_blocking = false;
+
+				transform.DOMoveY(last_position_before_block.y, 0.3f);
+				yield return new WaitForSeconds(0.3f);
+				transform.DOMoveX(last_position_before_block.x, 0.3f);
+				yield return new WaitForSeconds(0.3f);
+
+				last_position_before_block = Vector2.zero;
+
 				yield break;
 			}
 

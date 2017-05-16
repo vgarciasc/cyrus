@@ -26,49 +26,18 @@ public class BuffManager : MonoBehaviour {
 	[SerializeField]
 	CombatLogManager log;
 
-	#region on_attack
-		public List<Buff> on_attack_buffs(CharacterObject attacker,
-							CharacterObject defender,
-							AttackModule module) {
-			List<Buff> buffs = new List<Buff>();
-
-			for (int i = 0; i < attacker.skills.Count; i++) {
-				if (on_attack_should_activate(attacker, defender, module, attacker.skills[i])) {
-					buffs.AddRange(attacker.skills[i].buffs);
-
-					log.insert("<color=magenta>SKILL</color>: '<color=gray>" + attacker.data.nome +
-					"</color>' used <color=gray>" + attacker.skills[i].title.ToUpper() + "</color> on '<color=gray>" +
-					defender.data.nome + "'</color>.");
-				}
-			}
-
-			return buffs;
-		}
-
-		public bool on_attack_should_activate(CharacterObject attacker,
-							CharacterObject defender,
-							AttackModule module,
-							SkillData skill) {
-			
-			if (skill.targetingStyle != SkillTargeting.ON_ATTACK) {
-				return false;
-			}
-
-			if (module == AttackModule.COUNTER_ATTACK &&
-				!skill.activateEvenWhenCounterAttack) {
-				return false;
-			}
-
-			return true;
-		}
-	#endregion
-
+	//passive skill data
 	public IEnumerator ApplyBuff(CharacterObject attacker,
 								CharacterObject defender,
 								Damage dmg,
 								PassiveSkillData skill,
 								Effect eff,
 								CharacterObject skill_caster) {		
+
+		if (!ViolenceCalculator.pass_test(eff.buff.probability)) {
+			Debug.Log("DODGE");
+			yield break;
+		}
 
 		Debug.Log("Buff '" + eff.buff + "' applied.");
 		List<CharacterObject> targets_aux = new List<CharacterObject>();
@@ -116,12 +85,18 @@ public class BuffManager : MonoBehaviour {
 		}
 	}
 
+	//active skill data
 	public IEnumerator ApplyBuff(CharacterObject target,
 								ActiveSkillData skill,
 								ElementActive elem,
 								CharacterObject caster) {		
 
 		Buff buff = elem.buff;
+
+		if (!ViolenceCalculator.pass_test(buff.probability)) {
+			yield return target.dodge_motion();
+			yield break;
+		}
 
 		Debug.Log("Buff '" + elem.buff + "' applied.");
 		List<CharacterObject> targets_aux = new List<CharacterObject>();

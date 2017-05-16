@@ -109,68 +109,140 @@ public class PassiveSkillManager : MonoBehaviour {
 		yield break;
 	}
 
-	public float Get_Crit_Probability(CharacterObject attacker,
+	public IEnumerator on_block(CharacterObject blocker,
+								CharacterObject attacker,
 								CharacterObject defender,
 								AttackModule mod) {
+
+		CharacterObject skill_caster;
+
+		for (int j = 0; j < attacker.column.charObj.Count; j++) {
+			skill_caster =  attacker.column.charObj[j];
+			for (int i = 0; i < skill_caster.skillsDeluxe.Count; i++) {
+				PassiveSkillData psv = skill_caster.skillsDeluxe[i];
+				
+				if (should_cast_protect_ally(blocker, attacker, defender, mod, psv, false)) {
+					yield return CastEffects(psv,
+											skill_caster);	
+				}
+			}
+		}
+
+		for (int j = 0; j < defender.column.charObj.Count; j++) {
+			skill_caster =  defender.column.charObj[j];
+			for (int i = 0; i < skill_caster.skillsDeluxe.Count; i++) {
+				PassiveSkillData psv = skill_caster.skillsDeluxe[i];
+				bool caster_is_blocker = skill_caster == blocker;
+
+				if (should_cast_protect_ally(blocker, attacker, defender, mod, psv, caster_is_blocker)) {
+					yield return CastEffects(psv,
+											skill_caster);	
+				}
+			}
+		}
+
+		yield break;
+	}	
+
+	#region getters of probability
+		public float Get_Crit_Probability(CharacterObject attacker,
+									CharacterObject defender,
+									AttackModule mod) {
+			
+			float prob = 0;
+
+			for (int i = 0; i < attacker.skillsDeluxe.Count; i++) {
+				PassiveSkillData psv = attacker.skillsDeluxe[i];
+
+				if (should_cast(attacker, defender, mod, psv, true)) {
+					for (int k = 0; k < psv.effects.Count; k++) {
+						if (psv.effects[k].kind == EffectKind.BUFF_DEBUFF &&
+							ViolenceCalculator.pass_test(psv.effects[k].buff.probability)) {
+							prob += BuffManager.getCriticalMultiplier(psv.effects[k].buff);
+						}
+					}
+				}
+			}
+
+			for (int i = 0; i < defender.skillsDeluxe.Count; i++) {
+				PassiveSkillData psv = defender.skillsDeluxe[i];
+
+				if (should_cast(attacker, defender, mod, psv, false)) {
+					for (int k = 0; k < psv.effects.Count; k++) {
+						if (psv.effects[k].kind == EffectKind.BUFF_DEBUFF &&
+							ViolenceCalculator.pass_test(psv.effects[k].buff.probability)) {
+							prob += BuffManager.getCriticalMultiplier(psv.effects[k].buff);
+						}
+					}
+				}
+			}
+
+			return prob;
+		}
+
+		public float Get_Ignore_Probability(CharacterObject attacker,
+									CharacterObject defender,
+									AttackModule mod) {
+			
+			float prob = 0;
+
+			for (int i = 0; i < attacker.skillsDeluxe.Count; i++) {
+				PassiveSkillData psv = attacker.skillsDeluxe[i];
+
+				if (should_cast(attacker, defender, mod, psv, true)) {
+					for (int k = 0; k < psv.effects.Count; k++) {
+						if (psv.effects[k].kind == EffectKind.BUFF_DEBUFF &&
+							ViolenceCalculator.pass_test(psv.effects[k].buff.probability)) {
+							prob += BuffManager.getIgnoreMultiplier(psv.effects[k].buff);
+						}
+					}
+				}
+			}
+
+			for (int i = 0; i < defender.skillsDeluxe.Count; i++) {
+				PassiveSkillData psv = defender.skillsDeluxe[i];
+
+				if (should_cast(attacker, defender, mod, psv, false)) {
+					for (int k = 0; k < psv.effects.Count; k++) {
+						if (psv.effects[k].kind == EffectKind.BUFF_DEBUFF &&
+							ViolenceCalculator.pass_test(psv.effects[k].buff.probability)) {
+							prob += BuffManager.getIgnoreMultiplier(psv.effects[k].buff);
+						}
+					}
+				}
+			}
+
+			return prob;
+		}
 		
-		float prob = 0;
+		public float Get_Block_Probability(CharacterObject attacker,
+										CharacterObject defender,
+										CharacterObject potential_blocker,
+										AttackModule mod) {
+			
+			float prob = 0;
 
-		for (int i = 0; i < attacker.skillsDeluxe.Count; i++) {
-			PassiveSkillData psv = attacker.skillsDeluxe[i];
+			for (int j = 0; j < potential_blocker.skillsDeluxe.Count; j++) {
+				PassiveSkillData psv = potential_blocker.skillsDeluxe[j];
 
-			if (should_cast(attacker, defender, mod, psv, true)) {
-				for (int k = 0; k < psv.effects.Count; k++) {
-					prob += BuffManager.getCriticalMultiplier(psv.effects[k].buff);
+				if (should_cast_protect_ally(potential_blocker, attacker, defender, mod, psv, true)) {
+					for (int k = 0; k < psv.effects.Count; k++) {
+						if (psv.effects[k].kind == EffectKind.PROTECT_ALLY) {
+							prob += psv.effects[k].protectAlly.probability;
+						}
+					}
 				}
 			}
+
+			prob = Mathf.Clamp(prob, 0f, 1f);
+			return prob;
 		}
-
-		for (int i = 0; i < defender.skillsDeluxe.Count; i++) {
-			PassiveSkillData psv = defender.skillsDeluxe[i];
-
-			if (should_cast(attacker, defender, mod, psv, false)) {
-				for (int k = 0; k < psv.effects.Count; k++) {
-					prob += BuffManager.getCriticalMultiplier(psv.effects[k].buff);
-				}
-			}
-		}
-
-		return prob;
-	}
-
-	public float Get_Ignore_Probability(CharacterObject attacker,
-								CharacterObject defender,
-								AttackModule mod) {
-		
-		float prob = 0;
-
-		for (int i = 0; i < attacker.skillsDeluxe.Count; i++) {
-			PassiveSkillData psv = attacker.skillsDeluxe[i];
-
-			if (should_cast(attacker, defender, mod, psv, true)) {
-				for (int k = 0; k < psv.effects.Count; k++) {
-					prob += BuffManager.getIgnoreMultiplier(psv.effects[k].buff);
-				}
-			}
-		}
-
-		for (int i = 0; i < defender.skillsDeluxe.Count; i++) {
-			PassiveSkillData psv = defender.skillsDeluxe[i];
-
-			if (should_cast(attacker, defender, mod, psv, false)) {
-				for (int k = 0; k < psv.effects.Count; k++) {
-					prob += BuffManager.getIgnoreMultiplier(psv.effects[k].buff);
-				}
-			}
-		}
-
-		return prob;
-	}
+	#endregion
 
 	//used after attack has been calculated
-	public bool should_cast(Damage dmg,
-							PassiveSkillData psv,
-							bool caster_is_attacker) {
+	bool should_cast(Damage dmg,
+					PassiveSkillData psv,
+					bool caster_is_attacker) {
 
 		bool should_cast_OR = false;
 		bool should_cast_AND = true;
@@ -249,11 +321,11 @@ public class PassiveSkillManager : MonoBehaviour {
 	}
 
 	//used during attack calculations
-	public bool should_cast(CharacterObject attacker,
-							CharacterObject defender,
-							AttackModule mod,
-							PassiveSkillData psv,
-							bool caster_is_attacker) {
+	bool should_cast(CharacterObject attacker,
+					CharacterObject defender,
+					AttackModule mod,
+					PassiveSkillData psv,
+					bool caster_is_attacker) {
 		
 		bool should_cast_OR = false;
 		bool should_cast_AND = true;
@@ -312,6 +384,87 @@ public class PassiveSkillManager : MonoBehaviour {
 		return should_cast;
 	}
 
+	//used by protect ally
+	bool should_cast_protect_ally(CharacterObject blocker,
+						CharacterObject attacker,
+						CharacterObject defender,
+						AttackModule mod,
+						PassiveSkillData psv,
+						bool caster_is_blocker) {
+		
+		bool should_cast_OR = false;
+		bool should_cast_AND = true;
+		
+		for (int j = 0; j < psv.triggers.Count; j++) {
+			TriggerKind trigger = psv.triggers[j].kind;
+
+			//ON_SIMPLE_ATTACK
+			if (trigger == TriggerKind.ON_SIMPLE_ATTACK &&
+				mod == AttackModule.NORMAL_ATTACK) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_COUNTER_ATTACK
+			else if (trigger == TriggerKind.ON_SIMPLE_COUNTER &&
+				mod == AttackModule.COUNTER_ATTACK) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_PHYSICAL_ATTACK
+			else if (trigger == TriggerKind.ON_PHYSICAL_ATTACK
+				&& ViolenceCalculator.get_attack_kind(attacker, defender, mod) == AttackKind.PHYSICAL) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_MAGICAL_ATTACK
+			else if (trigger == TriggerKind.ON_MAGICAL_ATTACK
+				&& ViolenceCalculator.get_attack_kind(attacker, defender, mod) == AttackKind.MAGICAL) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_ADJACENT_ALLY_ATTACKED
+			else if (trigger == TriggerKind.ON_ADJACENT_ALLY_ATTACKED
+				&& defender.column.get_adjacent_characters(defender).Contains(blocker)) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_ANY_ALLY_ATTACKED
+			else if (trigger == TriggerKind.ON_ANY_ALLY_ATTACKED
+				&& blocker != defender) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_BLOCK
+			else if (trigger == TriggerKind.ON_BLOCK
+				&& caster_is_blocker) {
+				should_cast_OR = true;
+				continue;
+			}
+			//ON_BEING_DEFENDED_WITH_BLOCK
+			else if (trigger == TriggerKind.ON_BEING_DEFENDED_WITH_BLOCK
+				&& !caster_is_blocker) {
+				should_cast_OR = true;
+				continue;
+			}
+			else {
+				should_cast_AND = false;
+			}
+		}
+
+		should_cast_AND &= should_cast_OR;
+
+		bool should_cast = false;
+		if (psv.operation == PassiveSkillData.TriggerOperation.AND && should_cast_AND) {
+			should_cast = true;
+		}
+		else if (psv.operation == PassiveSkillData.TriggerOperation.OR && should_cast_OR) {
+			should_cast = true;
+		}
+
+		return should_cast;
+	}
+
+
 	//used majorly on skills activated during battle
 	IEnumerator CastEffects(CharacterObject attacker,
 							CharacterObject defender,
@@ -336,6 +489,10 @@ public class PassiveSkillManager : MonoBehaviour {
 				case EffectKind.LABEL_SHOW:
 					yield return skill_caster.label.showLabel(skill.name);
 					break;
+					
+				default:
+					Debug.Log("This should not be happening.");
+					break;
 			}
 		}
 
@@ -359,6 +516,12 @@ public class PassiveSkillManager : MonoBehaviour {
 						skill,
 						eff,
 						skill_caster);
+					break;
+				case EffectKind.LABEL_SHOW:
+					yield return skill_caster.label.showLabel(skill.name);
+					break;
+				default:
+					Debug.Log("This should not be happening.");
 					break;
 			}
 		}

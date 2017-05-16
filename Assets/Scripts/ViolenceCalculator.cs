@@ -38,7 +38,6 @@ public class ViolenceCalculator : MonoBehaviour {
 		}
 
 		if (pass_test(ignore_prob(attacker, defender, mod))) {
-			Debug.Log("Attack ignored.");
 			dmg.amount = 0;
 			return dmg;
 		}
@@ -181,6 +180,16 @@ public class ViolenceCalculator : MonoBehaviour {
 			prob += (int) (aux * 100);
 
 			return prob;
+		}
+	#endregion
+
+	#region block
+		public int block_prob(CharacterObject attacker,
+								CharacterObject defender,
+								AttackModule mod) {
+
+			
+			return 30;
 		}
 	#endregion
 }

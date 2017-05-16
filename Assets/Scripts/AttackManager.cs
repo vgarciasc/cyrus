@@ -63,6 +63,8 @@ public class AttackManager : MonoBehaviour {
 				yield break;
 			}
 
+			yield return block(AttackModule.NORMAL_ATTACK);
+
 			char_attacker.use_action();
 
 			yield return StartCoroutine(char_attacker.attack_motion());
@@ -92,6 +94,8 @@ public class AttackManager : MonoBehaviour {
 				yield break;
 			}
 
+			yield return block(AttackModule.COUNTER_ATTACK);
+
 			Damage dmg = calculator.effective_damage(
 				char_attacker,
 				char_defender,
@@ -112,13 +116,52 @@ public class AttackManager : MonoBehaviour {
 
 			char_defender.take_hit(dmg.amount);
 
+			//makes blocker go back to his place
+			yield return block_end();
+
 			yield break;
 		}
 
-		IEnumerator block(CharacterObject blocker) {
-			yield return StartCoroutine(blocker.block_attack_motion_start(char_defender));
+		IEnumerator block(AttackModule mod) {
+			PassiveSkillManager passive = skillManager.passiveManager;
+			CharacterObject blocker = null;
 
-			yield break;
+			//CHECKING IF WILL BE BLOCKED
+			for (int i = 0; i < char_defender.column.charObj.Count && blocker == null; i++) {
+				float prob = passive.Get_Block_Probability(char_attacker, char_defender, char_defender.column.charObj[i], mod);
+				if (ViolenceCalculator.pass_test(prob)) {
+					blocker = char_defender.column.charObj[i];
+				}
+			}
+
+			if (blocker == null || !blocker.has_actions()) {
+				yield break;
+			}
+			//END_CHECKING_BLOCKING
+
+			yield return blocker.block_attack_motion_start(char_defender);
+
+			yield return new WaitForSeconds(0.3f);
+
+			yield return passive.on_block(blocker, char_attacker, char_defender, mod);
+
+			char_defender = blocker;
+		}
+
+		IEnumerator block_end() {
+			for (int i = 0; i < char_attacker.column.charObj.Count; i++) {
+				var ch = char_attacker.column.charObj[i];
+				if (ch.is_blocking) {
+					yield return ch.block_attack_motion_end();
+				}
+			}
+
+			for (int i = 0; i < char_defender.column.charObj.Count; i++) {
+				var ch = char_defender.column.charObj[i];
+				if (ch.is_blocking) {
+					yield return ch.block_attack_motion_end();
+				}
+			}
 		}
 
 		#region player

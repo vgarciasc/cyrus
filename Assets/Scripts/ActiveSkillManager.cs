@@ -134,12 +134,7 @@ public class ActiveSkillManager : MonoBehaviour {
 				break;
 
 			case EffectActive.BUFF_DEBUFF:
-				if (ViolenceCalculator.pass_test(elem.buff.probability)) {
-					yield return buffManager.ApplyBuff(tgt_1, act, elem, caster);
-				}
-				else {
-					yield return tgt_1.dodge_motion();
-				}
+				yield return buffManager.ApplyBuff(tgt_1, act, elem, caster);
 				break;
 
 			default:

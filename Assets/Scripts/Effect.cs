@@ -4,13 +4,15 @@ using UnityEngine;
 
 public enum EffectKind {
 	BUFF_DEBUFF, //effect is a buff or a debuff
-	LABEL_SHOW //effect is showing label on appropriate character
+	LABEL_SHOW, //effect is showing label on appropriate character
+	PROTECT_ALLY //effect is protecting ally from incoming shot
 }
 
 [System.Serializable]
 public class Effect : System.Object {
 	public EffectKind kind = EffectKind.BUFF_DEBUFF;
 	public Buff buff;
+	public ProtectAlly protectAlly;
 	public List<TargetKind> targets = new List<TargetKind>();
 	
 	[TooltipAttribute("Mark as true to show label during effect. Mark as false if you want to show the label another time (or never).")]

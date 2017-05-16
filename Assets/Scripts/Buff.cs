@@ -12,7 +12,6 @@ public enum BuffType {
 	ATT_VIT,
 	CRIT_MULTIPLIER, //multiplies probability of critical hits
 	SWAP_TARGETTING, //changes what allies the user can swap with
-	BLOCK_CHANCE, //adds to probability of defending an ally from an attack
 	IGNORE_CHANCE, //adds to probability of blocking entire attack
 	SWAP_BLOCKING //changes if the user can be swapped with
 };
