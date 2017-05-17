@@ -14,7 +14,8 @@ public enum BuffType {
 	SWAP_TARGETTING, //changes what allies the user can swap with
 	IGNORE_CHANCE, //adds to probability of blocking entire attack
 	SWAP_BLOCKING, //changes if the user can be swapped with
-	BARRIER //character has a barrier
+	BARRIER, //character has a barrier
+	DELAYED_ATTACK //character will be attacked on buff end
 };
 
 public enum BuffGender {BUFF, DEBUFF, NONE};

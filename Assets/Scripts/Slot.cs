@@ -12,16 +12,6 @@ public class Slot : MonoBehaviour {
 	[HeaderAttribute("References")]
 	[SerializeField]
 	SlotColumn column;
-	[SerializeField]
-	Image background;
-
-	//temp
-	List<Color> colors = new List<Color>() {
-		Color.red,
-		Color.blue,
-		Color.cyan,
-		Color.magenta
-	};
 
 	public void set_IDs(int positionID, int charID) {
 		this.positionID = positionID;
@@ -30,12 +20,9 @@ public class Slot : MonoBehaviour {
 
 	public void set_charID(int new_set) {
 		this.charID = new_set;
-		updateBackground ();
 	}
 
-	void updateBackground() {
-		if (charID != -1) {
-			this.background.color = colors [charID];
-		}
+	public SlotColumn get_column() {
+		return column;
 	}
 }

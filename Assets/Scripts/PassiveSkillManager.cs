@@ -156,7 +156,7 @@ public class PassiveSkillManager : MonoBehaviour {
 
 				if (should_cast(attacker, defender, mod, psv, true)) {
 					for (int k = 0; k < psv.effects.Count; k++) {
-						if (psv.effects[k].kind == EffectKind.BUFF_DEBUFF &&
+						if (psv.effects[k].kind == EffectPassive.BUFF_DEBUFF &&
 							ViolenceCalculator.pass_test(psv.effects[k].buff.probability)) {
 							prob += BuffManager.getCriticalMultiplier(psv.effects[k].buff);
 						}
@@ -169,7 +169,7 @@ public class PassiveSkillManager : MonoBehaviour {
 
 				if (should_cast(attacker, defender, mod, psv, false)) {
 					for (int k = 0; k < psv.effects.Count; k++) {
-						if (psv.effects[k].kind == EffectKind.BUFF_DEBUFF &&
+						if (psv.effects[k].kind == EffectPassive.BUFF_DEBUFF &&
 							ViolenceCalculator.pass_test(psv.effects[k].buff.probability)) {
 							prob += BuffManager.getCriticalMultiplier(psv.effects[k].buff);
 						}
@@ -191,7 +191,7 @@ public class PassiveSkillManager : MonoBehaviour {
 
 				if (should_cast(attacker, defender, mod, psv, true)) {
 					for (int k = 0; k < psv.effects.Count; k++) {
-						if (psv.effects[k].kind == EffectKind.BUFF_DEBUFF &&
+						if (psv.effects[k].kind == EffectPassive.BUFF_DEBUFF &&
 							ViolenceCalculator.pass_test(psv.effects[k].buff.probability)) {
 							prob += BuffManager.getIgnoreMultiplier(psv.effects[k].buff);
 						}
@@ -204,7 +204,7 @@ public class PassiveSkillManager : MonoBehaviour {
 
 				if (should_cast(attacker, defender, mod, psv, false)) {
 					for (int k = 0; k < psv.effects.Count; k++) {
-						if (psv.effects[k].kind == EffectKind.BUFF_DEBUFF &&
+						if (psv.effects[k].kind == EffectPassive.BUFF_DEBUFF &&
 							ViolenceCalculator.pass_test(psv.effects[k].buff.probability)) {
 							prob += BuffManager.getIgnoreMultiplier(psv.effects[k].buff);
 						}
@@ -227,7 +227,7 @@ public class PassiveSkillManager : MonoBehaviour {
 
 				if (should_cast_protect_ally(potential_blocker, attacker, defender, mod, psv, true)) {
 					for (int k = 0; k < psv.effects.Count; k++) {
-						if (psv.effects[k].kind == EffectKind.PROTECT_ALLY) {
+						if (psv.effects[k].kind == EffectPassive.PROTECT_ALLY) {
 							prob += psv.effects[k].protectAlly.probability;
 						}
 					}
@@ -477,8 +477,8 @@ public class PassiveSkillManager : MonoBehaviour {
 		for (int i = 0; i < effects.Count; i++) {
 			Effect eff = effects[i];
 			switch (eff.kind) {
-				case EffectKind.BUFF_DEBUFF:
-					yield return buffManager.ApplyBuff(attacker,
+				case EffectPassive.BUFF_DEBUFF:
+					yield return buffManager.ApplyBuff_ToCharacter(attacker,
 						defender,
 						dmg,
 						skill,
@@ -486,7 +486,7 @@ public class PassiveSkillManager : MonoBehaviour {
 						skill_caster);
 					break;
 
-				case EffectKind.LABEL_SHOW:
+				case EffectPassive.LABEL_SHOW:
 					yield return skill_caster.label.showLabel(skill.name);
 					break;
 					
@@ -509,19 +509,19 @@ public class PassiveSkillManager : MonoBehaviour {
 		for (int i = 0; i < effects.Count; i++) {
 			Effect eff = effects[i];
 			switch (eff.kind) {
-				case EffectKind.BUFF_DEBUFF:
-					yield return buffManager.ApplyBuff(null,
+				case EffectPassive.BUFF_DEBUFF:
+					yield return buffManager.ApplyBuff_ToCharacter(null,
 						null,
 						null,
 						skill,
 						eff,
 						skill_caster);
 					break;
-				case EffectKind.LABEL_SHOW:
+				case EffectPassive.LABEL_SHOW:
 					yield return skill_caster.label.showLabel(skill.name);
 					break;
 				default:
-					Debug.Log("This should not be happening.");
+					Debug.Log("This should not be happening. Skill not being cast: " + skill + " , " + eff.kind);
 					break;
 			}
 		}

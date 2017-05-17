@@ -8,6 +8,7 @@ public class SlotColumn : MonoBehaviour {
 	public bool enemyColumn = false;
 
 	public List<Slot> slots = new List<Slot>();
+	public List<SlotBackground> slotsBackground = new List<SlotBackground>();
 	public List<CharacterData> characters = new List<CharacterData>();
 	public List<CharacterObject> charObj = new List<CharacterObject>();
 
@@ -16,12 +17,22 @@ public class SlotColumn : MonoBehaviour {
 	void Awake() {
 		init_slots();
 		init_characters();
+
+		// StartCoroutine(dasd());
+	}
+
+	IEnumerator dasd() {
+		yield return new WaitForSeconds(2.0f);
+		kill_slot(2);
 	}
 
 	void init_slots() {
 		groups = 4;
 		for (int i = 0; i < slots.Count; i++) {
 			slots[i].set_IDs(i, i);
+			slotsBackground[i].set_ID(i);
+
+			slotsBackground[i].click_event += register_click_slot;
 		}
 	}
 
@@ -39,8 +50,9 @@ public class SlotColumn : MonoBehaviour {
 	}
 
 	public void kill_slot(int slotID) {
+		get_slotbg_by_charobj(get_charobj_by_slotID(slotID)).kill();
 		get_charobj_by_slotID(slotID).kill();
-		
+
 		List<int> real_IDs = new List<int>();		
 		foreach (Slot s in slots) {
 			if (s.charID != slots[slotID].charID && 
@@ -53,6 +65,12 @@ public class SlotColumn : MonoBehaviour {
 		//ex: {1, 2, 3, 4} => kill 3 => {1, 2, 4}
 		//ex: {1, 2, 2, 4} => kill 2 => {1, 4}
 		
+		// for (int i = 0; i < slotsBackground.Count; i++) {
+		// 	if (!real_IDs.Contains(i)) {
+		// 		slotsBackground[i].gameObject.SetActive(false);
+		// 	}
+		// }
+
 		//everyone was killed
 		if (groups-- == 0) {
 			Debug.Log("everyone is dead");
@@ -83,15 +101,27 @@ public class SlotColumn : MonoBehaviour {
 				slots[i].set_charID(real_IDs[i]);
 			}
 		}
+
+		List<SlotBackground> bgs = new List<SlotBackground>();
+		foreach (SlotBackground sb in slotsBackground) {
+			if (sb.gameObject.activeSelf) {
+				bgs.Add(sb);
+			}
+		}
+
+		foreach (SlotBackground sb in bgs) {
+			sb.set_ID(bgs.IndexOf(sb));
+		}	
 		
-		adjust_positions();
+		adjust_positions(true);
 	}
 
-	void adjust_positions() {
+	void adjust_positions(bool death) {
 		switch (groups) {
 			case 4:
 				for (int i = 0; i < slots.Count; i++) {
 					charObj[i].set_new_pos(slots[i].transform.position);
+					slotsBackground[i].set_new_pos(slots[i].transform.position);
 				}
 				break;
 			case 3:
@@ -99,16 +129,42 @@ public class SlotColumn : MonoBehaviour {
 				get_charobj_by_slotID(1).set_new_pos(slots[1].transform.position +
 					(slots[2].transform.position - slots[1].transform.position) / 2);
 				get_charobj_by_slotID(3).set_new_pos(slots[3].transform.position);
+
+				if (death)  {
+					get_slotbg_by_charobj(get_charobj_by_slotID(1)).resize(2);
+					get_slotbg_by_charobj(get_charobj_by_slotID(0)).set_new_pos(slots[0].transform.position);
+					get_slotbg_by_charobj(get_charobj_by_slotID(1)).set_new_pos(slots[1].transform.position +
+						(slots[2].transform.position - slots[1].transform.position) / 2);
+					get_slotbg_by_charobj(get_charobj_by_slotID(3)).set_new_pos(slots[3].transform.position);
+				}
+
 				break;
 			case 2:
 				get_charobj_by_slotID(0).set_new_pos(slots[0].transform.position +
 					(slots[1].transform.position - slots[0].transform.position) / 2);
 				get_charobj_by_slotID(3).set_new_pos(slots[2].transform.position +
 					(slots[3].transform.position - slots[2].transform.position) / 2);
+
+				if (death)  {
+					get_slotbg_by_charobj(get_charobj_by_slotID(0)).resize(2);
+					get_slotbg_by_charobj(get_charobj_by_slotID(3)).resize(2);
+					get_slotbg_by_charobj(get_charobj_by_slotID(0)).set_new_pos(slots[0].transform.position +
+						(slots[1].transform.position - slots[0].transform.position) / 2);
+					get_slotbg_by_charobj(get_charobj_by_slotID(3)).set_new_pos(slots[2].transform.position +
+						(slots[3].transform.position - slots[2].transform.position) / 2);
+				}
+
 				break;
 			case 1:
 				get_charobj_by_slotID(0).set_new_pos(slots[1].transform.position +
 					(slots[2].transform.position - slots[1].transform.position) / 2);
+
+				if (death)  {
+					get_slotbg_by_charobj(get_charobj_by_slotID(0)).resize(4);
+					get_slotbg_by_charobj(get_charobj_by_slotID(0)).set_new_pos(slots[1].transform.position +
+						(slots[2].transform.position - slots[1].transform.position) / 2);
+				}
+
 				break;
 		}
 	}
@@ -117,8 +173,17 @@ public class SlotColumn : MonoBehaviour {
 		ClickManager.getClickManager().click_character(co);
 	}
 
+	void register_click_slot(int slotID) {
+		// Debug.Log("slotID: " + slotID + "\nslotbg: " + get_slotbg_by_slotID(slotID));
+		// TargetManager.getTargetManager().click_character(get_slotbg_by_slotID(slotID).target);
+	}
+
 	int get_slotID_by_charobj(CharacterObject co) {
 		return charObj.IndexOf(co);
+	}
+
+	public Slot get_slot_by_charobj(CharacterObject co) {
+		return slots[get_slotID_by_charobj(co)];
 	}
 
 	public CharacterObject get_charobj_by_slotID(int slotID) {
@@ -132,6 +197,9 @@ public class SlotColumn : MonoBehaviour {
 		Debug.Log("Error searching for charObj in slotID " + slotID);
 		return null;
 	}
+
+	// public SlotBackground get_slotbg_by_slotID(int slotID) {
+	// }
 
 	public void toggle_all_lanes(bool value) {
 		foreach (CharacterObject co in charObj) {
@@ -159,7 +227,7 @@ public class SlotColumn : MonoBehaviour {
 		}
 		charObj = aux;
 
-		adjust_positions();
+		adjust_positions(false);
 	}
 
 	public List<CharacterObject> get_adjacent_characters(CharacterObject co) {
@@ -202,5 +270,25 @@ public class SlotColumn : MonoBehaviour {
 		}
 
 		return targets;
+	}
+
+	public SlotBackground get_slotbg_by_charobj(CharacterObject co) {
+		List<SlotBackground> sb = new List<SlotBackground>();
+		foreach (SlotBackground s in slotsBackground) {
+			if (s.gameObject.activeSelf) {
+				sb.Add(s);
+			}
+		}
+
+		List<CharacterObject> cb = new List<CharacterObject>();
+		foreach (CharacterObject c in charObj) {
+			if (c.gameObject.activeSelf) {
+				cb.Add(c);
+			}
+		}
+
+		//TODO: BUGANDO QUANDO FICA SO UM EM TELA
+		Debug.Log("CharObj: " + co + "\nSlotBG: " + sb[cb.IndexOf(co)]);
+		return sb[cb.IndexOf(co)];
 	}
 }

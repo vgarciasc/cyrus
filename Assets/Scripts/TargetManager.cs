@@ -1,12 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
-public enum TargetKind {
+public enum TargetPassive {
 	LAST_DEFENDER, //target is last character to receive an attack
 	LAST_ATTACKER, //target is last character to attack
 	ADJACENT_TO_CASTER, //target is all characters adjacent to skill caster
 	CASTER //target is the skill caster
+};
+public enum TargetActive {
+	ADJACENT_SWAPPABLE, //ADJACENT (TARGET 1): targets allies adjacent to TARGET 1 that are swappable
+	ENEMIES_LANE_SWAPPABLE, //ENEMIES_LANE (TARGET 1): targets enemies in lane of TARGET 1
+	ENEMIES_LANE_ANY, //ENEMIES_LANE (TARGET 1): targets enemies in lane of TARGET 1 that are swappable
+	ADJACENT_ANY, //ADJACENT (TARGET 1): targets any allies adjacent to TARGET 1
+	SELF, //SELF: targets self
+	SLOT_SELF, //SLOT SELF: targets slot self
+	SLOTS_COLUMN //SLOTS COLUMN (TARGET 1): targets slots in TARGET 1
 };
 
 public class TargetManager : MonoBehaviour {
@@ -14,9 +24,9 @@ public class TargetManager : MonoBehaviour {
 		return (TargetManager) HushPuppy.safeFindComponent("GameController", "TargetManager");
 	}
 
-	List<CharacterObject> current_targets = new List<CharacterObject>();
-	CharacterObject selected_target = null;
-	CharacterObject last_selected_target = null;
+	List<Targettable> current_targets = new List<Targettable>();
+	Targettable selected_target = null;
+	Targettable last_selected_target = null;
 
 	[SerializeField]
 	ArenaManager arenaManager;
@@ -24,6 +34,14 @@ public class TargetManager : MonoBehaviour {
 	ClickManager clickManager;
 	[SerializeField]
 	GameObject confirmationScreen;
+	[SerializeField]
+	GameObject skillDescriptionPanel;
+	[SerializeField]
+	Text skillTitle;
+	[SerializeField]
+	Text skillDescription;
+
+	bool selecting_slot = false;
 
 	[HideInInspector]
 	public States current_state = States.INITIAL_STATE;
@@ -33,63 +51,81 @@ public class TargetManager : MonoBehaviour {
 		SHOW_CONFIRMATION
 	}
 
-	public CharacterObject GetTarget() {
+	void Update() {
+		if (Input.GetKeyDown(KeyCode.K)) {
+			for (int i = 0; i < 4; i++) {
+				// Debug.Log("slotID: " + i + "\nslotbg: " + 
+				// ArenaManager.getArenaManager().get_player_column().get_slotbg_by_slotID(i));
+			}
+		}
+	}
+
+	public Targettable GetTarget() {
 		return last_selected_target;
 	}
 
-	void update_targets(CharacterObject user, ElementActive elem, List<CharacterObject> targets) {
+	void update_targets(CharacterObject user, ElementActive elem, List<Targettable> targets) {
+		List<Targettable> output = new List<Targettable>();
+		Targettable tgt_1;
+		Targettable tgt_2;
+		
+		if (elem.targetIndex.Count == 0) {
+			Debug.Log("Skill is targetting but does not have targets.");
+			Debug.Break();
+		}
 
-		List<CharacterObject> output = new List<CharacterObject>();
-		CharacterObject tgt_1;
-		CharacterObject tgt_2;
+		if (elem.targetIndex[0] == -1) {
+			tgt_1 = user.target;
+		}
+		else {
+			tgt_1 = targets[elem.targetIndex[0]];
+		}
+
+		if (tgt_1.GetCharacter() == null) {
+			Debug.Log("Aiming for a slot. If not desired outcome, please check.");
+		}
 
 		switch (elem.target) {
 			case TargetActive.ADJACENT_ANY:
-				if (elem.targetIndex[0] == -1) {
-					tgt_1 = user;
+				foreach (CharacterObject co in user.column.get_adjacent_characters(tgt_1.GetCharacter())) {
+					output.Add(co.target);
 				}
-				else {
-					tgt_1 = targets[elem.targetIndex[0]];
-				}
-
-				output.AddRange(user.column.get_adjacent_characters(tgt_1));
 				break;
 
 			case TargetActive.ADJACENT_SWAPPABLE:
-				if (elem.targetIndex[0] == -1) {
-					tgt_1 = user;
+				foreach (CharacterObject co in arenaManager.get_swap_targets(tgt_1.GetCharacter())) {
+					output.Add(co.target);
 				}
-				else {
-					tgt_1 = targets[elem.targetIndex[0]];
-				}
-
-				output.AddRange(arenaManager.get_swap_targets(tgt_1));
 				break;
 
 			case TargetActive.ENEMIES_LANE_ANY:
-				if (elem.targetIndex[0] == -1) {
-					tgt_1 = user;
+				foreach (CharacterObject co in arenaManager.get_attack_targets(tgt_1.GetCharacter())) {
+					output.Add(co.target);
 				}
-				else {
-					tgt_1 = targets[elem.targetIndex[0]];
-				}
-
-				output.AddRange(arenaManager.get_attack_targets(tgt_1));
 				break;
 
 			case TargetActive.ENEMIES_LANE_SWAPPABLE:
-				if (elem.targetIndex[0] == -1) {
-					tgt_1 = user;
-				}
-				else {
-					tgt_1 = targets[elem.targetIndex[0]];
-				}
-
-				var aux = arenaManager.get_attack_targets(tgt_1);
-				for (int i = 0; i < aux.Count; i++) {
-					if (aux[i].status.getSwappable()) {
-						output.Add(aux[i]);
+				var aux = arenaManager.get_attack_targets(tgt_1.GetCharacter());
+				foreach (CharacterObject co in aux) {
+					if (co.status.getSwappable()) {
+						output.Add(co.target);
 					}
+				}
+				break;
+
+			case TargetActive.SELF:
+				output.Add(user.target);
+				break;
+
+			case TargetActive.SLOT_SELF:
+				selecting_slot = true;
+				output.Add(user.target);
+				break;
+			
+			case TargetActive.SLOTS_COLUMN:
+				selecting_slot = true;
+				foreach (CharacterObject co in user.column.charObj) {
+					output.Add(co.target);
 				}
 				break;
 		}
@@ -97,24 +133,33 @@ public class TargetManager : MonoBehaviour {
 		if (output.Count == 0) {
 			//no targets available
 			//what can i do, i'm just an elf
+			Debug.Log("No targets available for skill.");
 		}
 		current_targets = output;
 	}
 
-	public void enter_targetting(CharacterObject user, ElementActive elem, List<CharacterObject> targets) {
+	public void enter_targetting(CharacterObject user, ElementActive elem, List<Targettable> targets) {
+		selecting_slot = false;
 		update_targets(user, elem, targets);
 
 		switch (current_state) {
 			case States.INITIAL_STATE:
 				current_state = States.SHOW_TARGETS;
 				
+				toggle_skill_panel(true);
 				highlight_targets(true);
 				
 				break;
 		}
+
+		//no choice
+		// if (current_targets.Count == 1) {
+		// 	click_character(current_targets[0]);
+		// 	click_confirmation_button();
+		// }
 	}
 
-	public void click_character(CharacterObject clicked) {
+	public void click_character(Targettable clicked) {
 		if (!current_targets.Contains(clicked)) {
 			return;
 		}
@@ -139,11 +184,18 @@ public class TargetManager : MonoBehaviour {
 			case States.SHOW_CONFIRMATION:
 				current_state = States.INITIAL_STATE;
 
-				last_selected_target = selected_target;
+				if (selecting_slot) {
+					var obj = selected_target.GetComponent<CharacterObject>();
+					last_selected_target = arenaManager.get_player_column().get_slotbg_by_charobj(obj).target;
+				} else {
+					last_selected_target = selected_target;
+				}
+
 				selected_target = null;
 
 				highlight_targets(false);
 				toggle_confirmation(false);
+				toggle_skill_panel(false);
 				
 				break;
 		}
@@ -159,6 +211,7 @@ public class TargetManager : MonoBehaviour {
 
 				highlight_targets(false);
 				toggle_confirmation(false);
+				toggle_skill_panel(false);
 				
 				break;
 		}
@@ -185,5 +238,14 @@ public class TargetManager : MonoBehaviour {
 
 	void toggle_confirmation(bool value) {
 		confirmationScreen.SetActive(value);
+	}
+
+	public void show_skill_panel(ActiveSkillData skl) {
+		skillTitle.text = skl.title;
+		skillDescription.text = skl.description;
+	}
+
+	void toggle_skill_panel(bool value) {
+		skillDescriptionPanel.SetActive(value);
 	}
 }

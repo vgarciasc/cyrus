@@ -30,12 +30,9 @@ public class CharacterObject : MonoBehaviour {
 	public Image sprite;
 	public SlotColumn column;
 	public ButtonLane lane;
-	public BuffContainer buffContainer;
-	public GameObject targetLowPriority;
-	public GameObject targetHiPriority;
 	public GameObject inactiveMask;
 	public Label label;
-	public Barrier barrier;
+	public Targettable target;
 
 	//delegates
 	public delegate void ClickDelegate(CharacterObject co);
@@ -47,7 +44,7 @@ public class CharacterObject : MonoBehaviour {
 		init_references();
 
 		toggle_lane(false);
-		toggle_targets(false);
+		target.toggle_targets(false);
 	}
 
 	#region setters
@@ -108,21 +105,6 @@ public class CharacterObject : MonoBehaviour {
 	#endregion
 
 	#region UI access
-		#region targeting
-			public void toggle_targetlow(bool value) {
-				targetLowPriority.SetActive(value);
-			}
-
-			public void toggle_targethi(bool value) {
-				targetHiPriority.SetActive(value);
-			}
-
-			public void toggle_targets(bool value) {
-				toggle_targetlow(value);
-				toggle_targethi(value);
-			}
-		#endregion
-
 		#region inactive mask
 			void toggle_inactive_mask(bool value) {
 				inactiveMask.SetActive(value);

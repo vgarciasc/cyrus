@@ -27,7 +27,7 @@ public class BuffManager : MonoBehaviour {
 	CombatLogManager log;
 
 	//passive skill data
-	public IEnumerator ApplyBuff(CharacterObject attacker,
+	public IEnumerator ApplyBuff_ToCharacter(CharacterObject attacker,
 								CharacterObject defender,
 								Damage dmg,
 								PassiveSkillData skill,
@@ -43,7 +43,7 @@ public class BuffManager : MonoBehaviour {
 		List<CharacterObject> targets_aux = new List<CharacterObject>();
 		
 		//show label
-		if (eff.alsoShowLabel || eff.kind == EffectKind.LABEL_SHOW) {
+		if (eff.alsoShowLabel || eff.kind == EffectPassive.LABEL_SHOW) {
 			StartCoroutine(skill_caster.label.showLabel(skill.name));
 		}
 
@@ -51,16 +51,16 @@ public class BuffManager : MonoBehaviour {
 		for (int i = 0; i < eff.targets.Count; i++) {
 			var target = eff.targets[i];
 			switch (target) {
-				case TargetKind.LAST_ATTACKER:
+				case TargetPassive.LAST_ATTACKER:
 					targets_aux.Add(attacker);
 					break;
-				case TargetKind.LAST_DEFENDER:
+				case TargetPassive.LAST_DEFENDER:
 					targets_aux.Add(defender);
 					break;
-				case TargetKind.ADJACENT_TO_CASTER:
+				case TargetPassive.ADJACENT_TO_CASTER:
 					targets_aux.AddRange(skill_caster.column.get_adjacent_characters(skill_caster));
 					break;
-				case TargetKind.CASTER:
+				case TargetPassive.CASTER:
 					targets_aux.Add(skill_caster);
 					break;
 			}
@@ -70,7 +70,7 @@ public class BuffManager : MonoBehaviour {
 		Coroutine toWait = null;
 		if (eff.showBuffDebuffAnimation) {
 			for (int i = 0; i < targets_aux.Count; i++) {
-				toWait = StartCoroutine(FadeIn_Up_FadeOut(targets_aux[i], eff.buff));
+				toWait = StartCoroutine(FadeIn_Up_FadeOut(targets_aux[i].status.container, eff.buff));
 			}
 
 			if (toWait != null) {
@@ -86,7 +86,7 @@ public class BuffManager : MonoBehaviour {
 	}
 
 	//active skill data
-	public IEnumerator ApplyBuff(CharacterObject target,
+	public IEnumerator ApplyBuff(Buffable target,
 								ActiveSkillData skill,
 								ElementActive elem,
 								CharacterObject caster) {		
@@ -94,28 +94,26 @@ public class BuffManager : MonoBehaviour {
 		Buff buff = elem.buff;
 
 		if (!ViolenceCalculator.pass_test(buff.probability)) {
-			yield return target.dodge_motion();
+			Debug.Log("Buff " + buff + " did not pass the " + buff.probability * 100 + "% chance.");
 			yield break;
 		}
 
 		Debug.Log("Buff '" + elem.buff + "' applied.");
-		List<CharacterObject> targets_aux = new List<CharacterObject>();
 
 		if (elem.showBuffLabel) {
-			StartCoroutine(caster.label.showLabel(skill.name));
+			StartCoroutine(caster.label.showLabel(skill.title));
 		}
 
 		//show buff or debuff animation (arrows up and down)
 		Coroutine toWait = null;
-		toWait = StartCoroutine(FadeIn_Up_FadeOut(target, elem.buff));
+		toWait = StartCoroutine(FadeIn_Up_FadeOut(target.container, elem.buff));
 		yield return toWait;
 
 		//apply buffs
-		target.take_buffs(new List<Buff> {elem.buff});
+		target.insert(new List<Buff> {elem.buff});
 	}
 
-	IEnumerator FadeIn_Up_FadeOut(CharacterObject character, Buff buff) {
-		BuffContainer container = character.buffContainer;
+	IEnumerator FadeIn_Up_FadeOut(BuffContainer container, Buff buff) {
 		GameObject buffObject;
 
 		if (buff.gender == BuffGender.BUFF) {

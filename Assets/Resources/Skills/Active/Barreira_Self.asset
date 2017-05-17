@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dacb4568b5d48404d98d8d9331cd0664, type: 3}
+  m_Name: Barreira_Self
+  m_EditorClassIdentifier: 
+  title: BARREIRA_SELF
+  description: TESTE
+  elements:
+  - kind: 0
+    targetIndex: ffffffff
+    target: 6
+    effect: 0
+    totalAttackMultiplier: 0
+    buff:
+      kind: 0
+      gender: 0
+      amount: 0
+      multiplier: 0
+      turnsDuration: 0
+      turnsLeft: 0
+      stackable: 0
+      probability: 0
+      swapTarget: 0
+    showBuffLabel: 0
+  - kind: 1
+    targetIndex: 00000000
+    target: 0
+    effect: 5
+    totalAttackMultiplier: 0
+    buff:
+      kind: 11
+      gender: 0
+      amount: 1
+      multiplier: 0
+      turnsDuration: -1
+      turnsLeft: 0
+      stackable: 0
+      probability: 1
+      swapTarget: 0
+    showBuffLabel: 1

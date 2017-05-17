@@ -15,7 +15,7 @@ public class SkillLaneButton : MonoBehaviour {
 		this.character = charac;
 		this.data = skill;
 
-		buttonText.text = skill.name.ToUpper();
+		buttonText.text = skill.title.ToUpper();
 	}
 
 	public void click_skill() {

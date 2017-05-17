@@ -74,6 +74,12 @@ public class StatsManager : MonoBehaviour {
 					focused.status.buffs[i].turnsLeft + " turns left) \n";
 			}
 
+			SlotBackground sb = focused.column.get_slotbg_by_charobj(focused);
+			for (int i = 0; i < sb.slotBuff.buffs.Count; i++) {
+				aux += "<color=magenta>" + sb.slotBuff.buffs[i].ToString() + "</color> (" +
+					sb.slotBuff.buffs[i].turnsLeft + " turns left) \n";
+			}
+
 			statsInfo.text = aux;
 		}
 	#endregion

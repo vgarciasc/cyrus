@@ -17,10 +17,10 @@ public class ActiveSkillManager : MonoBehaviour {
 
 	public IEnumerator CastSkill(ActiveSkillData act,
 								CharacterObject caster,
-								List<CharacterObject> previous_targets,
+								List<Targettable> previous_targets,
 								int previous_element_index) {
 		
-		List<CharacterObject> current_targets = new List<CharacterObject>();
+		List<Targettable> current_targets = new List<Targettable>();
 		if (previous_targets != null) {
 			current_targets.AddRange(previous_targets);
 		}
@@ -37,12 +37,13 @@ public class ActiveSkillManager : MonoBehaviour {
 					break;
 
 				case ElementActiveKind.TARGET:
+					targetManager.show_skill_panel(act);
 					targetManager.enter_targetting(caster, act.elements[i], current_targets);
 
 					yield return new WaitUntil(() => 
 						targetManager.current_state == TargetManager.States.INITIAL_STATE);
 					
-					CharacterObject tgt = targetManager.GetTarget();
+					Targettable tgt = targetManager.GetTarget();
 					if (tgt != null) {
 						current_targets.Add(tgt);
 					}
@@ -91,22 +92,22 @@ public class ActiveSkillManager : MonoBehaviour {
 	public IEnumerator CastEffect(ActiveSkillData act,
 								ElementActive elem,
 								CharacterObject caster,
-								List<CharacterObject> targets) {
+								List<Targettable> targets) {
 		
 		int tgt_index_1, tgt_index_2, tgt_index_3;
-		CharacterObject tgt_1 = null, tgt_2 = null, tgt_3 = null;
+		Targettable tgt_1 = null, tgt_2 = null, tgt_3 = null;
 
 		if (elem.targetIndex.Count > 0) {
 			tgt_index_1 = elem.targetIndex[0];
-			tgt_1 = tgt_index_1 == -1 ? caster : targets[tgt_index_1];
+			tgt_1 = tgt_index_1 == -1 ? caster.target : targets[tgt_index_1];
 		}
 		if (elem.targetIndex.Count > 1) {
 			tgt_index_2 = elem.targetIndex[1];
-			tgt_2 = tgt_index_2 == -1 ? caster : targets[tgt_index_2];
+			tgt_2 = tgt_index_2 == -1 ? caster.target : targets[tgt_index_2];
 		}
 		if (elem.targetIndex.Count > 2) {
 			tgt_index_3 = elem.targetIndex[2];
-			tgt_3 = tgt_index_3 == -1 ? caster : targets[tgt_index_3];
+			tgt_3 = tgt_index_3 == -1 ? caster.target : targets[tgt_index_3];
 		}
 
 		AttackBonus bonus = new AttackBonus();
@@ -114,27 +115,27 @@ public class ActiveSkillManager : MonoBehaviour {
 
 		switch (elem.effect) {
 			case EffectActive.SWAP:
-				yield return swapManager.swap_characters(tgt_1, tgt_2);
+				yield return swapManager.swap_characters(tgt_1.GetCharacter(), tgt_2.GetCharacter());
 				break;
 
 			case EffectActive.COMPLETE_ATTACK:
-				yield return attackManager.complete_attack(tgt_1, tgt_2, bonus);
+				yield return attackManager.complete_attack(tgt_1.GetCharacter(), tgt_2.GetCharacter(), bonus);
 				break;
 
 			case EffectActive.SIMPLE_ATTACK:
-				yield return attackManager.simple_attack(tgt_1, tgt_2, bonus);
+				yield return attackManager.simple_attack(tgt_1.GetCharacter(), tgt_2.GetCharacter(), bonus);
 				break;
 
 			case EffectActive.SIMPLE_COUNTER:
-				yield return attackManager.simple_counter(tgt_1, tgt_2, bonus);
+				yield return attackManager.simple_counter(tgt_1.GetCharacter(), tgt_2.GetCharacter(), bonus);
 				break;
 
 			case EffectActive.SHOW_LABEL:
-				yield return caster.label.showLabel(act.name);
+				yield return caster.label.showLabel(act.title);
 				break;
 
 			case EffectActive.BUFF_DEBUFF:
-				yield return buffManager.ApplyBuff(tgt_1, act, elem, caster);
+				yield return buffManager.ApplyBuff(tgt_1.buffable, act, elem, caster);
 				break;
 
 			default:

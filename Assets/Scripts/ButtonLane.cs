@@ -140,6 +140,8 @@ public class ButtonLane : MonoBehaviour {
 		public void toggle_cancel(bool value) {
 			cancelActive = value;
 			cancelButton.SetActive(value);
+
+			// cancelButton.SetActive(false);
 		}
 	#endregion
 

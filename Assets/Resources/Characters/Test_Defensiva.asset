@@ -16,7 +16,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 8071dff93aa2ca043876f1f263b57299, type: 3}
   skills: []
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  VIT: 70
+  VIT: 1
   FOR: 24
   DEF: 33
   INT: 0

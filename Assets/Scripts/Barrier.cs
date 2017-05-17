@@ -7,6 +7,8 @@ public class Barrier : MonoBehaviour {
 	[HeaderAttribute("Components")]
 	[SerializeField]
 	Image barrier;
+	[SerializeField]
+	Text health;
 
 	public int points = 0;
 
@@ -15,6 +17,7 @@ public class Barrier : MonoBehaviour {
 	}
 
 	public void Insert() {
+		health.text = points.ToString();
 		toggle(true);
 	}
 
@@ -34,15 +37,22 @@ public class Barrier : MonoBehaviour {
 		
 		//if barrier is negative, now it doesnt exist
 		if (points < 0) {
+			int dano_transbordando = points;
 			points = 0;
 			Remove();
-			return points;
+			return dano_transbordando;
 		}
 
+		health.text = points.ToString();
 		return 0;
 	}
 
-	void toggle(bool value) {
-		barrier.enabled = value;
+	public void toggle(bool value) {
+		health.gameObject.SetActive(value);
+		barrier.gameObject.SetActive(value);
+	}
+
+	public void reset() {
+		add_health(0);
 	}
 }

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterStatus : MonoBehaviour {	
-	public List<Buff> buffs = new List<Buff>();
-
+public class CharacterStatus : Buffable {	
 	[HeaderAttribute("References")]
 	[SerializeField]
 	TurnManager turnManager;
@@ -21,83 +19,63 @@ public class CharacterStatus : MonoBehaviour {
 		update_buff();
 	}
 
-	#region buff
-		void update_buff() {
-			for (int i = 0; i < buffs.Count; i++) {
-				if (buffs[i].turnsLeft != -1) {
-					buffs[i].turnsLeft--;
-					
-					if (buffs[i].turnsLeft == 0) {
-						if (buffs[i].kind == BuffType.BARRIER) {
-							character.barrier.add_health(buffs[i].amount);
-						}
-						buffs.RemoveAt(i);
-					}
-				}
-			}
-		}
-
-		public void insert(List<Buff> buffs) {
-			for (int i = 0; i < buffs.Count; i++) {
-				if (hasBuff(buffs[i]) && !buffs[i].stackable) {
-					continue;
-				}
-				else {
-					this.buffs.Add(new Buff(buffs[i]));
-					if (buffs[i].kind == BuffType.BARRIER) {
-						character.barrier.add_health(buffs[i].amount);
-					}
-				}
-			}
-		}
-
-		bool hasBuff(Buff buff) {
-			for (int i = 0; i < buffs.Count; i++) {
-				if (buffs[i].Equals(buff)) {
-					return true;
-				}
-			}	
-
-			return false;
-		}
-	#endregion
-
 	#region getters
 		//caso o raposo comece a ter ideias mais esquisitas, isso aqui deve ser revisitado para 
 		//ficar mais aos moldes de PassiveSkillManager.getCriticalProbability()
 
 		public int getVIT() {
-			return character.data.VIT + BuffManager.getBuffNumbers(buffs, BuffType.ATT_VIT).amount;
+			SlotBackground sb = character.column.get_slotbg_by_charobj(character);
+			return character.data.VIT + BuffManager.getBuffNumbers(buffs, BuffType.ATT_VIT).amount
+				+ BuffManager.getBuffNumbers(sb.slotBuff.buffs, BuffType.ATT_VIT).amount;
 		}
 		
 		public int getFOR() {
-			return character.data.FOR + BuffManager.getBuffNumbers(buffs, BuffType.ATT_FOR).amount;
+			SlotBackground sb = character.column.get_slotbg_by_charobj(character);
+			return character.data.FOR + BuffManager.getBuffNumbers(buffs, BuffType.ATT_FOR).amount
+				+ BuffManager.getBuffNumbers(sb.slotBuff.buffs, BuffType.ATT_VIT).amount;
 		}
 
 		public int getDEF() {
-			return character.data.DEF + BuffManager.getBuffNumbers(buffs, BuffType.ATT_DEF).amount;
+			SlotBackground sb = character.column.get_slotbg_by_charobj(character);
+			return character.data.DEF + BuffManager.getBuffNumbers(buffs, BuffType.ATT_DEF).amount
+				+ BuffManager.getBuffNumbers(sb.slotBuff.buffs, BuffType.ATT_VIT).amount;
 		}
 
 		public int getRES() {
-			return character.data.RES + BuffManager.getBuffNumbers(buffs, BuffType.ATT_RES).amount;
+			SlotBackground sb = character.column.get_slotbg_by_charobj(character);
+			return character.data.RES + BuffManager.getBuffNumbers(buffs, BuffType.ATT_RES).amount
+				+ BuffManager.getBuffNumbers(sb.slotBuff.buffs, BuffType.ATT_VIT).amount;
 		}
 
 		public int getINT() {
-			return character.data.INT + BuffManager.getBuffNumbers(buffs, BuffType.ATT_INT).amount;
+			SlotBackground sb = character.column.get_slotbg_by_charobj(character);
+			return character.data.INT + BuffManager.getBuffNumbers(buffs, BuffType.ATT_INT).amount
+				+ BuffManager.getBuffNumbers(sb.slotBuff.buffs, BuffType.ATT_VIT).amount;
 		}
 
 		public int getAGI() {
-			return character.data.AGI + BuffManager.getBuffNumbers(buffs, BuffType.ATT_AGI).amount;
+			SlotBackground sb = character.column.get_slotbg_by_charobj(character);
+			return character.data.AGI + BuffManager.getBuffNumbers(buffs, BuffType.ATT_AGI).amount
+				+ BuffManager.getBuffNumbers(sb.slotBuff.buffs, BuffType.ATT_VIT).amount;
 		}
 
 		public int getDES() {
-			return character.data.DES + BuffManager.getBuffNumbers(buffs, BuffType.ATT_DES).amount;
+			SlotBackground sb = character.column.get_slotbg_by_charobj(character);
+			return character.data.DES + BuffManager.getBuffNumbers(buffs, BuffType.ATT_DES).amount
+				+ BuffManager.getBuffNumbers(sb.slotBuff.buffs, BuffType.ATT_VIT).amount;
 		}
 
 		public AllyTarget getSwapTargets() {
 			for (int i = 0; i < buffs.Count; i++) {
 				if (buffs[i].kind == BuffType.SWAP_TARGETTING) {
 					return buffs[i].swapTarget;
+				}
+			}
+
+			SlotBackground slot = character.column.get_slotbg_by_charobj(character);
+			for (int i = 0; i < slot.slotBuff.buffs.Count; i++) {
+				if (slot.slotBuff.buffs[i].kind == BuffType.SWAP_TARGETTING) {
+					return slot.slotBuff.buffs[i].swapTarget;
 				}
 			}
 

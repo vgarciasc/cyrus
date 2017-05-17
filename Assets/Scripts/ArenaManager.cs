@@ -16,25 +16,21 @@ public class ArenaManager : MonoBehaviour {
 	SlotColumn right = new SlotColumn();
 
 	public static ArenaManager getArenaManager() {
-		return (ArenaManager) HushPuppy.safeFindComponent("GameController", "ArenaManager");
+		return (ArenaManager) HushPuppy.safeFindComponent("ArenaManager", "ArenaManager");
 	}
 
 	void Start() {
-		// StartCoroutine (test_killing_slots());
+		StartCoroutine (test_killing_slots());
 		init_delegates();
 	}
 
 	IEnumerator test_killing_slots() {
 
-		right.kill_slot (0);
-
 		yield return new WaitForSeconds (1f);
-		// yield return new WaitForSeconds (1f);
-
+		right.kill_slot (0);
+		// yield return new WaitForSeconds (2f);
 		// right.kill_slot (2);
-
-		// yield return new WaitForSeconds (1f);
-
+		// yield return new WaitForSeconds (2f);
 		// right.kill_slot (0);
 	}
 
@@ -54,10 +50,10 @@ public class ArenaManager : MonoBehaviour {
 		void show_attack_targets(CharacterObject targeter) {
 			foreach (CharacterObject co in get_attack_targets(targeter)) {
 				if (co == get_default_attack_target(targeter)) {
-					co.toggle_targethi(true);
+					co.target.toggle_targethi(true);
 				}
 				else {
-					co.toggle_targetlow(true);
+					co.target.toggle_targetlow(true);
 				}
 			}
 		}
@@ -66,21 +62,21 @@ public class ArenaManager : MonoBehaviour {
 			unshow_attack_targets(targeter);
 			foreach (CharacterObject co in get_attack_targets(targeter)) {
 				if (co == target) {
-					co.toggle_targethi(true);
+					co.target.toggle_targethi(true);
 				}
 				else {
-					co.toggle_targetlow(true);
+					co.target.toggle_targetlow(true);
 				}
 			}
 		}
 		
 		void unshow_attack_targets(CharacterObject targeter) {
 			foreach (CharacterObject co in left.charObj) {
-				co.toggle_targets(false);
+				co.target.toggle_targets(false);
 			}
 
 			foreach (CharacterObject co in right.charObj) {
-				co.toggle_targets(false);
+				co.target.toggle_targets(false);
 			}
 		}
 	#endregion
@@ -88,7 +84,7 @@ public class ArenaManager : MonoBehaviour {
 	#region swap targets
 		void show_swap_targets(CharacterObject targeter) {	
 			foreach (CharacterObject co in get_swap_targets(targeter)) {
-				co.toggle_targetlow(true);
+				co.target.toggle_targetlow(true);
 			}
 		}
 		
@@ -98,11 +94,11 @@ public class ArenaManager : MonoBehaviour {
 
 		void unshow_swap_targets() {
 			foreach (CharacterObject co in left.charObj) {
-				co.toggle_targets(false);
+				co.target.toggle_targets(false);
 			}
 
 			foreach (CharacterObject co in right.charObj) {
-				co.toggle_targets(false);
+				co.target.toggle_targets(false);
 			}
 		}
 	#endregion
@@ -180,4 +176,21 @@ public class ArenaManager : MonoBehaviour {
 			}
 		}
 	#endregion
+
+	public CharacterObject get_char_by_targettable(Targettable tgt) {
+		foreach (CharacterObject c in left.charObj) {
+			if (c.target == tgt) {
+				return c;
+			}	
+		}
+
+		foreach (CharacterObject c in right.charObj) {
+			if (c.target == tgt) {
+				return c;
+			}	
+		}
+
+		Debug.Log("Erro!");
+		return null;
+	}
 }

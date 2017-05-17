@@ -98,7 +98,7 @@ public class ClickManager : MonoBehaviour {
 				break;
 			
 			case States.TARGET_MANAGER:
-				targetManager.click_character(charObj);
+				targetManager.click_character(charObj.target);
 				break;
 		}
 	}
