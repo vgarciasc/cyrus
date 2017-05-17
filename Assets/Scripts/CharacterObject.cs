@@ -35,6 +35,7 @@ public class CharacterObject : MonoBehaviour {
 	public GameObject targetHiPriority;
 	public GameObject inactiveMask;
 	public Label label;
+	public Barrier barrier;
 
 	//delegates
 	public delegate void ClickDelegate(CharacterObject co);

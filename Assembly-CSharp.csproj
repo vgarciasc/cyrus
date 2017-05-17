@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\ActiveSkillManager.cs" />
      <Compile Include="Assets\Scripts\ArenaManager.cs" />
      <Compile Include="Assets\Scripts\AttackManager.cs" />
+     <Compile Include="Assets\Scripts\Barrier.cs" />
      <Compile Include="Assets\Scripts\Buff.cs" />
      <Compile Include="Assets\Scripts\BuffContainer.cs" />
      <Compile Include="Assets\Scripts\BuffManager.cs" />

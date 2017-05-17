@@ -7,6 +7,8 @@ public class CharacterHealth : MonoBehaviour {
 	[HeaderAttribute("References")]
 	[SerializeField]
 	Text healthIndicator;
+	[SerializeField]
+	CharacterObject character;
 
 	public int hp = 0,
 			max = 10;
@@ -18,6 +20,11 @@ public class CharacterHealth : MonoBehaviour {
 	}
 
 	public void add_health(int amount) {
+		//if take damage and barrier is up
+		if (amount < 0 && character.barrier.points > 0) {
+			amount = character.barrier.add_health(amount);
+		}
+
 		hp += amount;
 		hp = Mathf.Clamp(hp, 0, max);
 		updateIndicator();

@@ -28,6 +28,9 @@ public class CharacterStatus : MonoBehaviour {
 					buffs[i].turnsLeft--;
 					
 					if (buffs[i].turnsLeft == 0) {
+						if (buffs[i].kind == BuffType.BARRIER) {
+							character.barrier.add_health(buffs[i].amount);
+						}
 						buffs.RemoveAt(i);
 					}
 				}
@@ -41,6 +44,9 @@ public class CharacterStatus : MonoBehaviour {
 				}
 				else {
 					this.buffs.Add(new Buff(buffs[i]));
+					if (buffs[i].kind == BuffType.BARRIER) {
+						character.barrier.add_health(buffs[i].amount);
+					}
 				}
 			}
 		}

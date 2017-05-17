@@ -13,7 +13,8 @@ public enum BuffType {
 	CRIT_MULTIPLIER, //multiplies probability of critical hits
 	SWAP_TARGETTING, //changes what allies the user can swap with
 	IGNORE_CHANCE, //adds to probability of blocking entire attack
-	SWAP_BLOCKING //changes if the user can be swapped with
+	SWAP_BLOCKING, //changes if the user can be swapped with
+	BARRIER //character has a barrier
 };
 
 public enum BuffGender {BUFF, DEBUFF, NONE};

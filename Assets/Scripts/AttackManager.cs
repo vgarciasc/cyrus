@@ -94,7 +94,7 @@ public class AttackManager : MonoBehaviour {
 				yield break;
 			}
 
-			yield return block(AttackModule.COUNTER_ATTACK);
+			// yield return block(AttackModule.COUNTER_ATTACK);
 
 			Damage dmg = calculator.effective_damage(
 				char_attacker,
