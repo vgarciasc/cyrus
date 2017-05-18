@@ -25,13 +25,12 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	IEnumerator test_killing_slots() {
-
 		yield return new WaitForSeconds (1f);
-		right.kill_slot (0);
-		// yield return new WaitForSeconds (2f);
-		// right.kill_slot (2);
-		// yield return new WaitForSeconds (2f);
-		// right.kill_slot (0);
+		// left.get_charobj_by_slotID(3).take_hit(700);
+		// yield return new WaitForSeconds (1f);
+		// left.get_charobj_by_slotID(2).take_hit(700);
+		// yield return new WaitForSeconds (1f);
+		// left.get_charobj_by_slotID(1).take_hit(700);
 	}
 
 	void init_delegates() {

@@ -43,8 +43,8 @@ public class SlotBackground : MonoBehaviour {
 	}
 
 	public void kill() {
-		this.gameObject.SetActive(false);
 		slotUpper.SetActive(false);
+		this.gameObject.SetActive(false);
 	}
 
 	public void resize(int multiplier) { 

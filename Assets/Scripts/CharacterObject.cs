@@ -193,7 +193,7 @@ public class CharacterObject : MonoBehaviour {
 			health.add_health(- amount);
 
 			if (health.hp == 0) {
-				kill();
+				column.kill_slot(this);
 			}
 		}
 

@@ -45,13 +45,31 @@ public class SlotColumn : MonoBehaviour {
 		}
 	}
 	
-	public void kill_slot(CharacterObject charObj) {
-		kill_slot(get_slotID_by_charobj(charObj));
+	public void kill_slot(CharacterObject co) {
+		
+		List<SlotBackground> sb = new List<SlotBackground>();
+		foreach (SlotBackground s in slotsBackground) {
+			if (s.gameObject.activeSelf) {
+				sb.Add(s);
+			}
+		}
+
+		List<CharacterObject> cb = new List<CharacterObject>();
+		foreach (CharacterObject c in charObj) {
+			if (c.gameObject.activeSelf) {
+				cb.Add(c);
+			}
+		}
+
+		sb[cb.IndexOf(co)].kill();
+		co.kill();
+
+		kill_slot(get_slotID_by_charobj(co));
 	}
 
 	public void kill_slot(int slotID) {
-		get_slotbg_by_charobj(get_charobj_by_slotID(slotID)).kill();
-		get_charobj_by_slotID(slotID).kill();
+		// get_slotbg_by_charobj(get_charobj_by_slotID(slotID)).kill();
+		// get_charobj_by_slotID(slotID).kill();
 
 		List<int> real_IDs = new List<int>();		
 		foreach (Slot s in slots) {
@@ -125,43 +143,45 @@ public class SlotColumn : MonoBehaviour {
 				}
 				break;
 			case 3:
-				get_charobj_by_slotID(0).set_new_pos(slots[0].transform.position);
-				get_charobj_by_slotID(1).set_new_pos(slots[1].transform.position +
+				get_charobj_by_index(0).set_new_pos(slots[0].transform.position);
+				get_charobj_by_index(1).set_new_pos(slots[1].transform.position +
 					(slots[2].transform.position - slots[1].transform.position) / 2);
-				get_charobj_by_slotID(3).set_new_pos(slots[3].transform.position);
+				get_charobj_by_index(2).set_new_pos(slots[3].transform.position);
 
 				if (death)  {
-					get_slotbg_by_charobj(get_charobj_by_slotID(1)).resize(2);
-					get_slotbg_by_charobj(get_charobj_by_slotID(0)).set_new_pos(slots[0].transform.position);
-					get_slotbg_by_charobj(get_charobj_by_slotID(1)).set_new_pos(slots[1].transform.position +
+					get_slotbg_by_index(1).resize(2);
+
+					get_slotbg_by_index(0).set_new_pos(slots[0].transform.position);
+					get_slotbg_by_index(1).set_new_pos(slots[1].transform.position +
 						(slots[2].transform.position - slots[1].transform.position) / 2);
-					get_slotbg_by_charobj(get_charobj_by_slotID(3)).set_new_pos(slots[3].transform.position);
+					get_slotbg_by_index(2).set_new_pos(slots[3].transform.position);
 				}
 
 				break;
 			case 2:
-				get_charobj_by_slotID(0).set_new_pos(slots[0].transform.position +
+				get_charobj_by_index(0).set_new_pos(slots[0].transform.position +
 					(slots[1].transform.position - slots[0].transform.position) / 2);
-				get_charobj_by_slotID(3).set_new_pos(slots[2].transform.position +
+				get_charobj_by_index(1).set_new_pos(slots[2].transform.position +
 					(slots[3].transform.position - slots[2].transform.position) / 2);
 
 				if (death)  {
-					get_slotbg_by_charobj(get_charobj_by_slotID(0)).resize(2);
-					get_slotbg_by_charobj(get_charobj_by_slotID(3)).resize(2);
-					get_slotbg_by_charobj(get_charobj_by_slotID(0)).set_new_pos(slots[0].transform.position +
+					get_slotbg_by_index(0).resize(2);
+					get_slotbg_by_index(1).resize(2);
+
+					get_slotbg_by_index(0).set_new_pos(slots[0].transform.position +
 						(slots[1].transform.position - slots[0].transform.position) / 2);
-					get_slotbg_by_charobj(get_charobj_by_slotID(3)).set_new_pos(slots[2].transform.position +
+					get_slotbg_by_index(1).set_new_pos(slots[2].transform.position +
 						(slots[3].transform.position - slots[2].transform.position) / 2);
 				}
 
 				break;
 			case 1:
-				get_charobj_by_slotID(0).set_new_pos(slots[1].transform.position +
+				get_charobj_by_index(0).set_new_pos(slots[1].transform.position +
 					(slots[2].transform.position - slots[1].transform.position) / 2);
 
 				if (death)  {
-					get_slotbg_by_charobj(get_charobj_by_slotID(0)).resize(4);
-					get_slotbg_by_charobj(get_charobj_by_slotID(0)).set_new_pos(slots[1].transform.position +
+					get_slotbg_by_index(0).resize(4);
+					get_slotbg_by_index(0).set_new_pos(slots[1].transform.position +
 						(slots[2].transform.position - slots[1].transform.position) / 2);
 				}
 
@@ -288,7 +308,28 @@ public class SlotColumn : MonoBehaviour {
 		}
 
 		//TODO: BUGANDO QUANDO FICA SO UM EM TELA
-		Debug.Log("CharObj: " + co + "\nSlotBG: " + sb[cb.IndexOf(co)]);
 		return sb[cb.IndexOf(co)];
+	}
+
+	public SlotBackground get_slotbg_by_index(int index) {
+		List<SlotBackground> sb = new List<SlotBackground>();
+		foreach (SlotBackground s in slotsBackground) {
+			if (s.gameObject.activeSelf) {
+				sb.Add(s);
+			}
+		}
+
+		return sb[index];
+	}
+
+	public CharacterObject get_charobj_by_index(int index) {
+		List<CharacterObject> cb = new List<CharacterObject>();
+		foreach (CharacterObject c in charObj) {
+			if (!c.is_dead()) {
+				cb.Add(c);
+			}
+		}
+
+		return cb[index];
 	}
 }

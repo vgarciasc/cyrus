@@ -40,7 +40,7 @@ public class AttackManager : MonoBehaviour {
 			yield return StartCoroutine(simple_attack(bonus));
 
 			if (char_defender.is_dead()) {
-				char_defender.column.kill_slot(char_defender);
+				// char_defender.column.kill_slot(char_defender);
 				yield break;
 			}			
 
@@ -53,7 +53,7 @@ public class AttackManager : MonoBehaviour {
 			yield return StartCoroutine(simple_counter(bonus));
 
 			if (char_defender.is_dead()) {
-				char_defender.column.kill_slot(char_defender);
+				// char_defender.column.kill_slot(char_defender);
 				yield break;
 			}
 		}
