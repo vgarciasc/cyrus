@@ -8,7 +8,8 @@ public class SkillLaneButton : MonoBehaviour {
 	[SerializeField]
 	Text buttonText;
 
-	ActiveSkillData data;
+	
+	public ActiveSkillData data;
 	CharacterObject character;	
 
 	public void init(CharacterObject charac, ActiveSkillData skill) {
@@ -19,8 +20,6 @@ public class SkillLaneButton : MonoBehaviour {
 	}
 
 	public void click_skill() {
-		if (character.has_actions()) {
-			ClickManager.getClickManager().click_skill_button(character, data);
-		}
+		ClickManager.getClickManager().click_skill_button(character, data);
 	}
 }

@@ -42,11 +42,11 @@ public class SwapManager : MonoBehaviour {
 		}
 
 		char_swap2 = swap_target;
-		swap();
+		char_swap1.use_general_action();
+		char_swap1.column.swap_characters(char_swap1, char_swap2);
 	}
 
 	void swap() {
-		char_swap1.use_action();
 		char_swap1.column.swap_characters(char_swap1, char_swap2);
 	}
 
@@ -54,9 +54,16 @@ public class SwapManager : MonoBehaviour {
 		return (arenaManager.get_swap_targets(char_swap1).Contains(swap_target));
 	}
 
-	public IEnumerator swap_characters(CharacterObject co1, CharacterObject co2) {
+	public IEnumerator swap_characters_skill(CharacterObject co1, CharacterObject co2) {
 		start_swap(co1);
-		end_swap(co2);
+		
+		if (co2 == char_swap1) {
+			cancel_swap();
+			yield break;
+		}
+
+		char_swap2 = co2;
+		char_swap1.column.swap_characters(char_swap1, char_swap2);
 
 		yield return wait_swap_end();
 	}

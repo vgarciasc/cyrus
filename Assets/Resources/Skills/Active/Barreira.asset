@@ -14,6 +14,7 @@ MonoBehaviour:
   title: BARREIRA
   description: permite dar um escudo de 5 de dano para um aliado adjacente por um
     turno
+  canBeUsedEveryXTurns: 1
   elements:
   - kind: 0
     targetIndex: ffffffff
@@ -23,6 +24,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -39,6 +41,7 @@ MonoBehaviour:
     buff:
       kind: 11
       gender: 0
+      skillName: 
       amount: 5
       multiplier: 0
       turnsDuration: 2
@@ -47,3 +50,4 @@ MonoBehaviour:
       probability: 1
       swapTarget: 0
     showBuffLabel: 1
+  turnsSinceLastCast: -1

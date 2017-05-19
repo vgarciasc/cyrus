@@ -14,7 +14,8 @@ public enum EffectActive {
 	SIMPLE_ATTACK, //makes TARGET 1 simple-attack TARGET 2
 	SIMPLE_COUNTER, //makes TARGET 1 simple-counter TARGET 2
 	SHOW_LABEL, //shows label on TARGET 1
-	BUFF_DEBUFF //casts buff/debuff on TARGET 1
+	BUFF_DEBUFF, //casts buff/debuff on TARGET 1
+	HEAL //heals TARGET 1
 };
 
 [System.Serializable]

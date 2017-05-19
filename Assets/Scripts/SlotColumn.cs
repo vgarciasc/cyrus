@@ -307,8 +307,26 @@ public class SlotColumn : MonoBehaviour {
 			}
 		}
 
-		//TODO: BUGANDO QUANDO FICA SO UM EM TELA
 		return sb[cb.IndexOf(co)];
+	}
+
+	public CharacterObject get_charobj_by_slotbg(SlotBackground sbg) {
+		List<SlotBackground> sb = new List<SlotBackground>();
+		foreach (SlotBackground s in slotsBackground) {
+			if (s.gameObject.activeSelf) {
+				sb.Add(s);
+			}
+		}
+
+		List<CharacterObject> cb = new List<CharacterObject>();
+		foreach (CharacterObject c in charObj) {
+			if (c.gameObject.activeSelf) {
+				cb.Add(c);
+			}
+		}
+
+		//TODO: BUGANDO QUANDO FICA SO UM EM TELA
+		return cb[sb.IndexOf(sbg)];
 	}
 
 	public SlotBackground get_slotbg_by_index(int index) {

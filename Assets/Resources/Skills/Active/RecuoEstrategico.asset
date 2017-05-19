@@ -14,6 +14,7 @@ MonoBehaviour:
   title: "RECUO ESTRAT\xC9GICO"
   description: "permite atacar com metade do dano original e realizar uma troca de
     posi\xE7\xE3o em seguida (aliado recebe o contra-ataque)"
+  canBeUsedEveryXTurns: 1
   elements:
   - kind: 0
     targetIndex: ffffffff
@@ -23,6 +24,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -39,6 +41,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -55,6 +58,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -71,6 +75,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -87,6 +92,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -103,6 +109,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -111,3 +118,4 @@ MonoBehaviour:
       probability: 0
       swapTarget: 0
     showBuffLabel: 1
+  turnsSinceLastCast: -1

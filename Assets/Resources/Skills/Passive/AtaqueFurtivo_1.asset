@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4856d3932a030ca4fa6f2183f8e528e2, type: 3}
   m_Name: AtaqueFurtivo_1
   m_EditorClassIdentifier: 
-  name: ATAQUE FURTIVO
+  title: ATAQUE FURTIVO
   triggers:
   - kind: 4
   - kind: 6
@@ -21,6 +21,7 @@ MonoBehaviour:
     buff:
       kind: 7
       gender: 0
+      skillName: 
       amount: 1
       multiplier: 2
       turnsDuration: -1

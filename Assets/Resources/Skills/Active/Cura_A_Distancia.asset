@@ -9,17 +9,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dacb4568b5d48404d98d8d9331cd0664, type: 3}
-  m_Name: Veu
+  m_Name: Cura_A_Distancia
   m_EditorClassIdentifier: 
-  title: "V\xC9U"
-  description: "cria uma aura no pr\xF3prio bloco que dura 3 turnos e d\xE1 +4 de
-    RES"
+  title: "CURA \xC0 DIST\xC2NCIA"
+  description: regenera 15% da vida total de uma unidade aliada
   canBeUsedEveryXTurns: 1
   elements:
   - kind: 0
     targetIndex: ffffffff
-    target: 5
+    target: 8
     effect: 0
+    useAction: 0
     totalAttackMultiplier: 0
     buff:
       kind: 0
@@ -36,18 +36,19 @@ MonoBehaviour:
   - kind: 1
     targetIndex: 00000000
     target: 0
-    effect: 5
+    effect: 6
+    useAction: 0
     totalAttackMultiplier: 0
     buff:
-      kind: 3
+      kind: 0
       gender: 0
       skillName: 
-      amount: 4
-      multiplier: 0
-      turnsDuration: 3
+      amount: 0
+      multiplier: 0.15
+      turnsDuration: 0
       turnsLeft: 0
-      stackable: 1
-      probability: 1
+      stackable: 0
+      probability: 0
       swapTarget: 0
-    showBuffLabel: 1
+    showBuffLabel: 0
   turnsSinceLastCast: -1

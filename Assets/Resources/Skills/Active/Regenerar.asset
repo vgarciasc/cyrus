@@ -9,17 +9,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dacb4568b5d48404d98d8d9331cd0664, type: 3}
-  m_Name: Veu
+  m_Name: Regenerar
   m_EditorClassIdentifier: 
-  title: "V\xC9U"
-  description: "cria uma aura no pr\xF3prio bloco que dura 3 turnos e d\xE1 +4 de
-    RES"
+  title: REGENERAR
+  description: aplica uma passiva em um aliado que o cura em 10% por 4 turnos seguidos
   canBeUsedEveryXTurns: 1
   elements:
   - kind: 0
     targetIndex: ffffffff
-    target: 5
+    target: 8
     effect: 0
+    useAction: 0
     totalAttackMultiplier: 0
     buff:
       kind: 0
@@ -37,17 +37,18 @@ MonoBehaviour:
     targetIndex: 00000000
     target: 0
     effect: 5
+    useAction: 0
     totalAttackMultiplier: 0
     buff:
-      kind: 3
+      kind: 14
       gender: 0
       skillName: 
-      amount: 4
-      multiplier: 0
-      turnsDuration: 3
+      amount: 0
+      multiplier: 0.1
+      turnsDuration: 4
       turnsLeft: 0
-      stackable: 1
+      stackable: 0
       probability: 1
       swapTarget: 0
-    showBuffLabel: 1
+    showBuffLabel: 0
   turnsSinceLastCast: -1

@@ -14,6 +14,7 @@ MonoBehaviour:
   title: TELECINESE
   description: "permite trocar a posi\xE7\xE3o de um inimigo com um inimigo adjacente
     a ele, recebendo contra-ataque da unidade que terminar na sua frente"
+  canBeUsedEveryXTurns: 3
   elements:
   - kind: 0
     targetIndex: ffffffff
@@ -23,6 +24,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -39,6 +41,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -55,6 +58,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -71,6 +75,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -87,6 +92,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -95,3 +101,4 @@ MonoBehaviour:
       probability: 0
       swapTarget: 0
     showBuffLabel: 1
+  turnsSinceLastCast: -1

@@ -98,19 +98,25 @@ public class ButtonLane : MonoBehaviour {
 	#endregion
 
 	void update_action_buttons() {
-		if (character.has_actions()) {
+		if (character.has_general_actions()) {
 			toggle_active(attackButton, true);
-			toggle_active(swapButton, true);
-
-			foreach (SkillLaneButton slb in skillButtons) {
-				toggle_active(slb.gameObject, true);
-			}
 		}
 		else {
 			toggle_active(attackButton, false);
+		}
+		if (character.has_swap_actions()) {
+			toggle_active(swapButton, true);
+		}
+		else {
 			toggle_active(swapButton, false);
-
-			foreach (SkillLaneButton slb in skillButtons) {
+		}
+		
+		ActiveSkillManager asm = ActiveSkillManager.getActiveSkillManager();
+		foreach (SkillLaneButton slb in skillButtons) {
+			if (asm.can_cast(character, slb.data)) {
+				toggle_active(slb.gameObject, true);
+			}
+			else {
 				toggle_active(slb.gameObject, false);
 			}
 		}

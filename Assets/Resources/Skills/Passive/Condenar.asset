@@ -11,25 +11,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4856d3932a030ca4fa6f2183f8e528e2, type: 3}
   m_Name: Condenar
   m_EditorClassIdentifier: 
-  name: CONDENAR
+  title: CONDENAR
   triggers:
-  - kind: 2
   - kind: 5
+  - kind: 2
   operation: 0
   effects:
   - kind: 0
     buff:
       kind: 2
-      gender: 1
+      gender: 0
+      skillName: 
       amount: -4
       multiplier: 0
-      turnsDuration: 3
+      turnsDuration: 1
       turnsLeft: 0
-      stackable: 1
+      stackable: 0
       probability: 1
       swapTarget: 0
     protectAlly:
-      probability: 1
+      probability: 0
     targets: 01000000
     alsoShowLabel: 1
     showBuffDebuffAnimation: 1

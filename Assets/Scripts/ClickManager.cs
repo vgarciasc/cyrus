@@ -44,16 +44,36 @@ public class ClickManager : MonoBehaviour {
 							conclude_turn_event;
 
 	//variables
-	enum States {NOTHING, CHOOSING_ACTION, DISPLAYING_ATTACK_INFO,
+	enum States {NOT_CLICKABLE, NOTHING, CHOOSING_ACTION, DISPLAYING_ATTACK_INFO,
 				DISPLAYING_CHAR_ATTRIBUTES, SWAPPING_ALLIES, IS_ATTACKING,
 				ENEMY_TURN, TARGET_MANAGER};
 	States currentState;
+	CharacterObject focused_character;
 
 	void Start() {
 		enemyManager.end_enemy_attack_event += end_enemy_turn;
+
+		can_click(false);
+	}
+
+	public void can_click(bool value) {
+		switch (currentState) {
+			case States.NOT_CLICKABLE:
+				if (value) {
+					currentState = States.NOTHING;
+				}
+				break;
+			default:
+				if (!value) {
+					currentState = States.NOT_CLICKABLE;
+				}
+				break;
+		}
 	}
 
 	public void click_character(CharacterObject charObj) {
+		focused_character = charObj;
+		
 		switch (currentState) {
 			case States.CHOOSING_ACTION:
 				if (deactivate_all_lanes != null) {
@@ -106,7 +126,7 @@ public class ClickManager : MonoBehaviour {
 	public void click_attack_button(CharacterObject charObj) {
 		switch (currentState) {
 			case States.CHOOSING_ACTION:
-				if (charObj.has_actions()) {
+				if (charObj.has_general_actions()) {
 					currentState = States.DISPLAYING_ATTACK_INFO;
 					if (deactivate_all_lanes != null) {
 						deactivate_all_lanes();
@@ -122,7 +142,7 @@ public class ClickManager : MonoBehaviour {
 	public void click_swap_button(CharacterObject charObj) {
 		switch (currentState) {
 			case States.CHOOSING_ACTION:
-				if (charObj.has_actions()) {
+				if (charObj.has_swap_actions()) {
 					currentState = States.SWAPPING_ALLIES;
 					if (deactivate_all_lanes != null) {
 						deactivate_all_lanes();
@@ -146,7 +166,7 @@ public class ClickManager : MonoBehaviour {
 					deactivate_all_lanes();
 				}				
 				break;
-		}
+		}		
 	}
 
 	public void click_confirmation_button() {
@@ -162,6 +182,8 @@ public class ClickManager : MonoBehaviour {
 				targetManager.click_confirmation_button();
 				break;
 		}
+
+		focused_character = null;		
 	}
 
 	public void click_endturn_button() {
@@ -192,6 +214,8 @@ public class ClickManager : MonoBehaviour {
 				}
 				break;	
 		}
+
+		focused_character = null;		
 	}
 
 	public void click_cancel_button(CharacterObject charObj) {
@@ -231,9 +255,54 @@ public class ClickManager : MonoBehaviour {
 
 				break;				
 		}
+
+		focused_character = null;		
+	}
+
+	public void click_cancel_button() {
+		switch (currentState) {
+			case States.CHOOSING_ACTION:
+				currentState = States.NOTHING;
+				focused_character.lane.toggle_lane(false);
+				break;
+
+			case States.DISPLAYING_ATTACK_INFO:
+				currentState = States.CHOOSING_ACTION;
+				focused_character.lane.toggle_lane(true);
+				if (deactivate_choosing_attack_target_event != null) {
+					deactivate_choosing_attack_target_event(focused_character);
+				}
+				break;
+
+			case States.DISPLAYING_CHAR_ATTRIBUTES:
+				currentState = States.CHOOSING_ACTION;
+				focused_character.lane.toggle_lane(true);
+				if (deactivate_choosing_attrib_target_event != null) {
+					deactivate_choosing_attrib_target_event(focused_character);
+				}
+				break;
+
+			case States.SWAPPING_ALLIES:
+				currentState = States.CHOOSING_ACTION;
+				focused_character.lane.toggle_lane(true);
+				if (deactivate_choosing_swap_target_event != null) {
+					deactivate_choosing_swap_target_event(focused_character);
+				}
+				break;
+
+			case States.TARGET_MANAGER:
+				targetManager.click_cancel_button();
+				break;				
+		}
+
+		focused_character = null;
 	}
 
 	public void click_skill_button(CharacterObject charObj, ActiveSkillData skill) {
+		if (!ActiveSkillManager.getActiveSkillManager().can_cast(charObj, skill)) {
+			return;
+		}
+
 		switch (currentState) {
 			case States.CHOOSING_ACTION:
 				currentState = States.TARGET_MANAGER;

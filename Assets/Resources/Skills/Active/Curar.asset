@@ -9,17 +9,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dacb4568b5d48404d98d8d9331cd0664, type: 3}
-  m_Name: Veu
+  m_Name: Curar
   m_EditorClassIdentifier: 
-  title: "V\xC9U"
-  description: "cria uma aura no pr\xF3prio bloco que dura 3 turnos e d\xE1 +4 de
-    RES"
+  title: CURAR
+  description: cura 30% da vida total do alvo aliado
   canBeUsedEveryXTurns: 1
   elements:
   - kind: 0
     targetIndex: ffffffff
-    target: 5
+    target: 3
     effect: 0
+    useAction: 0
     totalAttackMultiplier: 0
     buff:
       kind: 0
@@ -36,14 +36,15 @@ MonoBehaviour:
   - kind: 1
     targetIndex: 00000000
     target: 0
-    effect: 5
-    totalAttackMultiplier: 0
+    effect: 6
+    useAction: 0
+    totalAttackMultiplier: 0.3
     buff:
       kind: 3
       gender: 0
       skillName: 
       amount: 4
-      multiplier: 0
+      multiplier: 0.3
       turnsDuration: 3
       turnsLeft: 0
       stackable: 1

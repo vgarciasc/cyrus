@@ -17,8 +17,8 @@ public class PassiveSkillManager : MonoBehaviour {
 		CharacterObject skill_caster;
 
 		for (int i = 0; i < possible_casters.Count; i++) {
-			for (int j = 0; j < possible_casters[i].skillsDeluxe.Count; j++) {
-				PassiveSkillData psv = possible_casters[i].skillsDeluxe[j];
+			for (int j = 0; j < possible_casters[i].passiveSkills.Count; j++) {
+				PassiveSkillData psv = possible_casters[i].passiveSkills[j];
 				skill_caster = possible_casters[i];
 
 				for (int k = 0; k < psv.triggers.Count; k++) {
@@ -43,8 +43,8 @@ public class PassiveSkillManager : MonoBehaviour {
 				continue;
 			}
 
-			for (int j = 0; j < column.charObj[i].skillsDeluxe.Count; j++) {
-				PassiveSkillData psv = column.charObj[i].skillsDeluxe[j];
+			for (int j = 0; j < column.charObj[i].passiveSkills.Count; j++) {
+				PassiveSkillData psv = column.charObj[i].passiveSkills[j];
 				skill_caster = column.charObj[i];
 
 				for (int k = 0; k < psv.triggers.Count; k++) {
@@ -73,8 +73,8 @@ public class PassiveSkillManager : MonoBehaviour {
 		
 		CharacterObject skill_caster;
 
-		for (int i = 0; i < attacker.skillsDeluxe.Count; i++) {
-			PassiveSkillData psv = attacker.skillsDeluxe[i];
+		for (int i = 0; i < attacker.passiveSkills.Count; i++) {
+			PassiveSkillData psv = attacker.passiveSkills[i];
 			skill_caster = attacker;
 			
 			if (should_cast(dmg, psv, true)) {
@@ -86,8 +86,8 @@ public class PassiveSkillManager : MonoBehaviour {
 			}
 		}
 
-		for (int i = 0; i < defender.skillsDeluxe.Count; i++) {
-			PassiveSkillData psv = defender.skillsDeluxe[i];
+		for (int i = 0; i < defender.passiveSkills.Count; i++) {
+			PassiveSkillData psv = defender.passiveSkills[i];
 			skill_caster = defender;
 
 			if (should_cast(dmg, psv, false)) {
@@ -118,8 +118,8 @@ public class PassiveSkillManager : MonoBehaviour {
 
 		for (int j = 0; j < attacker.column.charObj.Count; j++) {
 			skill_caster =  attacker.column.charObj[j];
-			for (int i = 0; i < skill_caster.skillsDeluxe.Count; i++) {
-				PassiveSkillData psv = skill_caster.skillsDeluxe[i];
+			for (int i = 0; i < skill_caster.passiveSkills.Count; i++) {
+				PassiveSkillData psv = skill_caster.passiveSkills[i];
 				
 				if (should_cast_protect_ally(blocker, attacker, defender, mod, psv, false)) {
 					yield return CastEffects(psv,
@@ -130,8 +130,8 @@ public class PassiveSkillManager : MonoBehaviour {
 
 		for (int j = 0; j < defender.column.charObj.Count; j++) {
 			skill_caster =  defender.column.charObj[j];
-			for (int i = 0; i < skill_caster.skillsDeluxe.Count; i++) {
-				PassiveSkillData psv = skill_caster.skillsDeluxe[i];
+			for (int i = 0; i < skill_caster.passiveSkills.Count; i++) {
+				PassiveSkillData psv = skill_caster.passiveSkills[i];
 				bool caster_is_blocker = skill_caster == blocker;
 
 				if (should_cast_protect_ally(blocker, attacker, defender, mod, psv, caster_is_blocker)) {
@@ -151,8 +151,8 @@ public class PassiveSkillManager : MonoBehaviour {
 			
 			float prob = 0;
 
-			for (int i = 0; i < attacker.skillsDeluxe.Count; i++) {
-				PassiveSkillData psv = attacker.skillsDeluxe[i];
+			for (int i = 0; i < attacker.passiveSkills.Count; i++) {
+				PassiveSkillData psv = attacker.passiveSkills[i];
 
 				if (should_cast(attacker, defender, mod, psv, true)) {
 					for (int k = 0; k < psv.effects.Count; k++) {
@@ -164,8 +164,8 @@ public class PassiveSkillManager : MonoBehaviour {
 				}
 			}
 
-			for (int i = 0; i < defender.skillsDeluxe.Count; i++) {
-				PassiveSkillData psv = defender.skillsDeluxe[i];
+			for (int i = 0; i < defender.passiveSkills.Count; i++) {
+				PassiveSkillData psv = defender.passiveSkills[i];
 
 				if (should_cast(attacker, defender, mod, psv, false)) {
 					for (int k = 0; k < psv.effects.Count; k++) {
@@ -186,8 +186,8 @@ public class PassiveSkillManager : MonoBehaviour {
 			
 			float prob = 0;
 
-			for (int i = 0; i < attacker.skillsDeluxe.Count; i++) {
-				PassiveSkillData psv = attacker.skillsDeluxe[i];
+			for (int i = 0; i < attacker.passiveSkills.Count; i++) {
+				PassiveSkillData psv = attacker.passiveSkills[i];
 
 				if (should_cast(attacker, defender, mod, psv, true)) {
 					for (int k = 0; k < psv.effects.Count; k++) {
@@ -199,8 +199,8 @@ public class PassiveSkillManager : MonoBehaviour {
 				}
 			}
 
-			for (int i = 0; i < defender.skillsDeluxe.Count; i++) {
-				PassiveSkillData psv = defender.skillsDeluxe[i];
+			for (int i = 0; i < defender.passiveSkills.Count; i++) {
+				PassiveSkillData psv = defender.passiveSkills[i];
 
 				if (should_cast(attacker, defender, mod, psv, false)) {
 					for (int k = 0; k < psv.effects.Count; k++) {
@@ -222,8 +222,8 @@ public class PassiveSkillManager : MonoBehaviour {
 			
 			float prob = 0;
 
-			for (int j = 0; j < potential_blocker.skillsDeluxe.Count; j++) {
-				PassiveSkillData psv = potential_blocker.skillsDeluxe[j];
+			for (int j = 0; j < potential_blocker.passiveSkills.Count; j++) {
+				PassiveSkillData psv = potential_blocker.passiveSkills[j];
 
 				if (should_cast_protect_ally(potential_blocker, attacker, defender, mod, psv, true)) {
 					for (int k = 0; k < psv.effects.Count; k++) {
@@ -487,7 +487,7 @@ public class PassiveSkillManager : MonoBehaviour {
 					break;
 
 				case EffectPassive.LABEL_SHOW:
-					yield return skill_caster.label.showLabel(skill.name);
+					yield return skill_caster.label.showLabel(skill.title);
 					break;
 					
 				default:
@@ -518,7 +518,7 @@ public class PassiveSkillManager : MonoBehaviour {
 						skill_caster);
 					break;
 				case EffectPassive.LABEL_SHOW:
-					yield return skill_caster.label.showLabel(skill.name);
+					yield return skill_caster.label.showLabel(skill.title);
 					break;
 				default:
 					Debug.Log("This should not be happening. Skill not being cast: " + skill + " , " + eff.kind);

@@ -9,18 +9,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4856d3932a030ca4fa6f2183f8e528e2, type: 3}
-  m_Name: Comandante
+  m_Name: Pezinho
   m_EditorClassIdentifier: 
-  name: COMANDANTE
+  title: "P\xC9ZINHO"
   triggers:
-  - kind: 3
+  - kind: 9
+  operation: 0
   effects:
   - kind: 0
     buff:
-      kind: 0
+      kind: 13
       gender: 0
-      amount: 3
-      turnsDuration: 1
+      skillName: 
+      amount: 2
+      multiplier: 0
+      turnsDuration: -1
       turnsLeft: 0
-      stackable: 1
-    targets: 02000000
+      stackable: 0
+      probability: 1
+      swapTarget: 2
+    protectAlly:
+      probability: 1
+    targets: 03000000
+    alsoShowLabel: 1
+    showBuffDebuffAnimation: 1

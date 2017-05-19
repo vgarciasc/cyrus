@@ -8,12 +8,11 @@ public class CharacterObject : MonoBehaviour {
 	public int charID = -1;
 	public bool invertedSprite = false;
 
+	
 	[HideInInspector]
 	public CharacterData data;
 	[HideInInspector]
 	public CharacterHealth health;
-	[HideInInspector]
-	public CharacterStatus status;
 	[HideInInspector]
 	public WeaponData weapon;
 	[HideInInspector]
@@ -23,7 +22,15 @@ public class CharacterObject : MonoBehaviour {
 
 	public static float swapWaitTime = 0.6f;
 
-	public List<PassiveSkillData> skillsDeluxe = new List<PassiveSkillData>();
+	//to be used only in inspector
+	[SerializeField]
+	List<PassiveSkillData> passivesInspector = new List<PassiveSkillData>();
+	[SerializeField]
+	List<ActiveSkillData> activesInspector = new List<ActiveSkillData>();
+
+	[HideInInspector]
+	public List<PassiveSkillData> passiveSkills = new List<PassiveSkillData>();
+	[HideInInspector]
 	public List<ActiveSkillData> activeSkills = new List<ActiveSkillData>();
 
 	[HeaderAttribute("Components")]
@@ -33,12 +40,14 @@ public class CharacterObject : MonoBehaviour {
 	public GameObject inactiveMask;
 	public Label label;
 	public Targettable target;
+	public CharacterStatus status;
 
 	//delegates
 	public delegate void ClickDelegate(CharacterObject co);
 	public event ClickDelegate click_event;
 
-	int actions_left = 1;
+	int general_actions_left = 1;
+	int swap_actions_left = 0;
 
 	void Start() {
 		init_references();
@@ -53,6 +62,16 @@ public class CharacterObject : MonoBehaviour {
 			this.data = data;
 			this.weapon = data.weapon;
 			this.skills = data.skills;
+
+			activeSkills.Clear();
+			foreach (ActiveSkillData asd in activesInspector) {
+				activeSkills.Add(Instantiate(asd));
+			}
+
+			passiveSkills.Clear();
+			foreach (PassiveSkillData psd in passivesInspector) {
+				passiveSkills.Add(Instantiate(psd));
+			}
 
 			health.init(data);
 			init();
@@ -70,32 +89,45 @@ public class CharacterObject : MonoBehaviour {
 
 		void init_references() {
 			health = this.GetComponent<CharacterHealth>();
-			status = this.GetComponent<CharacterStatus>();
+			// status = this.GetComponent<CharacterStatus>();
 		}
 
 		void init_delegates() {
+			TurnManager.getTurnManager().another_turn += pass_turn;
 		}
 	#endregion
 
 	#region actions
-		public bool has_actions() {
-			return actions_left > 0;
+		//swap actions is always current state of general actions plus the bonus
+
+		public bool has_general_actions() {
+			return general_actions_left > 0;
+		}
+
+		public bool has_swap_actions() {
+			return swap_actions_left > 0;
 		}
 		
 		public void refresh_actions() {
-			actions_left = 1;
+			general_actions_left = 1;
+
+			swap_actions_left = general_actions_left + status.getSwapRefreshActions();
+
 			check_actions_empty();
 		}
 
-		public void use_action() {
-			if (actions_left > 0) {
-				actions_left--;
+		public void use_general_action() {
+			if (general_actions_left > 0) {
+				general_actions_left--;
+			}
+			if (swap_actions_left > 0) {
+				swap_actions_left--;
 			}
 			check_actions_empty();
 		}
 
 		void check_actions_empty() {
-			if (actions_left == 0) {
+			if (general_actions_left == 0) {
 				toggle_inactive_mask(true);
 			}
 			else {
@@ -109,7 +141,6 @@ public class CharacterObject : MonoBehaviour {
 			void toggle_inactive_mask(bool value) {
 				inactiveMask.SetActive(value);
 			}
-
 		#endregion
 
 		#region lane
@@ -220,6 +251,25 @@ public class CharacterObject : MonoBehaviour {
 			if (click_event != null) {
 				click_event(this);
 			}
+		}
+	#endregion
+
+	#region turns
+		public void pass_turn() {
+			foreach (ActiveSkillData act in activeSkills) {
+				act.turnsSinceLastCast++;
+			}			
+		}
+	#endregion
+
+	#region heal
+		public IEnumerator heal_by_buff(Buff buff) {
+			yield return heal((int) (health.max * buff.multiplier));
+		}
+
+		public IEnumerator heal(int amount) {
+			health.add_health(amount);
+			yield return health.heal_anim();
 		}
 	#endregion
 }

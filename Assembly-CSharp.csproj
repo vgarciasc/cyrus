@@ -69,6 +69,7 @@
      <Compile Include="Assets\Scripts\ElementActive.cs" />
      <Compile Include="Assets\Scripts\EnemyManager.cs" />
      <Compile Include="Assets\Scripts\GenericTweenAnimator.cs" />
+     <Compile Include="Assets\Scripts\HealManager.cs" />
      <Compile Include="Assets\Scripts\HushPuppy.cs" />
      <Compile Include="Assets\Scripts\Label.cs" />
      <Compile Include="Assets\Scripts\PassiveSkillData.cs" />

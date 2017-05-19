@@ -17,10 +17,10 @@ MonoBehaviour:
   skills:
   - {fileID: 11400000, guid: f1bba1ae1f04af3488cf63765bef8976, type: 2}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  VIT: 50
+  VIT: 25
   FOR: 22
   DEF: 18
   INT: 0
   RES: 21
   AGI: 31
-  DES: 95
+  DES: 22

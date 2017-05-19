@@ -29,6 +29,6 @@ public class Targettable : MonoBehaviour {
 
 		//this is a slot
 		var slot = this.GetComponentInChildren<SlotBackground>();
-		return null;
+		return ArenaManager.getArenaManager().get_char_by_targettable(this);
 	}
 }

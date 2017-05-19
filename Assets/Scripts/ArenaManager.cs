@@ -25,6 +25,7 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	IEnumerator test_killing_slots() {
+		// right.get_charobj_by_index(0).take_hit(20);
 		yield return new WaitForSeconds (1f);
 		// left.get_charobj_by_slotID(3).take_hit(700);
 		// yield return new WaitForSeconds (1f);
@@ -131,6 +132,9 @@ public class ArenaManager : MonoBehaviour {
 				targets.Add(opposite_column.get_charobj_by_slotID(pos));
 			}
 
+			if (targets.Count == 0) {
+				Debug.Log("Can't attack anyone.");
+			}
 			return targets;
 		}
 
@@ -183,10 +187,22 @@ public class ArenaManager : MonoBehaviour {
 			}	
 		}
 
+		foreach (SlotBackground sb in left.slotsBackground) {
+			if (sb.target == tgt) {
+				return left.get_charobj_by_slotbg(sb);
+			}
+		}
+
 		foreach (CharacterObject c in right.charObj) {
 			if (c.target == tgt) {
 				return c;
 			}	
+		}
+
+		foreach (SlotBackground sb in right.slotsBackground) {
+			if (sb.target == tgt) {
+				return right.get_charobj_by_slotbg(sb);
+			}
 		}
 
 		Debug.Log("Erro!");

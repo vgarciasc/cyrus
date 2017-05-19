@@ -6,7 +6,7 @@ using UnityEngine;
 public class PassiveSkillData : ScriptableObject {
 	public enum TriggerOperation {AND, OR};
 
-	public string name = "";
+	public string title = "";
 
 	public List<Trigger> triggers = new List<Trigger>();
 	public TriggerOperation operation;

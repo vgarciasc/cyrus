@@ -34,17 +34,18 @@ public class BuffManager : MonoBehaviour {
 								Effect eff,
 								CharacterObject skill_caster) {		
 
+		Buff buff = new Buff(eff.buff);
+
 		if (!ViolenceCalculator.pass_test(eff.buff.probability)) {
 			Debug.Log("DODGE");
 			yield break;
 		}
 
-		Debug.Log("Buff '" + eff.buff + "' applied.");
 		List<CharacterObject> targets_aux = new List<CharacterObject>();
 		
 		//show label
 		if (eff.alsoShowLabel || eff.kind == EffectPassive.LABEL_SHOW) {
-			StartCoroutine(skill_caster.label.showLabel(skill.name));
+			StartCoroutine(skill_caster.label.showLabel(skill.title));
 		}
 
 		//build targets
@@ -70,7 +71,7 @@ public class BuffManager : MonoBehaviour {
 		Coroutine toWait = null;
 		if (eff.showBuffDebuffAnimation) {
 			for (int i = 0; i < targets_aux.Count; i++) {
-				toWait = StartCoroutine(FadeIn_Up_FadeOut(targets_aux[i].status.container, eff.buff));
+				toWait = StartCoroutine(FadeIn_Up_FadeOut(targets_aux[i].status.container, buff));
 			}
 
 			if (toWait != null) {
@@ -78,20 +79,22 @@ public class BuffManager : MonoBehaviour {
 			}
 		}
 
+		buff.skillName = skill.title;
+
 		//apply buffs
 		for (int i = 0; i < targets_aux.Count; i++) {
 			CharacterObject target = targets_aux[i];
-			target.take_buffs(new List<Buff> {eff.buff});
+			target.take_buffs(new List<Buff> {buff});
 		}
 	}
 
 	//active skill data
-	public IEnumerator ApplyBuff(Buffable target,
+	public IEnumerator ApplyBuff(Targettable target,
 								ActiveSkillData skill,
 								ElementActive elem,
 								CharacterObject caster) {		
 
-		Buff buff = elem.buff;
+		Buff buff = new Buff(elem.buff);
 
 		if (!ViolenceCalculator.pass_test(buff.probability)) {
 			Debug.Log("Buff " + buff + " did not pass the " + buff.probability * 100 + "% chance.");
@@ -106,11 +109,22 @@ public class BuffManager : MonoBehaviour {
 
 		//show buff or debuff animation (arrows up and down)
 		Coroutine toWait = null;
-		toWait = StartCoroutine(FadeIn_Up_FadeOut(target.container, elem.buff));
+		toWait = StartCoroutine(FadeIn_Up_FadeOut(target.buffable.container, elem.buff));
 		yield return toWait;
 
+		//if delayed attack, store damage
+		if (elem.buff.kind == BuffType.DELAYED_ATTACK) {
+			buff.amount = ViolenceCalculator.theoretical_damage(
+				caster,
+				target.GetCharacter(),
+				AttackModule.NORMAL_ATTACK
+			);
+		}
+
+		buff.skillName = skill.title;
+
 		//apply buffs
-		target.insert(new List<Buff> {elem.buff});
+		target.buffable.insert(new List<Buff> {buff});
 	}
 
 	IEnumerator FadeIn_Up_FadeOut(BuffContainer container, Buff buff) {

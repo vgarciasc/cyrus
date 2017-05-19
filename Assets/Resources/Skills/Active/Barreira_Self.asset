@@ -13,15 +13,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: BARREIRA_SELF
   description: TESTE
+  canBeUsedEveryXTurns: 1
   elements:
   - kind: 0
     targetIndex: ffffffff
-    target: 6
+    target: 7
     effect: 0
     totalAttackMultiplier: 0
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -36,13 +38,15 @@ MonoBehaviour:
     effect: 5
     totalAttackMultiplier: 0
     buff:
-      kind: 11
+      kind: 12
       gender: 0
-      amount: 1
-      multiplier: 0
-      turnsDuration: -1
+      skillName: 
+      amount: 3
+      multiplier: 1.25
+      turnsDuration: 1
       turnsLeft: 0
       stackable: 0
       probability: 1
       swapTarget: 0
     showBuffLabel: 1
+  turnsSinceLastCast: -1

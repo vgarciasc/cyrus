@@ -15,6 +15,7 @@ public class ElementActive : System.Object {
 
 	//EFFECT
 	public EffectActive effect;
+	public bool useAction;
 
 	//MAIN
 	[RangeAttribute(0f, 5f)]

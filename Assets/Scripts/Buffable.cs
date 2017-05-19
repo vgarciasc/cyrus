@@ -10,7 +10,7 @@ public class Buffable : MonoBehaviour {
 	public BuffContainer container;
 	public Targettable target;
 
-	protected void update_buff() {
+	public IEnumerator update_buff() {
 		for (int i = 0; i < buffs.Count; i++) {
 			if (buffs[i].turnsLeft != -1) {
 				buffs[i].turnsLeft--;
@@ -22,12 +22,22 @@ public class Buffable : MonoBehaviour {
 					if (buffs[i].kind == BuffType.DELAYED_ATTACK) {
 						//TODO: como não é yield return vai dar problema se tiver animação
 						// target.GetCharacter().health.(buffs[i].amount);
+						Debug.Log("target: " + target + '\n' + 
+							"target.getCharacter(): " + target.GetCharacter());						
+						yield return DelayedAttack.conclude(target.GetCharacter(), buffs[i]);
 						Debug.Log("Take damage amount : " + buffs[i].amount);
 					}
 					buffs.RemoveAt(i);
 				}
+				else {
+					if (buffs[i].kind == BuffType.HEAL_OVER_TIME) {
+						yield return target.GetCharacter().heal_by_buff(buffs[i]);
+					}
+				}
 			}
 		}
+
+		yield break;
 	}
 
 	public void insert(List<Buff> buffs) {

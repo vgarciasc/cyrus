@@ -7,7 +7,7 @@ public class SkillManager : MonoBehaviour {
 	CombatLogManager log;
 	
 	public void cast(CharacterObject user, SkillData skill) {
-		user.use_action();
+		user.use_general_action();
 
 		log.insert("<color=magenta>SKILL</color>: '<color=gray>" + user.data.nome +
 			"</color>' used <color=gray>" + skill.title.ToUpper() + "</color>.");

@@ -14,6 +14,7 @@ MonoBehaviour:
   title: ENRAIZAR
   description: "70% de chance de impedir que inimigo atingido seja trocado de posi\xE7\xE3o
     por 4 turnos"
+  canBeUsedEveryXTurns: 1
   elements:
   - kind: 0
     targetIndex: ffffffff
@@ -23,6 +24,7 @@ MonoBehaviour:
     buff:
       kind: 0
       gender: 0
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 0
@@ -39,6 +41,7 @@ MonoBehaviour:
     buff:
       kind: 11
       gender: 1
+      skillName: 
       amount: 0
       multiplier: 0
       turnsDuration: 4
@@ -47,3 +50,4 @@ MonoBehaviour:
       probability: 0.7
       swapTarget: 0
     showBuffLabel: 1
+  turnsSinceLastCast: -1

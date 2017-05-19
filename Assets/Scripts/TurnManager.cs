@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TurnManager : MonoBehaviour {
+	public static TurnManager getTurnManager() {
+		return (TurnManager) HushPuppy.safeFindComponent("TurnManager", "TurnManager");
+	}
+
 	[HeaderAttribute("References")]
 	[SerializeField]
 	GameObject endPlayerTurnButton;
@@ -40,10 +44,12 @@ public class TurnManager : MonoBehaviour {
 		yield return StartCoroutine(skillManager.passiveManager.on_match_start());
 
 		while (true) {
-			StartPlayerTurn();
+			yield return update_buffs();
 
 			aux = StartCoroutine(skillManager.passiveManager.on_turn_start(arenaManager.get_player_column()));
 			yield return aux;
+
+			StartPlayerTurn();
 
 			//player turn
 			yield return new WaitUntil(() => end_player_turn);
@@ -61,11 +67,13 @@ public class TurnManager : MonoBehaviour {
 	}
 
 	void StartPlayerTurn() {
+		clickManager.can_click(true);
 		endPlayerTurnButton.SetActive(true);
 		arenaManager.refresh_character_actions();
 	}
 
 	public void EndPlayerTurn() {
+		clickManager.can_click(false);
 		endPlayerTurnButton.SetActive(false);
 		end_player_turn = true;
 
@@ -84,6 +92,21 @@ public class TurnManager : MonoBehaviour {
 
 		if (another_turn != null) {
 			another_turn();
+		}
+	}
+
+	IEnumerator update_buffs () {
+		foreach (CharacterObject co in arenaManager.get_enemy_column().charObj) {
+			yield return co.status.update_buff();
+		}
+		foreach (SlotBackground sb in arenaManager.get_enemy_column().slotsBackground) {
+			yield return sb.slotBuff.update_buff();
+		}
+		foreach (CharacterObject co in arenaManager.get_player_column().charObj) {
+			yield return co.status.update_buff();
+		}
+		foreach (SlotBackground sb in arenaManager.get_player_column().slotsBackground) {
+			yield return sb.slotBuff.update_buff();
 		}
 	}
 }

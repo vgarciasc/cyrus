@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4856d3932a030ca4fa6f2183f8e528e2, type: 3}
   m_Name: Proteger
   m_EditorClassIdentifier: 
-  name: PROTEGER
+  title: PROTEGER
   triggers:
   - kind: 8
   operation: 0
@@ -20,6 +20,7 @@ MonoBehaviour:
     buff:
       kind: 1
       gender: 0
+      skillName: 
       amount: 3
       multiplier: 0
       turnsDuration: 1

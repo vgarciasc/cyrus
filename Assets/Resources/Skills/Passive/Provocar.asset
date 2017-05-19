@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4856d3932a030ca4fa6f2183f8e528e2, type: 3}
   m_Name: Provocar
   m_EditorClassIdentifier: 
-  name: PROVOCAR
+  title: PROVOCAR
   triggers:
   - kind: 4
   operation: 0
@@ -20,13 +20,16 @@ MonoBehaviour:
     buff:
       kind: 9
       gender: 0
+      skillName: 
       amount: 0
-      multiplier: 0.3
+      multiplier: 1
       turnsDuration: -1
       turnsLeft: 0
       stackable: 0
-      probability: 1
+      probability: 0.3
       swapTarget: 1
+    protectAlly:
+      probability: 1
     targets: 03000000
     alsoShowLabel: 0
     showBuffDebuffAnimation: 0

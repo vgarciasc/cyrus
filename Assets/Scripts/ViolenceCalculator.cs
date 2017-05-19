@@ -71,36 +71,36 @@ public class ViolenceCalculator : MonoBehaviour {
 		return dmg;
 	}
 
-	public int theoretical_damage(CharacterObject attacker,
+	public static int theoretical_damage(CharacterObject attacker,
 								CharacterObject defender,
 								AttackModule mod) {
 		int damage = 0;
 		int attacking_attrib;
 		int defending_attrib;
-		log_info = "";
+		// log_info = "";
 
 		switch (get_attack_kind(attacker, defender, mod)) {
 			case AttackKind.PHYSICAL: default:
 				attacking_attrib = attacker.data.FOR;
 				defending_attrib = defender.data.DEF;
-				log_info += "(FOR + DMG[arma] - DEF) = ";
+				// log_info += "(FOR + DMG[arma] - DEF) = ";
 				break;
 			case AttackKind.MAGICAL:
 				attacking_attrib = attacker.data.INT;
 				defending_attrib = defender.data.RES;
-				log_info += "(INT + DMG[arma] - RES) = ";
+				// log_info += "(INT + DMG[arma] - RES) = ";
 				break;
 		}
 
 		damage += attacking_attrib;
 		damage += attacker.weapon.damage;
 		damage -= defending_attrib;
-		log_info += "(" + attacking_attrib + " + " +
-					attacker.weapon.damage + " - " +
-					defending_attrib + ")";
+		// log_info += "(" + attacking_attrib + " + " +
+		// 			attacker.weapon.damage + " - " +
+		// 			defending_attrib + ")";
 
 		if (mod == AttackModule.COUNTER_ATTACK) {
-			log_info += " / 2";
+			// log_info += " / 2";
 			damage /= 2;
 		}
 

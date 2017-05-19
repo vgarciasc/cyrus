@@ -11,24 +11,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4856d3932a030ca4fa6f2183f8e528e2, type: 3}
   m_Name: ProtecaoDivina
   m_EditorClassIdentifier: 
-  name: "PROTE\xC7\xC3O DIVINA"
+  title: "PROTE\xC7\xC3O DIVINA"
   triggers:
   - kind: 8
   operation: 0
   effects:
   - kind: 0
     buff:
-      kind: 3
+      kind: 0
       gender: 0
+      skillName: 
       amount: 3
       multiplier: 0
-      turnsDuration: 1
+      turnsDuration: 0
       turnsLeft: 0
-      stackable: 1
+      stackable: 0
       probability: 1
       swapTarget: 0
     protectAlly:
-      probability: 1
+      probability: 0
     targets: 02000000
     alsoShowLabel: 1
     showBuffDebuffAnimation: 1

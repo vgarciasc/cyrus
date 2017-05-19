@@ -36,8 +36,8 @@ public class AttackManager : MonoBehaviour {
 	}
 
 	#region attack mechanics
-		IEnumerator complete_attack(AttackBonus bonus) {
-			yield return StartCoroutine(simple_attack(bonus));
+		IEnumerator complete_attack(AttackBonus bonus, bool use_action) {
+			yield return StartCoroutine(simple_attack(bonus, use_action));
 
 			if (char_defender.is_dead()) {
 				// char_defender.column.kill_slot(char_defender);
@@ -50,7 +50,7 @@ public class AttackManager : MonoBehaviour {
 			char_attacker = char_defender;
 			char_defender = aux;
 
-			yield return StartCoroutine(simple_counter(bonus));
+			yield return StartCoroutine(simple_counter(bonus, use_action));
 
 			if (char_defender.is_dead()) {
 				// char_defender.column.kill_slot(char_defender);
@@ -58,14 +58,16 @@ public class AttackManager : MonoBehaviour {
 			}
 		}
 
-		IEnumerator simple_attack(AttackBonus bonus) {
+		IEnumerator simple_attack(AttackBonus bonus, bool use_action) {
 			if (char_attacker.is_dead() || char_defender.is_dead()) {
 				yield break;
 			}
 
 			yield return block(AttackModule.NORMAL_ATTACK);
 
-			char_attacker.use_action();
+			if (use_action) {
+				char_attacker.use_general_action();
+			}
 
 			yield return StartCoroutine(char_attacker.attack_motion());
 
@@ -89,7 +91,7 @@ public class AttackManager : MonoBehaviour {
 			yield break;
 		}
 
-		IEnumerator simple_counter(AttackBonus bonus) {
+		IEnumerator simple_counter(AttackBonus bonus, bool use_action) {
 			if (char_attacker.is_dead() || char_defender.is_dead()) {
 				yield break;
 			}
@@ -102,7 +104,10 @@ public class AttackManager : MonoBehaviour {
 				AttackModule.COUNTER_ATTACK,
 				bonus);
 
-			char_attacker.use_action();
+			if (use_action) {
+				char_attacker.use_general_action();
+			}
+
 			var motion = StartCoroutine(char_attacker.counter_attack_motion());
 			if (dmg.amount == 0) {
 				StartCoroutine(char_defender.dodge_motion());
@@ -134,7 +139,7 @@ public class AttackManager : MonoBehaviour {
 				}
 			}
 
-			if (blocker == null || !blocker.has_actions()) {
+			if (blocker == null || !blocker.has_general_actions()) {
 				yield break;
 			}
 			//END_CHECKING_BLOCKING
@@ -178,7 +183,7 @@ public class AttackManager : MonoBehaviour {
 			}
 
 			void conclude_attack() {
-				StartCoroutine(complete_attack(null));
+				StartCoroutine(complete_attack(null, true));
 				toggle_screen(false);
 			}
 
@@ -193,7 +198,7 @@ public class AttackManager : MonoBehaviour {
 				char_attacker = enemy;
 				char_defender = arenaManager.get_default_attack_target(enemy);
 				
-				yield return StartCoroutine(complete_attack(null));
+				yield return StartCoroutine(complete_attack(null, true));
 			}
 		#endregion
 	#endregion
@@ -206,8 +211,8 @@ public class AttackManager : MonoBehaviour {
 			}
 
 			char_defender = charObj;
-			textRight.text = get_char_info(false);
-			textLeft.text = get_char_info(true);
+			textLeft.text = get_char_info(false);
+			textRight.text = get_char_info(true);
 
 			if (set_new_target_event != null) {
 				set_new_target_event(char_attacker, char_defender);
@@ -219,14 +224,14 @@ public class AttackManager : MonoBehaviour {
 			if (counter) mod = AttackModule.COUNTER_ATTACK; 
 
 			string aux = "";
-			aux += "\nDMG: <color=gray>" + calculator.theoretical_damage(counter? char_attacker : char_defender,
+			aux += "\nDMG: <color=gray>" + ViolenceCalculator.theoretical_damage(counter? char_attacker : char_defender,
 															counter? char_defender : char_attacker,
 															mod) + "</color>";
 			aux += "\nACC: <color=gray>" + calculator.accuracy_prob(counter? char_attacker : char_defender,
 															counter? char_defender : char_attacker,
 															mod) + "%</color>";
 			aux += "\n\n";
-			if (counter) aux += "<color=red>COUNTER!</color>";
+			if (!counter) aux += "<color=red>COUNTER!</color>";
 			else aux += "<color=red><<<<</color>";
 			
 			return aux;
@@ -249,7 +254,7 @@ public class AttackManager : MonoBehaviour {
 			this.char_attacker = attacker;
 			this.char_defender = defender;
 			
-			yield return complete_attack(bonus);
+			yield return complete_attack(bonus, false);
 		}
 
 		public IEnumerator simple_attack(CharacterObject attacker,
@@ -259,7 +264,7 @@ public class AttackManager : MonoBehaviour {
 			this.char_attacker = attacker;
 			this.char_defender = defender;
 			
-			yield return simple_attack(bonus);
+			yield return simple_attack(bonus, false);
 		}
 
 		public IEnumerator simple_counter(CharacterObject attacker,
@@ -269,7 +274,7 @@ public class AttackManager : MonoBehaviour {
 			this.char_attacker = attacker;
 			this.char_defender = defender;
 			
-			yield return simple_counter(bonus);
+			yield return simple_counter(bonus, false);
 		}
 	#endregion
 }

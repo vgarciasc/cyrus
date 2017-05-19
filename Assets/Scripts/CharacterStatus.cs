@@ -11,12 +11,10 @@ public class CharacterStatus : Buffable {
 
 	void Start() {
 		character = this.GetComponent<CharacterObject>();
-
-		turnManager.another_turn += pass_turn;
 	}
 
-	void pass_turn() {
-		update_buff();
+	IEnumerator pass_turn() {
+		yield return update_buff();
 	}
 
 	#region getters
@@ -91,6 +89,12 @@ public class CharacterStatus : Buffable {
 			}
 
 			return true;
+		}
+
+		public int getSwapRefreshActions() {
+			int aux = BuffManager.getBuffNumbers(buffs, BuffType.SWAP_ACTIONS_REFRESH).amount;
+			//cannot have less than 1 swap refresh
+			return aux;
 		}
 	#endregion
 }

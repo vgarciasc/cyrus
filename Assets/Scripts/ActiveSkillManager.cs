@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ActiveSkillManager : MonoBehaviour {
+	public static ActiveSkillManager getActiveSkillManager() {
+		return (ActiveSkillManager) HushPuppy.safeFindComponent("GameController", "ActiveSkillManager");
+	}
 
 	[SerializeField]
 	TargetManager targetManager;
@@ -85,6 +88,8 @@ public class ActiveSkillManager : MonoBehaviour {
 			}
 		}
 
+		act.turnsSinceLastCast = 0;
+		caster.use_general_action();
 		clickManager.end_targetting(caster, true);
 		yield break;
 	}
@@ -93,7 +98,7 @@ public class ActiveSkillManager : MonoBehaviour {
 								ElementActive elem,
 								CharacterObject caster,
 								List<Targettable> targets) {
-		
+
 		int tgt_index_1, tgt_index_2, tgt_index_3;
 		Targettable tgt_1 = null, tgt_2 = null, tgt_3 = null;
 
@@ -115,7 +120,7 @@ public class ActiveSkillManager : MonoBehaviour {
 
 		switch (elem.effect) {
 			case EffectActive.SWAP:
-				yield return swapManager.swap_characters(tgt_1.GetCharacter(), tgt_2.GetCharacter());
+				yield return swapManager.swap_characters_skill(tgt_1.GetCharacter(), tgt_2.GetCharacter());
 				break;
 
 			case EffectActive.COMPLETE_ATTACK:
@@ -135,7 +140,12 @@ public class ActiveSkillManager : MonoBehaviour {
 				break;
 
 			case EffectActive.BUFF_DEBUFF:
-				yield return buffManager.ApplyBuff(tgt_1.buffable, act, elem, caster);
+				yield return buffManager.ApplyBuff(tgt_1, act, elem, caster);
+				break;
+
+			case EffectActive.HEAL:
+				StartCoroutine(caster.label.showLabel(act.title));
+				yield return tgt_1.GetCharacter().heal_by_buff(elem.buff);
 				break;
 
 			default:
@@ -144,5 +154,15 @@ public class ActiveSkillManager : MonoBehaviour {
 		}
 		
 		yield break;
+	}
+
+	public bool can_cast(CharacterObject charobj, ActiveSkillData act) {
+		if ((act.turnsSinceLastCast == -1 || 
+			act.turnsSinceLastCast >= act.canBeUsedEveryXTurns) &&
+		 	charobj.has_general_actions()) {
+			return true;
+		}
+
+		return false;
 	}
 }

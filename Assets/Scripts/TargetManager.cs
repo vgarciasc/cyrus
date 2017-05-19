@@ -16,7 +16,10 @@ public enum TargetActive {
 	ADJACENT_ANY, //ADJACENT (TARGET 1): targets any allies adjacent to TARGET 1
 	SELF, //SELF: targets self
 	SLOT_SELF, //SLOT SELF: targets slot self
-	SLOTS_COLUMN //SLOTS COLUMN (TARGET 1): targets slots in TARGET 1
+	SLOTS_CASTER_COLUMN, //SLOTS SELF COLUMN: targets slots in caster column
+	SLOTS_OPPOSITE_COLUMN, //SLOTS ENEMY COLUMN: targets slots in enemy column
+	CASTER_COLUMN, //CASTER COLUMN: targets characters in caster column
+	OPPOSITE_COLUMN //OPPOSITE COLUMN: targets characters in opposite column to caster
 };
 
 public class TargetManager : MonoBehaviour {
@@ -33,7 +36,9 @@ public class TargetManager : MonoBehaviour {
 	[SerializeField]
 	ClickManager clickManager;
 	[SerializeField]
-	GameObject confirmationScreen;
+	GameObject confirmation;
+	[SerializeField]
+	GameObject cancellation;
 	[SerializeField]
 	GameObject skillDescriptionPanel;
 	[SerializeField]
@@ -122,9 +127,28 @@ public class TargetManager : MonoBehaviour {
 				output.Add(user.target);
 				break;
 			
-			case TargetActive.SLOTS_COLUMN:
+			case TargetActive.SLOTS_CASTER_COLUMN:
 				selecting_slot = true;
 				foreach (CharacterObject co in user.column.charObj) {
+					output.Add(co.target);
+				}
+				break;
+
+			case TargetActive.SLOTS_OPPOSITE_COLUMN:
+				selecting_slot = true;
+				foreach (CharacterObject co in arenaManager.get_other_column(user.column).charObj) {
+					output.Add(co.target);
+				}
+				break;
+
+			case TargetActive.CASTER_COLUMN:
+				foreach (CharacterObject co in user.column.charObj) {
+					output.Add(co.target);
+				}
+				break;
+
+			case TargetActive.OPPOSITE_COLUMN:
+				foreach (CharacterObject co in arenaManager.get_other_column(user.column).charObj) {
 					output.Add(co.target);
 				}
 				break;
@@ -146,8 +170,10 @@ public class TargetManager : MonoBehaviour {
 			case States.INITIAL_STATE:
 				current_state = States.SHOW_TARGETS;
 				
+				user.lane.toggle_cancel(false);
 				toggle_skill_panel(true);
 				highlight_targets(true);
+				toggle_cancellation(true);
 				
 				break;
 		}
@@ -186,7 +212,7 @@ public class TargetManager : MonoBehaviour {
 
 				if (selecting_slot) {
 					var obj = selected_target.GetComponent<CharacterObject>();
-					last_selected_target = arenaManager.get_player_column().get_slotbg_by_charobj(obj).target;
+					last_selected_target = selected_target.GetCharacter().column.get_slotbg_by_charobj(obj).target;
 				} else {
 					last_selected_target = selected_target;
 				}
@@ -195,6 +221,7 @@ public class TargetManager : MonoBehaviour {
 
 				highlight_targets(false);
 				toggle_confirmation(false);
+				toggle_cancellation(false);
 				toggle_skill_panel(false);
 				
 				break;
@@ -211,6 +238,7 @@ public class TargetManager : MonoBehaviour {
 
 				highlight_targets(false);
 				toggle_confirmation(false);
+				toggle_cancellation(false);
 				toggle_skill_panel(false);
 				
 				break;
@@ -237,7 +265,11 @@ public class TargetManager : MonoBehaviour {
 	}
 
 	void toggle_confirmation(bool value) {
-		confirmationScreen.SetActive(value);
+		confirmation.gameObject.SetActive(value);
+	}
+
+	void toggle_cancellation(bool value) {
+		cancellation.gameObject.SetActive(value);
 	}
 
 	public void show_skill_panel(ActiveSkillData skl) {

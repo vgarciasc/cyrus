@@ -15,7 +15,9 @@ public enum BuffType {
 	IGNORE_CHANCE, //adds to probability of blocking entire attack
 	SWAP_BLOCKING, //changes if the user can be swapped with
 	BARRIER, //character has a barrier
-	DELAYED_ATTACK //character will be attacked on buff end
+	DELAYED_ATTACK, //character will be attacked on buff end
+	SWAP_ACTIONS_REFRESH, //character has more swap actions
+	HEAL_OVER_TIME //character will heal a little every turn
 };
 
 public enum BuffGender {BUFF, DEBUFF, NONE};
@@ -25,6 +27,8 @@ public class Buff : System.Object {
 	public BuffType kind;
 	public BuffGender gender;
 	
+	[HideInInspector]
+	public string skillName = "";
 	public int amount = 0;
 	[RangeAttribute(0f, 2f)]
 	public float multiplier = 1f;
@@ -49,6 +53,9 @@ public class Buff : System.Object {
 		this.turnsDuration = b.turnsDuration;
 		this.stackable = b.stackable;
 		this.swapTarget = b.swapTarget;
+		this.skillName = b.skillName;
+		this.multiplier = b.multiplier;
+		this.probability = b.probability;
 	}
 
 	public bool Equals(Buff b) {
