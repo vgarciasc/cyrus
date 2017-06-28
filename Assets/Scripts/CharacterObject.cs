@@ -83,8 +83,8 @@ public class CharacterObject : MonoBehaviour {
 		}
 
 		void init() {
-			sprite = sprite.GetComponentInChildren<Image>();
-			sprite.sprite = data.sprite;
+			//sprite = sprite.GetComponentInChildren<Image>();
+			//sprite.sprite = data.sprite;
 		}
 
 		void init_references() {

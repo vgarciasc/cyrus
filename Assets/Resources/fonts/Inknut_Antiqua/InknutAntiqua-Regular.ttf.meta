@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 9f086fb4a3d9ef64c9c17a7e1671d8a0
+timeCreated: 1497019711
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Inknut Antiqua
+  fontNames:
+  - Inknut Antiqua
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 43e559a070b6fd54087f54e8d5f4d41e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

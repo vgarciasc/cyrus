@@ -67,10 +67,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.71323526, g: 0.71323526, b: 0.71323526, a: 1}
-    m_HighlightedColor: {r: 0.45588237, g: 0.45588237, b: 0.45588237, a: 1}
-    m_PressedColor: {r: 0.21323532, g: 0.21323532, b: 0.21323532, a: 1}
-    m_DisabledColor: {r: 0.5588235, g: 0.5588235, b: 0.5588235, a: 0.5019608}
+    m_NormalColor: {r: 0.427451, g: 0.87843144, b: 0.9176471, a: 1}
+    m_HighlightedColor: {r: 0.35813147, g: 0.67806226, b: 0.7058823, a: 1}
+    m_PressedColor: {r: 0.28308824, g: 0.48293954, b: 0.5, a: 1}
+    m_DisabledColor: {r: 0.59872407, g: 0.81230974, b: 0.8308824, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -112,15 +112,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.41911763, g: 0.41911763, b: 0.41911763, a: 1}
+  m_Color: {r: 0.42576775, g: 0.8782886, b: 0.9191176, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: f0b081b8ed057b84db72fe1816b55e8f, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: c6b3df3cb5716ea4db1ad7ef0cd29c81, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -190,6 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonText: {fileID: 114631005580942778}
+  data: {fileID: 0}
 --- !u!222 &222385995861580296
 CanvasRenderer:
   m_ObjectHideFlags: 1
