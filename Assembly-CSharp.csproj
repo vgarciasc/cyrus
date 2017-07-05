@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\Character\CharacterData.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterHealth.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterObject.cs" />
+     <Compile Include="Assets\Scripts\Character\CharacterSprite.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterStatus.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterTarget.cs" />
      <Compile Include="Assets\Scripts\ClickManager.cs" />

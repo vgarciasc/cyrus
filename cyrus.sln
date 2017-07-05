@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cyrus", "Assembly-CSharp.csproj", "{7B51FF28-5606-9169-0FDA-AB2971ED20BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cyrus", "Assembly-CSharp-Editor.csproj", "{C078A277-CCD3-4E06-1B28-F69838A51F4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{7B51FF28-5606-9169-0FDA-AB2971ED20BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B51FF28-5606-9169-0FDA-AB2971ED20BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B51FF28-5606-9169-0FDA-AB2971ED20BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C078A277-CCD3-4E06-1B28-F69838A51F4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C078A277-CCD3-4E06-1B28-F69838A51F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C078A277-CCD3-4E06-1B28-F69838A51F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C078A277-CCD3-4E06-1B28-F69838A51F4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
