@@ -91,6 +91,7 @@
      <Compile Include="Assets\Scripts\UI\SkillLaneButton.cs" />
      <Compile Include="Assets\Scripts\UI\Slot.cs" />
      <Compile Include="Assets\Scripts\UI\SlotBackground.cs" />
+     <Compile Include="Assets\Scripts\UI\SlotForeground.cs" />
      <Compile Include="Assets\Scripts\ViolenceCalculator.cs" />
      <None Include="Assets\DOTween\DOTween50.xml" />
      <None Include="Assets\Resources\Fonts\Raleway\OFL.txt" />

@@ -8,6 +8,7 @@ public class SlotColumn : MonoBehaviour {
 	public bool enemyColumn = false;
 
 	public List<Slot> slots = new List<Slot>();
+	public List<SlotForeground> slotsForeground = new List<SlotForeground>();
 	public List<SlotBackground> slotsBackground = new List<SlotBackground>();
 	public List<CharacterData> characters = new List<CharacterData>();
 	public List<CharacterObject> charObj = new List<CharacterObject>();
@@ -304,6 +305,24 @@ public class SlotColumn : MonoBehaviour {
 	public SlotBackground get_slotbg_by_charobj(CharacterObject co) {
 		List<SlotBackground> sb = new List<SlotBackground>();
 		foreach (SlotBackground s in slotsBackground) {
+			if (s.gameObject.activeSelf) {
+				sb.Add(s);
+			}
+		}
+
+		List<CharacterObject> cb = new List<CharacterObject>();
+		foreach (CharacterObject c in charObj) {
+			if (c.gameObject.activeSelf) {
+				cb.Add(c);
+			}
+		}
+
+		return sb[cb.IndexOf(co)];
+	}
+
+	public SlotForeground get_slotfg_by_charobj(CharacterObject co) {
+		List<SlotForeground> sb = new List<SlotForeground>();
+		foreach (SlotForeground s in slotsForeground) {
 			if (s.gameObject.activeSelf) {
 				sb.Add(s);
 			}

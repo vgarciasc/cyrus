@@ -168,6 +168,9 @@ public class CharacterObject : MonoBehaviour {
 
 			public IEnumerator attack_motion() {
 				yield return StartCoroutine(back_and_forth_motion(20, false, 0.3f));
+
+				SlotForeground sfg = column.get_slotfg_by_charobj(this);
+				yield return sfg.Ground_Attack_Animation();
 			}
 
 			public IEnumerator counter_attack_motion() {
