@@ -16,17 +16,9 @@ public class CharacterObject : MonoBehaviour {
 	[HideInInspector]
 	public WeaponData weapon;
 	[HideInInspector]
-	public List<SkillData> skills = new List<SkillData>();
-	[HideInInspector]
 	public bool is_blocking = false;
 
 	public static float swapWaitTime = 0.6f;
-
-	//to be used only in inspector
-	[SerializeField]
-	List<PassiveSkillData> passivesInspector = new List<PassiveSkillData>();
-	[SerializeField]
-	List<ActiveSkillData> activesInspector = new List<ActiveSkillData>();
 
 	[HideInInspector]
 	public List<PassiveSkillData> passiveSkills = new List<PassiveSkillData>();
@@ -61,15 +53,14 @@ public class CharacterObject : MonoBehaviour {
 			this.charID = charID;
 			this.data = data;
 			this.weapon = data.weapon;
-			this.skills = data.skills;
 
 			activeSkills.Clear();
-			foreach (ActiveSkillData asd in activesInspector) {
+			foreach (ActiveSkillData asd in data.skillsActive) {
 				activeSkills.Add(Instantiate(asd));
 			}
 
 			passiveSkills.Clear();
-			foreach (PassiveSkillData psd in passivesInspector) {
+			foreach (PassiveSkillData psd in data.skillsPassive) {
 				passiveSkills.Add(Instantiate(psd));
 			}
 

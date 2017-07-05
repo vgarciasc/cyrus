@@ -43,6 +43,8 @@ MonoBehaviour:
   id: -1
   background: {fileID: 114230729225727552}
   slotUpper: {fileID: 0}
+  target: {fileID: 0}
+  slotBuff: {fileID: 0}
 --- !u!114 &114230729225727552
 MonoBehaviour:
   m_ObjectHideFlags: 1

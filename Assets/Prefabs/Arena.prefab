@@ -6552,9 +6552,6 @@ MonoBehaviour:
   positionID: -1
   charID: -1
   column: {fileID: 114487652716405010}
-  background: {fileID: 114237385211601866}
-  target: {fileID: 114219446296393724}
-  slotBuff: {fileID: 114063463946625864}
 --- !u!114 &114015910498620020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6653,6 +6650,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthIndicator: {fileID: 114983109221945076}
   character: {fileID: 114843278205878274}
+  heal_image: {fileID: 0}
   hp: 0
   max: 10
 --- !u!114 &114027079937667884
@@ -7763,9 +7761,6 @@ MonoBehaviour:
   positionID: -1
   charID: -1
   column: {fileID: 114487652716405010}
-  background: {fileID: 114089423643547490}
-  target: {fileID: 114517707720855818}
-  slotBuff: {fileID: 114431960959848944}
 --- !u!114 &114111747818434688
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7779,6 +7774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthIndicator: {fileID: 114065064887092952}
   character: {fileID: 114700398307060884}
+  heal_image: {fileID: 0}
   hp: 0
   max: 10
 --- !u!114 &114111807508827002
@@ -8095,6 +8091,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthIndicator: {fileID: 114446492934129696}
   character: {fileID: 114666307030758308}
+  heal_image: {fileID: 0}
   hp: 0
   max: 10
 --- !u!114 &114144455384337942
@@ -8360,14 +8357,9 @@ MonoBehaviour:
   invertedSprite: 1
   data: {fileID: 0}
   health: {fileID: 114348624069319650}
-  status: {fileID: 0}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  skills: []
   is_blocking: 0
-  skillsDeluxe:
-  - {fileID: 11400000, guid: 8486fe2518e7822428e09800207fc32a, type: 2}
-  - {fileID: 11400000, guid: 068bdedc250ef4a41a09d1b4590471ec, type: 2}
-  - {fileID: 11400000, guid: 2673bd0ee1aa4384f8523fb05761d0e7, type: 2}
+  passiveSkills: []
   activeSkills:
   - {fileID: 11400000, guid: bee7a9881fb78d14d984e9a80ca62291, type: 2}
   - {fileID: 11400000, guid: db2e97319e24bc147b8285ca4a6fc556, type: 2}
@@ -8378,6 +8370,7 @@ MonoBehaviour:
   inactiveMask: {fileID: 1120883865947592}
   label: {fileID: 114310872861671094}
   target: {fileID: 114393495855591162}
+  status: {fileID: 0}
 --- !u!114 &114175013367222406
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8419,9 +8412,6 @@ MonoBehaviour:
   positionID: -1
   charID: -1
   column: {fileID: 114487652716405010}
-  background: {fileID: 114452853278114344}
-  target: {fileID: 114331529367620216}
-  slotBuff: {fileID: 114282197638543802}
 --- !u!114 &114177131921554170
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9283,9 +9273,6 @@ MonoBehaviour:
   positionID: -1
   charID: -1
   column: {fileID: 114487652716405010}
-  background: {fileID: 114963334347861312}
-  target: {fileID: 114848786618816924}
-  slotBuff: {fileID: 114324795649740022}
 --- !u!114 &114242050739395504
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -10755,6 +10742,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthIndicator: {fileID: 114291502730661244}
   character: {fileID: 114171748291704502}
+  heal_image: {fileID: 0}
   hp: 0
   max: 10
 --- !u!114 &114349664545988074
@@ -11319,16 +11307,9 @@ MonoBehaviour:
   invertedSprite: 1
   data: {fileID: 0}
   health: {fileID: 114672481013087578}
-  status: {fileID: 0}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  skills: []
   is_blocking: 0
-  skillsDeluxe:
-  - {fileID: 11400000, guid: 8486fe2518e7822428e09800207fc32a, type: 2}
-  - {fileID: 11400000, guid: 4ecac8f859b0e8a488fda90037854eff, type: 2}
-  - {fileID: 11400000, guid: 700fc85107c64fc42a19f9202e722b67, type: 2}
-  - {fileID: 11400000, guid: 068bdedc250ef4a41a09d1b4590471ec, type: 2}
-  - {fileID: 11400000, guid: 2673bd0ee1aa4384f8523fb05761d0e7, type: 2}
+  passiveSkills: []
   activeSkills:
   - {fileID: 11400000, guid: de2ab966f913bf2448e4183f77f4d266, type: 2}
   - {fileID: 11400000, guid: 34f5b460206f7b14b930bd24fb320fb1, type: 2}
@@ -11339,6 +11320,7 @@ MonoBehaviour:
   inactiveMask: {fileID: 1920176978378970}
   label: {fileID: 114196335330907938}
   target: {fileID: 114233890464950216}
+  status: {fileID: 0}
 --- !u!114 &114399581101580634
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -12173,6 +12155,7 @@ MonoBehaviour:
   - {fileID: 114239848068589582}
   - {fileID: 114015074667498660}
   - {fileID: 114175829011849722}
+  slotsBackground: []
   characters:
   - {fileID: 11400000, guid: 434b63829cf7eef47823b783c8a43c8a, type: 2}
   - {fileID: 11400000, guid: be1c08868d481eb4a966087e19d9031b, type: 2}
@@ -12258,6 +12241,7 @@ MonoBehaviour:
   - {fileID: 114703217703694690}
   - {fileID: 114544297486432460}
   - {fileID: 114552471335596140}
+  slotsBackground: []
   characters:
   - {fileID: 11400000, guid: 434b63829cf7eef47823b783c8a43c8a, type: 2}
   - {fileID: 11400000, guid: 51f5763a154821240b7b3c9eb9cafaf4, type: 2}
@@ -12861,14 +12845,9 @@ MonoBehaviour:
   invertedSprite: 0
   data: {fileID: 0}
   health: {fileID: 114935337118887448}
-  status: {fileID: 0}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  skills: []
   is_blocking: 0
-  skillsDeluxe:
-  - {fileID: 11400000, guid: 8486fe2518e7822428e09800207fc32a, type: 2}
-  - {fileID: 11400000, guid: 068bdedc250ef4a41a09d1b4590471ec, type: 2}
-  - {fileID: 11400000, guid: 2673bd0ee1aa4384f8523fb05761d0e7, type: 2}
+  passiveSkills: []
   activeSkills:
   - {fileID: 11400000, guid: bee7a9881fb78d14d984e9a80ca62291, type: 2}
   - {fileID: 11400000, guid: db2e97319e24bc147b8285ca4a6fc556, type: 2}
@@ -12879,6 +12858,7 @@ MonoBehaviour:
   inactiveMask: {fileID: 1366547431105304}
   label: {fileID: 114803586152412348}
   target: {fileID: 114267467333001932}
+  status: {fileID: 0}
 --- !u!114 &114539793716430984
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -12911,9 +12891,6 @@ MonoBehaviour:
   positionID: -1
   charID: -1
   column: {fileID: 114493034568670580}
-  background: {fileID: 114175013367222406}
-  target: {fileID: 114169204632415142}
-  slotBuff: {fileID: 114652346244836968}
 --- !u!114 &114549095987624268
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13007,9 +12984,6 @@ MonoBehaviour:
   positionID: -1
   charID: -1
   column: {fileID: 114493034568670580}
-  background: {fileID: 114899971473264534}
-  target: {fileID: 114184666854123204}
-  slotBuff: {fileID: 114254695207690228}
 --- !u!114 &114553014441501724
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13582,9 +13556,6 @@ MonoBehaviour:
   positionID: -1
   charID: -1
   column: {fileID: 114493034568670580}
-  background: {fileID: 114556700122280486}
-  target: {fileID: 114555899138228670}
-  slotBuff: {fileID: 114255906967894730}
 --- !u!114 &114586321121786416
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -14321,6 +14292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthIndicator: {fileID: 114898927132736956}
   character: {fileID: 114806451443157840}
+  heal_image: {fileID: 0}
   hp: 0
   max: 10
 --- !u!114 &114663041366042834
@@ -14371,16 +14343,9 @@ MonoBehaviour:
   invertedSprite: 1
   data: {fileID: 0}
   health: {fileID: 114133424298576070}
-  status: {fileID: 0}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  skills: []
   is_blocking: 0
-  skillsDeluxe:
-  - {fileID: 11400000, guid: 9a31a97b7a04a3441a0bb6f764fd754f, type: 2}
-  - {fileID: 11400000, guid: a32b597deb476ad47a0bd5a2b67ee97e, type: 2}
-  - {fileID: 11400000, guid: 1dba105c43a3780498195b63458d9cd1, type: 2}
-  - {fileID: 11400000, guid: d03d1253ad1148e4f89a4440309ba92d, type: 2}
-  - {fileID: 11400000, guid: 666ecdc35616eab47a43796661dc4e0c, type: 2}
+  passiveSkills: []
   activeSkills:
   - {fileID: 11400000, guid: f40e94c040c8ce344b2617dbc01824b7, type: 2}
   - {fileID: 11400000, guid: 015c5eee1c875d04bbbea7df7aec8642, type: 2}
@@ -14391,6 +14356,7 @@ MonoBehaviour:
   inactiveMask: {fileID: 1184361680714030}
   label: {fileID: 114563806109798182}
   target: {fileID: 114900347294619360}
+  status: {fileID: 0}
 --- !u!114 &114668214804755224
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -14460,6 +14426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthIndicator: {fileID: 114296786163715186}
   character: {fileID: 114397059116975548}
+  heal_image: {fileID: 0}
   hp: 0
   max: 10
 --- !u!114 &114674113706258484
@@ -14987,14 +14954,9 @@ MonoBehaviour:
   invertedSprite: 0
   data: {fileID: 0}
   health: {fileID: 114111747818434688}
-  status: {fileID: 0}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  skills: []
   is_blocking: 0
-  skillsDeluxe:
-  - {fileID: 11400000, guid: 8486fe2518e7822428e09800207fc32a, type: 2}
-  - {fileID: 11400000, guid: 068bdedc250ef4a41a09d1b4590471ec, type: 2}
-  - {fileID: 11400000, guid: 2673bd0ee1aa4384f8523fb05761d0e7, type: 2}
+  passiveSkills: []
   activeSkills:
   - {fileID: 11400000, guid: bee7a9881fb78d14d984e9a80ca62291, type: 2}
   - {fileID: 11400000, guid: db2e97319e24bc147b8285ca4a6fc556, type: 2}
@@ -15005,6 +14967,7 @@ MonoBehaviour:
   inactiveMask: {fileID: 1453913090302286}
   label: {fileID: 114884380670498400}
   target: {fileID: 114706898022160814}
+  status: {fileID: 0}
 --- !u!114 &114701067003041570
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -15071,9 +15034,6 @@ MonoBehaviour:
   positionID: -1
   charID: -1
   column: {fileID: 114493034568670580}
-  background: {fileID: 114679423344773998}
-  target: {fileID: 114972900577871042}
-  slotBuff: {fileID: 114498868716764248}
 --- !u!114 &114703828262816010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -16104,14 +16064,9 @@ MonoBehaviour:
   invertedSprite: 0
   data: {fileID: 0}
   health: {fileID: 114942733316420150}
-  status: {fileID: 0}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  skills: []
   is_blocking: 0
-  skillsDeluxe:
-  - {fileID: 11400000, guid: 8486fe2518e7822428e09800207fc32a, type: 2}
-  - {fileID: 11400000, guid: 068bdedc250ef4a41a09d1b4590471ec, type: 2}
-  - {fileID: 11400000, guid: 2673bd0ee1aa4384f8523fb05761d0e7, type: 2}
+  passiveSkills: []
   activeSkills:
   - {fileID: 11400000, guid: bee7a9881fb78d14d984e9a80ca62291, type: 2}
   - {fileID: 11400000, guid: db2e97319e24bc147b8285ca4a6fc556, type: 2}
@@ -16122,6 +16077,7 @@ MonoBehaviour:
   inactiveMask: {fileID: 1654592539522486}
   label: {fileID: 114756782905419450}
   target: {fileID: 114263890167796874}
+  status: {fileID: 0}
 --- !u!114 &114787776166260636
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -16257,14 +16213,9 @@ MonoBehaviour:
   invertedSprite: 0
   data: {fileID: 0}
   health: {fileID: 114661086837696292}
-  status: {fileID: 0}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  skills: []
   is_blocking: 0
-  skillsDeluxe:
-  - {fileID: 11400000, guid: 8486fe2518e7822428e09800207fc32a, type: 2}
-  - {fileID: 11400000, guid: 068bdedc250ef4a41a09d1b4590471ec, type: 2}
-  - {fileID: 11400000, guid: 2673bd0ee1aa4384f8523fb05761d0e7, type: 2}
+  passiveSkills: []
   activeSkills:
   - {fileID: 11400000, guid: bee7a9881fb78d14d984e9a80ca62291, type: 2}
   - {fileID: 11400000, guid: db2e97319e24bc147b8285ca4a6fc556, type: 2}
@@ -16275,6 +16226,7 @@ MonoBehaviour:
   inactiveMask: {fileID: 1172356130127374}
   label: {fileID: 114009044373289700}
   target: {fileID: 114099584101647784}
+  status: {fileID: 0}
 --- !u!114 &114806638792288680
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -16525,14 +16477,9 @@ MonoBehaviour:
   invertedSprite: 0
   data: {fileID: 0}
   health: {fileID: 114026652318880698}
-  status: {fileID: 0}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  skills: []
   is_blocking: 0
-  skillsDeluxe:
-  - {fileID: 11400000, guid: 8486fe2518e7822428e09800207fc32a, type: 2}
-  - {fileID: 11400000, guid: a32b597deb476ad47a0bd5a2b67ee97e, type: 2}
-  - {fileID: 11400000, guid: 666ecdc35616eab47a43796661dc4e0c, type: 2}
+  passiveSkills: []
   activeSkills:
   - {fileID: 11400000, guid: bee7a9881fb78d14d984e9a80ca62291, type: 2}
   - {fileID: 11400000, guid: db2e97319e24bc147b8285ca4a6fc556, type: 2}
@@ -16543,6 +16490,7 @@ MonoBehaviour:
   inactiveMask: {fileID: 1515856110872432}
   label: {fileID: 114774159180191014}
   target: {fileID: 114476543481632976}
+  status: {fileID: 0}
 --- !u!114 &114843286024766908
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -17754,6 +17702,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthIndicator: {fileID: 114071560640957610}
   character: {fileID: 114539658089946676}
+  heal_image: {fileID: 0}
   hp: 0
   max: 10
 --- !u!114 &114939252416098814
@@ -17920,6 +17869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthIndicator: {fileID: 114015910498620020}
   character: {fileID: 114785258144334390}
+  heal_image: {fileID: 0}
   hp: 0
   max: 10
 --- !u!114 &114944697782128592

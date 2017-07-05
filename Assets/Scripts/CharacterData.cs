@@ -10,7 +10,8 @@ public class CharacterData : ScriptableObject {
 	public string nome;
 	public CharacterClass classe;
 	public Sprite sprite;
-	public List<SkillData> skills = new List<SkillData>();
+	public List<PassiveSkillData> skillsPassive = new List<PassiveSkillData>();
+	public List<ActiveSkillData> skillsActive = new List<ActiveSkillData>();
 
 	//TEMPORARIO
 	public WeaponData weapon;

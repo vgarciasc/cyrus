@@ -6,6 +6,7 @@ TagManager:
   tags:
   - TurnManager
   - ArenaManager
+  - EncounterManager
   layers:
   - Default
   - TransparentFX

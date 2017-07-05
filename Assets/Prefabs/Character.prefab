@@ -1732,12 +1732,7 @@ MonoBehaviour:
   data: {fileID: 0}
   health: {fileID: 114407067135772262}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  skills: []
   is_blocking: 0
-  passivesInspector:
-  - {fileID: 11400000, guid: 700fc85107c64fc42a19f9202e722b67, type: 2}
-  - {fileID: 11400000, guid: 2e7e013ece1acbb40aedda1a10b44313, type: 2}
-  activesInspector: []
   passiveSkills: []
   activeSkills: []
   sprite: {fileID: 0}

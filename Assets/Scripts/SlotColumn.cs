@@ -37,8 +37,17 @@ public class SlotColumn : MonoBehaviour {
 	}
 
 	void init_characters() {
+		EncounterManager encounterManager = EncounterManager.getEncounterManager();
+		if (encounterManager == null) {
+			Debug.Log("Encounter Manager not found.");
+			Debug.Break();
+		}
+		List<CharacterData> encounterCharacters = enemyColumn ?
+			encounterManager.currentEncounter.enemies :
+			encounterManager.currentEncounter.allies;
+
 		for (int i = 0; i < characters.Count; i++) {
-			charObj[i].set_data(i, characters[i]);
+			charObj[i].set_data(i, encounterCharacters[i]);
 			charObj[i].transform.position = slots[i].transform.position;
 			
 			charObj[i].click_event += register_click;

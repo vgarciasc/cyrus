@@ -14,8 +14,12 @@ MonoBehaviour:
   nome: UNIDADE_AGIL
   classe: 2
   sprite: {fileID: 21300000, guid: dbb82d8356d7f604aa756405d4b00c3c, type: 3}
-  skills:
-  - {fileID: 11400000, guid: f1bba1ae1f04af3488cf63765bef8976, type: 2}
+  skillsPassive:
+  - {fileID: 11400000, guid: beeeca3db434a7744a01c71cf1102c17, type: 2}
+  - {fileID: 11400000, guid: 9a31a97b7a04a3441a0bb6f764fd754f, type: 2}
+  skillsActive:
+  - {fileID: 11400000, guid: b1f761f5ddfac544d9233eda29a034d3, type: 2}
+  - {fileID: 11400000, guid: b64d7ea5dff891f4faf9394fcdefb336, type: 2}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
   VIT: 25
   FOR: 22
