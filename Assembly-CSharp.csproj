@@ -54,6 +54,7 @@
      <Compile Include="Assets\Scripts\Character\CharacterSprite.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterStatus.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterTarget.cs" />
+     <Compile Include="Assets\Scripts\Character\RaceSpritesData.cs" />
      <Compile Include="Assets\Scripts\ClickManager.cs" />
      <Compile Include="Assets\Scripts\CombatLogManager.cs" />
      <Compile Include="Assets\Scripts\Damage.cs" />
