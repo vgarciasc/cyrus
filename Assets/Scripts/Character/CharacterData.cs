@@ -9,6 +9,7 @@ public enum CharacterClass {NULL, LUTADOR, LADINO, GENERAL, BARDO,
 public class CharacterData : ScriptableObject {
 	public string nome;
 	public CharacterClass classe;
+    public CharacterRace raca;
 	public Sprite sprite;
 	public List<PassiveSkillData> skillsPassive = new List<PassiveSkillData>();
 	public List<ActiveSkillData> skillsActive = new List<ActiveSkillData>();

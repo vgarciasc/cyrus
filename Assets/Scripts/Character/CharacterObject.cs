@@ -49,43 +49,45 @@ public class CharacterObject : MonoBehaviour {
 	}
 
 	#region setters
-		public void set_data(int charID, CharacterData data) {
-			this.charID = charID;
-			this.data = data;
-			this.weapon = data.weapon;
+	public void set_data(int charID, CharacterData data) {
+		this.charID = charID;
+		this.data = data;
+		this.weapon = data.weapon;
 
-			activeSkills.Clear();
-			foreach (ActiveSkillData asd in data.skillsActive) {
-				activeSkills.Add(Instantiate(asd));
-			}
-
-			passiveSkills.Clear();
-			foreach (PassiveSkillData psd in data.skillsPassive) {
-				passiveSkills.Add(Instantiate(psd));
-			}
-
-			health.init(data);
-			init();
-			init_delegates();
+		activeSkills.Clear();
+		foreach (ActiveSkillData asd in data.skillsActive) {
+			activeSkills.Add(Instantiate(asd));
 		}
 
-		public void set_new_pos(Vector3 position) {
-			this.transform.DOMove(position, swapWaitTime);
+		passiveSkills.Clear();
+		foreach (PassiveSkillData psd in data.skillsPassive) {
+			passiveSkills.Add(Instantiate(psd));
 		}
 
-		void init() {
-			//sprite = sprite.GetComponentInChildren<Image>();
-			//sprite.sprite = data.sprite;
-		}
+		health.init(data);
+		init(data);
+		init_delegates();
+	}
 
-		void init_references() {
-			health = this.GetComponent<CharacterHealth>();
-			// status = this.GetComponent<CharacterStatus>();
-		}
+	public void set_new_pos(Vector3 position) {
+		this.transform.DOMove(position, swapWaitTime);
+	}
 
-		void init_delegates() {
-			TurnManager.getTurnManager().another_turn += pass_turn;
-		}
+	void init(CharacterData data) {
+        gameObject.GetComponent<CharacterSprite>().Set_Race_Sprites(data.raca);
+        //sprite = sprite.GetComponentInChildren<Image>();
+        //sprite.sprite = data.sprite;
+    }
+
+	void init_references() {
+		health = this.GetComponent<CharacterHealth>();
+		// status = this.GetComponent<CharacterStatus>();
+	}
+
+	void init_delegates() {
+		TurnManager.getTurnManager().another_turn += pass_turn;
+	}
+
 	#endregion
 
 	#region actions

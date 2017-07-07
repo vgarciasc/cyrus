@@ -13,8 +13,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nome: UNIDADE_DEFENSIVA
   classe: 1
+  raca: 1
   sprite: {fileID: 21300000, guid: 8071dff93aa2ca043876f1f263b57299, type: 3}
-  skills: []
+  skillsPassive: []
+  skillsActive: []
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
   VIT: 50
   FOR: 24

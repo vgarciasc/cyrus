@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d9b48424141a244c94bb6f0db190cf3, type: 3}
+  m_Name: Bird_Sprites_Data
+  m_EditorClassIdentifier: 
+  fillTail: {fileID: 21300000, guid: 7480f1baf99b9f948abf883dde46f508, type: 3}
+  lineTail: {fileID: 21300000, guid: 7adecf05110d366468ce328f21bfeeba, type: 3}
+  fillHead: {fileID: 21300000, guid: 5ca991740b6bb544f9c52abea25f973c, type: 3}
+  fillFace: {fileID: 21300000, guid: 88786c13380219443afe2e8d25715ac5, type: 3}
+  lineHead: {fileID: 21300000, guid: c73c39bbeacabca498cd65ad057ac5d3, type: 3}

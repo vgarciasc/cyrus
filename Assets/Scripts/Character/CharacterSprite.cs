@@ -14,7 +14,8 @@ public class CharacterSprite : MonoBehaviour {
 	public Image lineBody;
 	[Header("Head")]
 	public Image fillHead;
-	public Image lineHead;
+    public Image fillFace;
+    public Image lineHead;
 	[Header("Paw Left")]
 	public Image fillPawLeft;
 	public Image linePawLeft;
@@ -41,6 +42,23 @@ public class CharacterSprite : MonoBehaviour {
 		Set_Random_Palette();
 	}
 	
+    public void Set_Race_Sprites(CharacterRace character_race) {
+        string race_path = "Races\\";
+        if (character_race == CharacterRace.CAT)  race_path += "Cat_Sprites_Data"; else
+        if (character_race == CharacterRace.DOG)  race_path += "Dog_Sprites_Data"; else
+        if (character_race == CharacterRace.BIRD) race_path += "Bird_Sprites_Data";
+
+        RaceSpritesData sprites_data = Resources.Load<RaceSpritesData>(race_path);
+
+        if (sprites_data != null){
+            fillTail.sprite = sprites_data.fillTail;
+            lineTail.sprite = sprites_data.lineTail;
+            fillHead.sprite = sprites_data.fillHead;
+            fillFace.sprite = sprites_data.fillFace;
+            lineHead.sprite = sprites_data.lineHead;
+        } else Debug.Log("Data não encontrada no race_path(" + race_path + ")");
+    }
+
 	public void Set_Random_Palette() {
 		Color line = Color.black;
 		Color fill = Color.white;

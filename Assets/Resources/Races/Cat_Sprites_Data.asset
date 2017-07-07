@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d9b48424141a244c94bb6f0db190cf3, type: 3}
+  m_Name: Cat_Sprites_Data
+  m_EditorClassIdentifier: 
+  fillTail: {fileID: 21300000, guid: 54cd44e5daa9a934081663387f4885c8, type: 3}
+  lineTail: {fileID: 21300000, guid: 5fae75bc5a321c64bb325eb3e0443d12, type: 3}
+  fillHead: {fileID: 21300000, guid: 1dda80112d4f25e449e49550f84c7573, type: 3}
+  fillFace: {fileID: 21300000, guid: 941171e936a171f4297ec99d789af7f1, type: 3}
+  lineHead: {fileID: 21300000, guid: 36d03864802f8ff41a7474e9f6ae2c25, type: 3}
