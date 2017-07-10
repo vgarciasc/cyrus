@@ -13,7 +13,9 @@ public class CharacterObject : MonoBehaviour {
 	public CharacterData data;
 	[HideInInspector]
 	public CharacterHealth health;
-	[HideInInspector]
+    [HideInInspector]
+    public CharacterAnimator characterAnimator;
+    [HideInInspector]
 	public WeaponData weapon;
 	[HideInInspector]
 	public bool is_blocking = false;
@@ -81,6 +83,7 @@ public class CharacterObject : MonoBehaviour {
 
 	void init_references() {
 		health = this.GetComponent<CharacterHealth>();
+        characterAnimator = this.GetComponent<CharacterAnimator>();
 		// status = this.GetComponent<CharacterStatus>();
 	}
 
@@ -177,7 +180,10 @@ public class CharacterObject : MonoBehaviour {
 
 			public IEnumerator counter_attack_motion() {
 				yield return StartCoroutine(back_and_forth_motion(10, false, 0.2f));
-			}
+
+                SlotForeground sfg = column.get_slotfg_by_charobj(this);
+                yield return sfg.Ground_Attack_Animation();
+            }
 
 			Vector2 last_position_before_block;
 
