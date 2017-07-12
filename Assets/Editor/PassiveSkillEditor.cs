@@ -22,7 +22,7 @@ public class PassiveSkillEditor : Editor {
 		EditorGUILayout.Space();
 		EditorGUILayout.Space();
 
-		DrawDefaultInspector();
+		// DrawDefaultInspector();
 	}
 
 	void Draw_Title() {
