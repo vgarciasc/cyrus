@@ -87,8 +87,11 @@ public class AttackManager : MonoBehaviour {
 			if (dmg.amount == 0) {
 				yield return StartCoroutine(char_defender.dodge_motion());
 			}
-			
-			yield break;
+            else {
+                yield return char_defender.characterAnimator.Wait_For_Damage_Animation();
+            }
+
+        yield break;
 		}
 
 		IEnumerator simple_counter(AttackBonus bonus, bool use_action) {
@@ -109,17 +112,23 @@ public class AttackManager : MonoBehaviour {
 			}
 
 			var motion = StartCoroutine(char_attacker.counter_attack_motion());
-			if (dmg.amount == 0) {
-				StartCoroutine(char_defender.dodge_motion());
-			} 
-			
-			yield return motion;
+
+            yield return motion;
 			
 			PassiveSkillManager passive = skillManager.passiveManager;
 			var on_attack = StartCoroutine(passive.on_counter_attack(char_attacker, char_defender, dmg));
 			yield return on_attack;
 
-			char_defender.take_hit(dmg.amount);
+            if (dmg.amount == 0)
+            {
+                StartCoroutine(char_defender.dodge_motion());
+            }
+            else
+            {
+                yield return char_defender.characterAnimator.Wait_For_Damage_Animation();
+            }
+
+            char_defender.take_hit(dmg.amount);
 
 			//makes blocker go back to his place
 			yield return block_end();
