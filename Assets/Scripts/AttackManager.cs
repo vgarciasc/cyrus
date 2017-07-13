@@ -88,7 +88,7 @@ public class AttackManager : MonoBehaviour {
 				yield return StartCoroutine(char_defender.dodge_motion());
 			}
             else {
-				char_defender.audio.Play_Damage_Strike();
+				char_defender.soundManager.Play_Damage_Strike();
                 yield return char_defender.characterAnimator.Wait_For_Strike_Damage_Animation();
             }
 			yield return char_defender.characterAnimator.Wait_For_Damage_Number_Animation(dmg.amount);
@@ -127,6 +127,7 @@ public class AttackManager : MonoBehaviour {
                 StartCoroutine(char_defender.dodge_motion());
             }
             else {
+				char_defender.soundManager.Play_Damage_Strike();
                 yield return char_defender.characterAnimator.Wait_For_Strike_Damage_Animation();
             }
 			yield return char_defender.characterAnimator.Wait_For_Damage_Number_Animation(dmg.amount);

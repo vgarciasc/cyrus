@@ -16,7 +16,7 @@ public class CharacterObject : MonoBehaviour {
     [HideInInspector]
     public CharacterAnimator characterAnimator;
 	[HideInInspector]
-	public CharacterSound audio;
+	public CharacterSound soundManager;
     [HideInInspector]
 	public WeaponData weapon;
 	[HideInInspector]
@@ -84,6 +84,7 @@ public class CharacterObject : MonoBehaviour {
 	void init_references() {
 		health = this.GetComponent<CharacterHealth>();
         characterAnimator = this.GetComponent<CharacterAnimator>();
+		soundManager = this.GetComponent<CharacterSound>();
 		// status = this.GetComponent<CharacterStatus>();
 	}
 

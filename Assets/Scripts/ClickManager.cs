@@ -270,14 +270,14 @@ public class ClickManager : MonoBehaviour {
 			case States.DISPLAYING_ATTACK_INFO:
 				click_cancel_button(focused_character);
 				return;
-				currentState = States.CHOOSING_ACTION;
-				if (deactivate_all_lanes_cancels != null) {
-					deactivate_all_lanes_cancels();
-				}
-				if (deactivate_choosing_attack_target_event != null) {
-					deactivate_choosing_attack_target_event(focused_character);
-				}
-				break;
+				// currentState = States.CHOOSING_ACTION;
+				// if (deactivate_all_lanes_cancels != null) {
+				// 	deactivate_all_lanes_cancels();
+				// }
+				// if (deactivate_choosing_attack_target_event != null) {
+				// 	deactivate_choosing_attack_target_event(focused_character);
+				// }
+				// break;
 
 			case States.DISPLAYING_CHAR_ATTRIBUTES:
 				currentState = States.CHOOSING_ACTION;
