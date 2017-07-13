@@ -15,6 +15,8 @@ public class CharacterObject : MonoBehaviour {
 	public CharacterHealth health;
     [HideInInspector]
     public CharacterAnimator characterAnimator;
+	[HideInInspector]
+	public CharacterSound audio;
     [HideInInspector]
 	public WeaponData weapon;
 	[HideInInspector]

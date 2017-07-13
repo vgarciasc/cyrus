@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\Character\CharacterData.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterHealth.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterObject.cs" />
+     <Compile Include="Assets\Scripts\Character\CharacterSound.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterSprite.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterStatus.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterTarget.cs" />
@@ -82,6 +83,7 @@
      <Compile Include="Assets\Scripts\Skills\Trigger.cs" />
      <Compile Include="Assets\Scripts\Skills\WeaponData.cs" />
      <Compile Include="Assets\Scripts\SlotColumn.cs" />
+     <Compile Include="Assets\Scripts\SoundManager.cs" />
      <Compile Include="Assets\Scripts\StatsManager.cs" />
      <Compile Include="Assets\Scripts\SwapManager.cs" />
      <Compile Include="Assets\Scripts\TargetContainer.cs" />

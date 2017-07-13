@@ -5457,6 +5457,7 @@ GameObject:
   - component: {fileID: 1081504442}
   - component: {fileID: 1081504441}
   - component: {fileID: 1081504443}
+  - component: {fileID: 1081504444}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -5644,6 +5645,17 @@ MonoBehaviour:
   skillTitle: {fileID: 98845303}
   skillDescription: {fileID: 1946062818}
   current_state: 0
+--- !u!114 &1081504444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1081504431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab1c4df637adc934d987834039ea11dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1088595870
 GameObject:
   m_ObjectHideFlags: 0
