@@ -22,9 +22,7 @@ public class CharacterObject : MonoBehaviour {
 
 	public static float swapWaitTime = 0.6f;
 
-	[HideInInspector]
 	public List<PassiveSkillData> passiveSkills = new List<PassiveSkillData>();
-	[HideInInspector]
 	public List<ActiveSkillData> activeSkills = new List<ActiveSkillData>();
 
 	[HeaderAttribute("Components")]
@@ -173,16 +171,10 @@ public class CharacterObject : MonoBehaviour {
 
 			public IEnumerator attack_motion() {
 				yield return StartCoroutine(back_and_forth_motion(20, false, 0.3f));
-
-				SlotForeground sfg = column.get_slotfg_by_charobj(this);
-				yield return sfg.Ground_Attack_Animation();
 			}
 
 			public IEnumerator counter_attack_motion() {
 				yield return StartCoroutine(back_and_forth_motion(10, false, 0.2f));
-
-                SlotForeground sfg = column.get_slotfg_by_charobj(this);
-                yield return sfg.Ground_Attack_Animation();
             }
 
 			Vector2 last_position_before_block;

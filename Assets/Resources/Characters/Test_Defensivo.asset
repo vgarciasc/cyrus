@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74cb4749c841f5544a27694ec1c7c4ff, type: 3}
+  m_Name: Test_Defensivo
+  m_EditorClassIdentifier: 
+  nome: UNIDADE_DEFENSIVA
+  classe: 3
+  raca: 1
+  sprite: {fileID: 21300000, guid: 836a61cdb784b1d4599100b71901c09a, type: 3}
+  skillsPassive:
+  - {fileID: 11400000, guid: 700fc85107c64fc42a19f9202e722b67, type: 2}
+  - {fileID: 11400000, guid: a32b597deb476ad47a0bd5a2b67ee97e, type: 2}
+  - {fileID: 11400000, guid: 666ecdc35616eab47a43796661dc4e0c, type: 2}
+  - {fileID: 11400000, guid: 1dba105c43a3780498195b63458d9cd1, type: 2}
+  - {fileID: 11400000, guid: d03d1253ad1148e4f89a4440309ba92d, type: 2}
+  skillsActive: []
+  weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
+  VIT: 30
+  FOR: 30
+  DEF: 25
+  INT: 0
+  RES: 17
+  AGI: 22
+  DES: 24

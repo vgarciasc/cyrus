@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ArenaManager : MonoBehaviour {
 
+	public EncounterData defaultEncounter;
+
 	[SerializeField]
 	ClickManager clickManager;
 	[SerializeField]
@@ -11,9 +13,9 @@ public class ArenaManager : MonoBehaviour {
 
 	[Header("Slot Columns")]
 	[SerializeField]
-	SlotColumn left = new SlotColumn();
+	SlotColumn left;
 	[SerializeField]
-	SlotColumn right = new SlotColumn();
+	SlotColumn right;
 
 	public static ArenaManager getArenaManager() {
 		return (ArenaManager) HushPuppy.safeFindComponent("ArenaManager", "ArenaManager");

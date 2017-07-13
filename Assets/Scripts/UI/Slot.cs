@@ -25,4 +25,9 @@ public class Slot : MonoBehaviour {
 	public SlotColumn get_column() {
 		return column;
 	}
+
+	//35 IS MAGIC NUMBER
+	public Vector3 get_character_position() {
+		return this.transform.position + new Vector3(0f, 35f);
+	}
 }

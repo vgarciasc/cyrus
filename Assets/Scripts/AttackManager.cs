@@ -69,7 +69,9 @@ public class AttackManager : MonoBehaviour {
 				char_attacker.use_general_action();
 			}
 
-			yield return StartCoroutine(char_attacker.attack_motion());
+			yield return char_attacker.attack_motion();
+			SlotForeground sfg = char_defender.column.get_slotfg_by_charobj(char_defender);
+			yield return sfg.Ground_Attack_Animation();
 
 			Damage dmg = calculator.effective_damage(
 				char_attacker,
@@ -82,16 +84,17 @@ public class AttackManager : MonoBehaviour {
 			var on_attack = StartCoroutine(passive.on_attack(char_attacker, char_defender, dmg));
 			yield return on_attack;
 
-			char_defender.take_hit(dmg.amount);
-
 			if (dmg.amount == 0) {
 				yield return StartCoroutine(char_defender.dodge_motion());
 			}
             else {
-                yield return char_defender.characterAnimator.Wait_For_Damage_Animation();
+                yield return char_defender.characterAnimator.Wait_For_Strike_Damage_Animation();
             }
+			yield return char_defender.characterAnimator.Wait_For_Damage_Number_Animation(dmg.amount);
 
-        yield break;
+			char_defender.take_hit(dmg.amount);
+
+        	yield break;
 		}
 
 		IEnumerator simple_counter(AttackBonus bonus, bool use_action) {
@@ -111,22 +114,21 @@ public class AttackManager : MonoBehaviour {
 				char_attacker.use_general_action();
 			}
 
-			var motion = StartCoroutine(char_attacker.counter_attack_motion());
-
-            yield return motion;
+            yield return char_attacker.counter_attack_motion();
+			SlotForeground sfg = char_defender.column.get_slotfg_by_charobj(char_defender);
+			yield return sfg.Ground_Attack_Animation();
 			
 			PassiveSkillManager passive = skillManager.passiveManager;
 			var on_attack = StartCoroutine(passive.on_counter_attack(char_attacker, char_defender, dmg));
 			yield return on_attack;
 
-            if (dmg.amount == 0)
-            {
+            if (dmg.amount == 0) {
                 StartCoroutine(char_defender.dodge_motion());
             }
-            else
-            {
-                yield return char_defender.characterAnimator.Wait_For_Damage_Animation();
+            else {
+                yield return char_defender.characterAnimator.Wait_For_Strike_Damage_Animation();
             }
+			yield return char_defender.characterAnimator.Wait_For_Damage_Number_Animation(dmg.amount);
 
             char_defender.take_hit(dmg.amount);
 

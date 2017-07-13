@@ -82,7 +82,7 @@ public class CharacterStatus : Buffable {
 
 		public bool getSwappable() {
 			for (int i = 0; i < buffs.Count; i++) {
-				Debug.Log(buffs[i].kind + ": " + buffs[i].swapTarget);
+				// Debug.Log(buffs[i].kind + ": " + buffs[i].swapTarget);
 				if (buffs[i].kind == BuffType.SWAP_BLOCKING) {
 					return false;
 				}

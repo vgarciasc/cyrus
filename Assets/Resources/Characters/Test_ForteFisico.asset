@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Name: Test_ForteFisico
   m_EditorClassIdentifier: 
   nome: UNIDADE_FORTE_FISICA
-  classe: 1
+  classe: 3
   raca: 1
-  sprite: {fileID: 21300000, guid: 836a61cdb784b1d4599100b71901c09a, type: 3}
-  skillsPassive: []
-  skillsActive: []
+  sprite: {fileID: 21300000, guid: 8071dff93aa2ca043876f1f263b57299, type: 3}
+  skillsPassive:
+  - {fileID: 11400000, guid: 8486fe2518e7822428e09800207fc32a, type: 2}
+  - {fileID: 11400000, guid: 9a31a97b7a04a3441a0bb6f764fd754f, type: 2}
+  skillsActive:
+  - {fileID: 11400000, guid: bee7a9881fb78d14d984e9a80ca62291, type: 2}
   weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
-  VIT: 30
-  FOR: 30
-  DEF: 25
+  VIT: 50
+  FOR: 24
+  DEF: 33
   INT: 0
-  RES: 17
-  AGI: 22
-  DES: 24
+  RES: 20
+  AGI: 18
+  DES: 21

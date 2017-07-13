@@ -222,6 +222,7 @@ public class ClickManager : MonoBehaviour {
 		switch (currentState) {
 			case States.CHOOSING_ACTION:
 				currentState = States.NOTHING;
+				focused_character = null;
 				charObj.lane.toggle(false);
 				break;
 
@@ -256,19 +257,23 @@ public class ClickManager : MonoBehaviour {
 				break;				
 		}
 
-		focused_character = null;		
+		// focused_character = null;		
 	}
 
 	public void click_cancel_button() {
 		switch (currentState) {
 			case States.CHOOSING_ACTION:
 				currentState = States.NOTHING;
-				focused_character.lane.toggle_lane(false);
+				// focused_character.lane.toggle_lane(false);
 				break;
 
 			case States.DISPLAYING_ATTACK_INFO:
+				click_cancel_button(focused_character);
+				return;
 				currentState = States.CHOOSING_ACTION;
-				focused_character.lane.toggle_lane(true);
+				if (deactivate_all_lanes_cancels != null) {
+					deactivate_all_lanes_cancels();
+				}
 				if (deactivate_choosing_attack_target_event != null) {
 					deactivate_choosing_attack_target_event(focused_character);
 				}
@@ -276,7 +281,7 @@ public class ClickManager : MonoBehaviour {
 
 			case States.DISPLAYING_CHAR_ATTRIBUTES:
 				currentState = States.CHOOSING_ACTION;
-				focused_character.lane.toggle_lane(true);
+				// focused_character.lane.toggle_lane(true);
 				if (deactivate_choosing_attrib_target_event != null) {
 					deactivate_choosing_attrib_target_event(focused_character);
 				}
@@ -284,7 +289,7 @@ public class ClickManager : MonoBehaviour {
 
 			case States.SWAPPING_ALLIES:
 				currentState = States.CHOOSING_ACTION;
-				focused_character.lane.toggle_lane(true);
+				// focused_character.lane.toggle_lane(true);
 				if (deactivate_choosing_swap_target_event != null) {
 					deactivate_choosing_swap_target_event(focused_character);
 				}

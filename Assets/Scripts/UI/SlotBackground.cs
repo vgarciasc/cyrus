@@ -26,6 +26,8 @@ public class SlotBackground : MonoBehaviour {
 		Color.magenta
 	};
 
+	List<Texture2D> spritesBySize = new List<Texture2D>(); 
+
 	public void set_new_pos(Vector3 position) {
 		this.transform.DOMove(position, CharacterObject.swapWaitTime);
 		slotUpper.transform.DOMove(position, CharacterObject.swapWaitTime);
@@ -38,7 +40,7 @@ public class SlotBackground : MonoBehaviour {
 
 	void updateBackground() {
 		if (id != -1) {
-			this.background.color = colors [id];
+			// this.background.color = colors [id];
 		}
 	}
 
@@ -47,7 +49,10 @@ public class SlotBackground : MonoBehaviour {
 		this.gameObject.SetActive(false);
 	}
 
-	public void resize(int multiplier) { 
+	public void resize(int multiplier) {
+		/*
+		this.GetComponent<SpriteRenderer>().sprite = spritesBySize[multiplier];
+		 */
 		this.transform.DOScaleY(multiplier, 0.6f);
 	}
 

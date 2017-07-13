@@ -60,13 +60,13 @@ public class CharacterSprite : MonoBehaviour {
     }
 
 	public void Set_Random_Palette() {
-		Color line = Color.black;
+		Color line = new Color(0.3f, 0.3f, 0.3f);
 		Color fill = Color.white;
 
 		fill = pool[Random.Range(0, pool.Count)];
-		fill += new Color(Random.Range(0.3f, 0.3f),
-			Random.Range(0.4f, 0.3f),
-			Random.Range(0.3f, 0.4f));
+		// fill += new Color(Random.Range(0.3f, 0.3f),
+		// 	Random.Range(0.4f, 0.3f),
+		// 	Random.Range(0.3f, 0.4f));
 
 		Set_Fill_Color(fill);
 		Set_Line_Color(line);

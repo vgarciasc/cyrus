@@ -39,17 +39,22 @@ public class SlotColumn : MonoBehaviour {
 
 	void init_characters() {
 		EncounterManager encounterManager = EncounterManager.getEncounterManager();
-		if (encounterManager == null) {
-			Debug.Log("Encounter Manager not found.");
-			Debug.Break();
+		EncounterData encounter;
+
+		if (encounterManager != null) {
+			encounter = encounterManager.currentEncounter;
 		}
-		List<CharacterData> encounterCharacters = enemyColumn ?
-			encounterManager.currentEncounter.enemies :
-			encounterManager.currentEncounter.allies;
+		else {
+			Debug.Log("Encounter Manager not found. Using the default in Arena Manager.");
+			encounter = ArenaManager.getArenaManager().defaultEncounter;
+		}
+
+		List<CharacterData> encounterCharacters =
+		    enemyColumn ? encounter.enemies : encounter.allies;
 
 		for (int i = 0; i < characters.Count; i++) {
 			charObj[i].set_data(i, encounterCharacters[i]);
-			charObj[i].transform.position = slots[i].transform.position;
+			charObj[i].transform.position = slots[i].get_character_position();
 			
 			charObj[i].click_event += register_click;
 		}
@@ -148,15 +153,15 @@ public class SlotColumn : MonoBehaviour {
 		switch (groups) {
 			case 4:
 				for (int i = 0; i < slots.Count; i++) {
-					charObj[i].set_new_pos(slots[i].transform.position);
+					charObj[i].set_new_pos(slots[i].get_character_position());
 					slotsBackground[i].set_new_pos(slots[i].transform.position);
 				}
 				break;
 			case 3:
-				get_charobj_by_index(0).set_new_pos(slots[0].transform.position);
-				get_charobj_by_index(1).set_new_pos(slots[1].transform.position +
-					(slots[2].transform.position - slots[1].transform.position) / 2);
-				get_charobj_by_index(2).set_new_pos(slots[3].transform.position);
+				get_charobj_by_index(0).set_new_pos(slots[0].get_character_position());
+				get_charobj_by_index(1).set_new_pos(slots[1].get_character_position() +
+					(slots[2].get_character_position() - slots[1].get_character_position()) / 2);
+				get_charobj_by_index(2).set_new_pos(slots[3].get_character_position());
 
 				if (death)  {
 					get_slotbg_by_index(1).resize(2);
@@ -169,10 +174,10 @@ public class SlotColumn : MonoBehaviour {
 
 				break;
 			case 2:
-				get_charobj_by_index(0).set_new_pos(slots[0].transform.position +
-					(slots[1].transform.position - slots[0].transform.position) / 2);
-				get_charobj_by_index(1).set_new_pos(slots[2].transform.position +
-					(slots[3].transform.position - slots[2].transform.position) / 2);
+				get_charobj_by_index(0).set_new_pos(slots[0].get_character_position() +
+					(slots[1].get_character_position() - slots[0].get_character_position()) / 2);
+				get_charobj_by_index(1).set_new_pos(slots[2].get_character_position() +
+					(slots[3].get_character_position() - slots[2].get_character_position()) / 2);
 
 				if (death)  {
 					get_slotbg_by_index(0).resize(2);
@@ -186,8 +191,8 @@ public class SlotColumn : MonoBehaviour {
 
 				break;
 			case 1:
-				get_charobj_by_index(0).set_new_pos(slots[1].transform.position +
-					(slots[2].transform.position - slots[1].transform.position) / 2);
+				get_charobj_by_index(0).set_new_pos(slots[1].get_character_position() +
+					(slots[2].get_character_position() - slots[1].get_character_position()) / 2);
 
 				if (death)  {
 					get_slotbg_by_index(0).resize(4);

@@ -228,6 +228,7 @@ public class PassiveSkillManager : MonoBehaviour {
 				if (should_cast_protect_ally(potential_blocker, attacker, defender, mod, psv, true)) {
 					for (int k = 0; k < psv.effects.Count; k++) {
 						if (psv.effects[k].kind == EffectPassive.PROTECT_ALLY) {
+							Debug.Log("Added BLOCK_CHANCE from " + potential_blocker + " in skill " + psv.name + ".");
 							prob += psv.effects[k].protectAlly.probability;
 						}
 					}
