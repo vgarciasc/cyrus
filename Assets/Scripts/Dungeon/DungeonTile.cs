@@ -17,6 +17,9 @@ public class DungeonTile : MonoBehaviour {
 	public int linha;
 	public int coluna;
 
+	public bool bottomConnection;
+	public bool rightConnection;
+
 	void Start() {
 		Init();
 	}
