@@ -4,16 +4,18 @@ using UnityEngine.UI;
 using UnityEngine;
 
 public enum DungeonTileType {
-	NORMAL,
+	INACTIVE,
+	ACTIVE,
 	START,
 	BOSS,
-	INACTIVE
 };
 
 [ExecuteInEditMode]
 public class DungeonTile : MonoBehaviour {
 	Image img;
-	DungeonTileType type;
+	public DungeonTileType type;
+	public int linha;
+	public int coluna;
 
 	void Start() {
 		Init();
@@ -21,6 +23,11 @@ public class DungeonTile : MonoBehaviour {
 
 	void Init() {
 		img	= this.GetComponentInChildren<Image>();
+	}
+
+	public void Set_Pos(int linha, int coluna) {
+		this.linha = linha;
+		this.coluna = coluna;
 	}
 
 	public void Set_Type(DungeonTileType type) {
@@ -47,7 +54,7 @@ public class DungeonTile : MonoBehaviour {
 			case DungeonTileType.BOSS:
 				color = Color.red;
 				break;
-			case DungeonTileType.NORMAL:
+			case DungeonTileType.ACTIVE:
 				color = new Color(0.32f, 0.32f, 0.32f, 1f);
 				break;
 		}
