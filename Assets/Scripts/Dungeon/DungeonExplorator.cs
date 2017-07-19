@@ -95,5 +95,18 @@ public class DungeonExplorator : MonoBehaviour {
 		new_tile.Set_Player_Tile(true);
 		Show_Arrows(new_tile);
 		gen.Update_Visible_Connections(new_tile);
+		gen.Set_Adjacent_Semi_Explored(new_tile);
+	}
+
+	public void Set_Player_Tile(DungeonTile tile) {
+		if (tile == null) {
+			Debug.Log("This should not be happening.");
+			Debug.Break();
+		}
+
+		tile.Set_Player_Tile(true);
+		Show_Arrows(tile);
+		gen.Update_Visible_Connections(tile);
+		gen.Set_Adjacent_Semi_Explored(tile);
 	}
 }

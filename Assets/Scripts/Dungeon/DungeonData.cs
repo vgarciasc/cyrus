@@ -17,6 +17,7 @@ public class DungeonTileData {
 	public DungeonTileType kind;
 	
 	public bool explored;
+	public bool semiExplored;
 	public int linha;
 	public int coluna;
 
@@ -29,6 +30,7 @@ public class DungeonTileData {
 		int linha, int coluna,
 		bool bottom, bool right,
 		bool explored,
+		bool semiExplored,
 		bool currentPlayerTile) {
 			
 		this.kind = kind;
@@ -37,6 +39,7 @@ public class DungeonTileData {
 		this.bottomConnection = bottom;
 		this.rightConnection = right;
 		this.explored = explored;
+		this.semiExplored = semiExplored;
 		this.currentPlayerTile = currentPlayerTile;
 	}
 }

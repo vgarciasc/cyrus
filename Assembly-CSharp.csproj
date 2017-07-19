@@ -71,6 +71,7 @@
      <Compile Include="Assets\Scripts\EnemyManager.cs" />
      <Compile Include="Assets\Scripts\HealManager.cs" />
      <Compile Include="Assets\Scripts\HushPuppy.cs" />
+     <Compile Include="Assets\Scripts\SceneLoader.cs" />
      <Compile Include="Assets\Scripts\Skills\ActiveSkillData.cs" />
      <Compile Include="Assets\Scripts\Skills\ActiveSkillManager.cs" />
      <Compile Include="Assets\Scripts\Skills\Barrier.cs" />

@@ -25,6 +25,8 @@ public class DungeonTile : MonoBehaviour {
 	bool currentPlayerTile = false;
 	[SerializeField]
 	bool explored = false;
+	[SerializeField]
+	bool semiExplored = false;
 
 	public bool bottomConnection = false;
 	public bool rightConnection = false;
@@ -36,6 +38,7 @@ public class DungeonTile : MonoBehaviour {
 	public void Reset() {
 		Set_Player_Tile(false);
 		Set_Explored(false);
+		Set_Semi_Explored(false);
 
 		bottomConnection = false;
 		rightConnection = false;
@@ -70,9 +73,16 @@ public class DungeonTile : MonoBehaviour {
 				break;
 			case DungeonTileType.ACTIVE:
 				color = new Color(0.32f, 0.32f, 0.32f, 1f);
-				if (!explored) {
-					// color /= 2f;
-					// color += new Color(0f, 0f, 0f, 1f);
+				if (explored) {
+					//se explorado, visivel
+					color = new Color(0.32f, 0.32f, 0.32f, 1f);
+				}
+				else if (semiExplored) {
+					//se semi-explorado, visivel porem escuro
+					color = new Color(0.1f, 0.1f, 0.1f, 1f);
+				}
+				else {
+					//nao explorado nem semi-explorado: invisivel
 					color = Color.clear;
 				}
 				break;
@@ -101,5 +111,14 @@ public class DungeonTile : MonoBehaviour {
 
 	public bool Get_Explored() {
 		return explored;
+	}
+
+	public void Set_Semi_Explored(bool value) {
+		semiExplored = value;
+		Update_Appearance();
+	}
+
+	public bool Get_Semi_Explored() {
+		return semiExplored;
 	}
 }

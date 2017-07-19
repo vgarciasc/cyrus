@@ -26,6 +26,10 @@ public class DungeonGenerator : MonoBehaviour {
 		StartCoroutine(Dungeon());
 	}
 
+	public void Save_State() {
+		Serialize_Dungeon();
+	}
+
 	IEnumerator Dungeon() {
 
 		//if no dungeon, generate dungeon
@@ -81,6 +85,8 @@ public class DungeonGenerator : MonoBehaviour {
 
 	#region Serialization
 		void Unserialize_Dungeon(DungeonData dg) {
+			DungeonTile playerTile = null;
+
 			foreach (DungeonTileData dt in dg.dungeonTiles) {
 				var obj = dungeonRoomContainer.transform.GetChild(dt.linha * colunas + dt.coluna);
 				var tile = obj.GetComponentInChildren<DungeonTile>();
@@ -90,16 +96,19 @@ public class DungeonGenerator : MonoBehaviour {
 				tile.linha = dt.linha;
 				tile.coluna = dt.coluna;
 				tile.Set_Explored(dt.explored);
+				tile.Set_Semi_Explored(dt.semiExplored);
 
 				tile.Set_Player_Tile(dt.currentPlayerTile);
+
 				tile.Set_Type(dt.kind);
 			}
 
 			foreach (DungeonTileData dt in dg.dungeonTiles) {
-				dungeonExplorator.Show_Arrows(Get_Player_Tile());
 				Toggle_Connection_Bottom(dt.linha, dt.coluna, dt.bottomConnection);
 				Toggle_Connection_Right(dt.linha, dt.coluna, dt.rightConnection);
 			}
+
+			dungeonExplorator.Show_Arrows(Get_Player_Tile());
 		}
 
 		DungeonData Serialize_Dungeon() {
@@ -123,6 +132,7 @@ public class DungeonGenerator : MonoBehaviour {
 							tile.bottomConnection,
 							tile.rightConnection,
 							tile.Get_Explored(),
+							tile.Get_Semi_Explored(),
 							tile.Get_Is_Player_Tile()
 						)
 					);
@@ -197,6 +207,8 @@ public class DungeonGenerator : MonoBehaviour {
 				UnityEditor.AssetDatabase.Refresh();
 				// UnityEditor.AssetDatabase.SaveAssets();
 			#endif
+
+			print("Saved state!");
 		}
 
 		DungeonData Load_Dungeon_From_Disk() {
@@ -325,8 +337,6 @@ public class DungeonGenerator : MonoBehaviour {
 			}
 
 			Apply_Matrix(matrix);
-			Get_Start_Tile().Set_Player_Tile(true);
-			dungeonExplorator.Show_Arrows(Get_Start_Tile());
 
 			current_linha = esquerda_linha;
 			current_coluna = esquerda_coluna;
@@ -401,8 +411,14 @@ public class DungeonGenerator : MonoBehaviour {
 				Generate_Dungeon();
 			}
 			
-			dungeonExplorator.Show_Arrows(Get_Player_Tile());
+			dungeonExplorator.Set_Player_Tile(Get_Start_Tile());
 			Serialize_Dungeon();
+		}
+
+		public void Set_Adjacent_Semi_Explored(DungeonTile tile) {
+			foreach (DungeonTile dt in Get_Connected_To_Tile(tile)) {
+				dt.Set_Semi_Explored(true);
+			}
 		}
 	#endregion
 
