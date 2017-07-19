@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour {
@@ -164,7 +165,7 @@ public class DungeonGenerator : MonoBehaviour {
 		foreach (Direcao dir in trajeto) {
 			switch (dir) {
 				case Direcao.BAIXO:
-					Get_Connection(current_linha, current_coluna).Toggle_Bottom(true);
+					Toggle_Connection_Bottom(current_linha, current_coluna, true);
 					current_linha++;
 					break;
 				case Direcao.CIMA:
@@ -198,6 +199,8 @@ public class DungeonGenerator : MonoBehaviour {
 				}
 			}
 		}
+
+		Polish_Connections();
 	}
 
 	void Apply_Matrix(int[,] matrix) {
@@ -208,6 +211,79 @@ public class DungeonGenerator : MonoBehaviour {
 				tile.Set_Type((DungeonTileType) matrix[i, j]);
 			}
 		}
+	}
+
+	void Polish_Connections() {
+		List<DungeonTile> main_rooms = new List<DungeonTile>();
+		var start = Get_Start_Tile();
+		if (start == null) {
+			print("No start room!!");
+			Debug.Break();
+		}
+
+		main_rooms = Get_Componente_Conexa_Rooms(start);
+		foreach (Transform t in dungeonRoomContainer.transform) {
+			var tile = t.GetComponentInChildren<DungeonTile>();
+			if (!main_rooms.Contains(tile)) {
+				Deactivate_Tile(tile);
+			}
+		}
+
+		if (main_rooms.Count < 10) {
+			Generate_Dungeon();
+		}
+	}
+
+	List<DungeonTile> Get_Componente_Conexa_Rooms(DungeonTile tile) {
+		List<DungeonTile> componente = new List<DungeonTile>() { tile };
+
+		DungeonTile next_tile;
+		int k = 0;
+
+		while (true) {
+			next_tile = componente[k];
+
+			foreach (DungeonTile dt in Get_Connected_To_Tile(next_tile)) {
+				if (!componente.Contains(dt)) {
+					componente.Add(dt);
+				}
+			}
+
+			k++;
+			if (k >= componente.Count) {
+				break;
+			}
+		}
+
+		return componente;
+	}
+
+	List<DungeonTile> Get_Connected_To_Tile(DungeonTile tile) {
+		List<DungeonTile> output = new List<DungeonTile>();
+
+		int linha = tile.linha;
+		int coluna = tile.coluna;
+
+		if (tile.bottomConnection) {
+			output.Add(dungeonRoomContainer.transform.GetChild((linha + 1) * colunas + coluna).GetComponentInChildren<DungeonTile>());
+		}
+		if (tile.rightConnection) {
+			output.Add(dungeonRoomContainer.transform.GetChild((linha) * colunas + (coluna + 1)).GetComponentInChildren<DungeonTile>());
+		}
+		if (linha > 0) {
+			var above = dungeonRoomContainer.transform.GetChild((linha - 1) * colunas + coluna).GetComponent<DungeonTile>();
+			if (above.bottomConnection) {
+				output.Add(above);
+			}
+		}
+		if (coluna > 0) {
+			var left = dungeonRoomContainer.transform.GetChild((linha) * colunas + (coluna - 1)).GetComponent<DungeonTile>();
+			if (left.rightConnection) {
+				output.Add(left);
+			}
+		}
+
+		return output;
 	}
 
 	bool Adjacent_To_Active(int[,] matrix, int linha, int coluna) {
@@ -235,6 +311,32 @@ public class DungeonGenerator : MonoBehaviour {
 
 	int Get_Random_Coluna() {
 		return Random.Range(0, colunas);
+	}
+
+	void Deactivate_Tile(DungeonTile tile) {
+		tile.Set_Type(DungeonTileType.INACTIVE);
+		Toggle_Connection_Bottom(tile.linha, tile.coluna, false);
+		Toggle_Connection_Right(tile.linha, tile.coluna, false);
+
+		if (tile.linha > 0) {
+			var above = dungeonRoomContainer.transform.GetChild((tile.linha - 1) * colunas + tile.coluna).GetComponent<DungeonTile>();
+			Toggle_Connection_Bottom(above.linha, above.coluna, false);
+		}
+		if (tile.coluna > 0) {
+			var left = dungeonRoomContainer.transform.GetChild((tile.linha) * colunas + (tile.coluna - 1)).GetComponent<DungeonTile>();
+			Toggle_Connection_Right(left.linha, left.coluna, false);
+		}
+	}
+
+	DungeonTile Get_Start_Tile() {
+		for (int i = 0; i < dungeonRoomContainer.transform.childCount; i++) {
+			var aux = dungeonRoomContainer.transform.GetChild(i).GetComponent<DungeonTile>();
+			if (aux.type == DungeonTileType.START) {
+				return aux;
+			}
+		}
+
+		return null;
 	}
 
 	DungeonTile Get_Random_Tile() {
@@ -290,8 +392,8 @@ public class DungeonGenerator : MonoBehaviour {
 			return;
 		}
 		
-		Get_Connection(linha, coluna).Toggle_Bottom(true);
-		Get_Tile(linha, coluna).bottomConnection = true;
+		Get_Connection(linha, coluna).Toggle_Bottom(value);
+		Get_Tile(linha, coluna).bottomConnection = value;
 	}
 
 	void Toggle_Connection_Right(int linha, int coluna, bool value) {
@@ -305,8 +407,8 @@ public class DungeonGenerator : MonoBehaviour {
 			return;
 		}
 
-		Get_Connection(linha, coluna).Toggle_Right(true);
-		Get_Tile(linha, coluna).rightConnection = true;
+		Get_Connection(linha, coluna).Toggle_Right(value);
+		Get_Tile(linha, coluna).rightConnection = value;
 	}
 
 	void Print_Matrix(int[,] matrix) {

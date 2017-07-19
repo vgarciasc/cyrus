@@ -17,8 +17,8 @@ public class DungeonTile : MonoBehaviour {
 	public int linha;
 	public int coluna;
 
-	public bool bottomConnection;
-	public bool rightConnection;
+	public bool bottomConnection = false;
+	public bool rightConnection = false;
 
 	void Start() {
 		Init();
@@ -26,6 +26,8 @@ public class DungeonTile : MonoBehaviour {
 
 	void Init() {
 		img	= this.GetComponentInChildren<Image>();
+		bottomConnection = false;
+		rightConnection = false;
 	}
 
 	public void Set_Pos(int linha, int coluna) {
