@@ -653,3 +653,4 @@ MonoBehaviour:
   dungeonConnectionsContainer: {fileID: 51306354}
   dungeonConnectionsPrefab: {fileID: 1908605254512602, guid: 1f8e1395a0fe5a947ae613b274e977ef,
     type: 2}
+  currentDungeon: {fileID: 11400000, guid: 84611e994ef663c42ad6fffd177ee0a9, type: 2}

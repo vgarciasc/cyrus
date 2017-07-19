@@ -61,7 +61,9 @@
      <Compile Include="Assets\Scripts\CombatLogManager.cs" />
      <Compile Include="Assets\Scripts\Damage.cs" />
      <Compile Include="Assets\Scripts\Dungeon\ConnectionTile.cs" />
+     <Compile Include="Assets\Scripts\Dungeon\DungeonData.cs" />
      <Compile Include="Assets\Scripts\Dungeon\DungeonGenerator.cs" />
+     <Compile Include="Assets\Scripts\Dungeon\DungeonHistory.cs" />
      <Compile Include="Assets\Scripts\Dungeon\DungeonTile.cs" />
      <Compile Include="Assets\Scripts\Encounter\EncounterData.cs" />
      <Compile Include="Assets\Scripts\Encounter\EncounterManager.cs" />
