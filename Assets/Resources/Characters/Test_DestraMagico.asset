@@ -20,7 +20,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b64d7ea5dff891f4faf9394fcdefb336, type: 2}
   - {fileID: 11400000, guid: de2ab966f913bf2448e4183f77f4d266, type: 2}
   - {fileID: 11400000, guid: 015c5eee1c875d04bbbea7df7aec8642, type: 2}
-  weapon: {fileID: 11400000, guid: 74298ebf57807a044b99f46388b1fce3, type: 2}
+  weapon: {fileID: 11400000, guid: 47470f97f4451af41b3c1fc0d6a20ff1, type: 2}
   VIT: 35
   FOR: 0
   DEF: 17

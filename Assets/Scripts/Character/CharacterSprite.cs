@@ -22,6 +22,8 @@ public class CharacterSprite : MonoBehaviour {
 	[Header("Paw Right")]
 	public Image fillPawRight;
 	public Image linePawRight;
+	[Header("Weapon")]
+	public Image weapon;
 
 	List<Image> fills = new List<Image>();
 	List<Image> lines = new List<Image>();
@@ -94,5 +96,9 @@ public class CharacterSprite : MonoBehaviour {
 
 	Color Get_Random_Pool_Color() {
 		return pool[Random.Range(0, pool.Count)];
+	}
+
+	public void Set_Weapon(WeaponData data) {
+		weapon.sprite = data.sprite;
 	}
 }

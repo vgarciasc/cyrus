@@ -1643,16 +1643,6 @@ Prefab:
       propertyPath: column
       value: 
       objectReference: {fileID: 1626674240}
-    - target: {fileID: 114623346107587096, guid: 2e35e39f4f74eb344b606568c38fb021,
-        type: 2}
-      propertyPath: invertedSprite
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224031441580386902, guid: 2e35e39f4f74eb344b606568c38fb021,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 11.9
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2e35e39f4f74eb344b606568c38fb021, type: 2}
   m_IsPrefabParent: 0
@@ -3624,7 +3614,7 @@ MonoBehaviour:
   - {fileID: 247433598}
   characters:
   - {fileID: 11400000, guid: 434b63829cf7eef47823b783c8a43c8a, type: 2}
-  - {fileID: 11400000, guid: a3c9d1173c3ab474fb3c2a8b5176f79a, type: 2}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   charObj:
@@ -8590,7 +8580,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 11400000, guid: 51f5763a154821240b7b3c9eb9cafaf4, type: 2}
   - {fileID: 11400000, guid: 434b63829cf7eef47823b783c8a43c8a, type: 2}
-  - {fileID: 11400000, guid: a3c9d1173c3ab474fb3c2a8b5176f79a, type: 2}
+  - {fileID: 0}
   charObj:
   - {fileID: 1210115445}
   - {fileID: 1951016541}

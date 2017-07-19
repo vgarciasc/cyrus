@@ -16,9 +16,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 51f5763a154821240b7b3c9eb9cafaf4, type: 2}
   - {fileID: 11400000, guid: 029c0f28b9f6c1a42be7caa62241b801, type: 2}
   - {fileID: 11400000, guid: 434b63829cf7eef47823b783c8a43c8a, type: 2}
-  - {fileID: 11400000, guid: a3c9d1173c3ab474fb3c2a8b5176f79a, type: 2}
+  - {fileID: 11400000, guid: be1c08868d481eb4a966087e19d9031b, type: 2}
   allies:
   - {fileID: 11400000, guid: 434b63829cf7eef47823b783c8a43c8a, type: 2}
-  - {fileID: 11400000, guid: a3c9d1173c3ab474fb3c2a8b5176f79a, type: 2}
+  - {fileID: 11400000, guid: 51f5763a154821240b7b3c9eb9cafaf4, type: 2}
   - {fileID: 11400000, guid: be1c08868d481eb4a966087e19d9031b, type: 2}
-  - {fileID: 11400000, guid: a3c9d1173c3ab474fb3c2a8b5176f79a, type: 2}
+  - {fileID: 11400000, guid: 443652142cc2ce746a950be2e7c1d053, type: 2}

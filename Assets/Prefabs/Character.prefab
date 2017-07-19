@@ -1289,6 +1289,7 @@ MonoBehaviour:
   linePawLeft: {fileID: 114175739219608534}
   fillPawRight: {fileID: 114727148195592790}
   linePawRight: {fileID: 114283725571182590}
+  weapon: {fileID: 114689044154163934}
   pool:
   - {r: 0.79215693, g: 0.3254902, b: 0.3254902, a: 1}
   - {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -2173,7 +2174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   charID: -1
-  invertedSprite: 0
+  invertedSprite: 1
   data: {fileID: 0}
   health: {fileID: 114407067135772262}
   characterAnimator: {fileID: 0}
@@ -3253,7 +3254,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 530.03, y: 0}
+  m_AnchoredPosition: {x: 11.9, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224042229785621258

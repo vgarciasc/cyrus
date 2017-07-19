@@ -93,7 +93,7 @@ public class ViolenceCalculator : MonoBehaviour {
 		}
 
 		damage += attacking_attrib;
-		damage += attacker.weapon.damage;
+		// damage += attacker.weapon.damage;
 		damage -= defending_attrib;
 		// log_info += "(" + attacking_attrib + " + " +
 		// 			attacker.weapon.damage + " - " +
@@ -139,7 +139,7 @@ public class ViolenceCalculator : MonoBehaviour {
 
 			int prob = 0;
 			prob += (attacker.data.DES - defender.data.AGI) * 3;
-			prob += (int) (attacker.weapon.accuracy * 100);
+			// prob += (int) (attacker.weapon.accuracy * 100);
 			prob -= onus;
 
 			return prob;
@@ -153,7 +153,7 @@ public class ViolenceCalculator : MonoBehaviour {
 			int prob = 0;
 			prob += (attacker.data.DES - defender.data.AGI) * 3;
 			prob -= 100;
-			prob += (int) (attacker.weapon.accuracy * 100 / 2);
+			// prob += (int) (attacker.weapon.accuracy * 100 / 2);
 			prob += (int) (attacker.weapon.criticalBonus * 100);
 
 			if (mod == AttackModule.COUNTER_ATTACK) {

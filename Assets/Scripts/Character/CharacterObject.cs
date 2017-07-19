@@ -8,11 +8,12 @@ public class CharacterObject : MonoBehaviour {
 	public int charID = -1;
 	public bool invertedSprite = false;
 
-	
 	[HideInInspector]
 	public CharacterData data;
 	[HideInInspector]
 	public CharacterHealth health;
+	[HideInInspector]
+	public CharacterSprite sprite;
     [HideInInspector]
     public CharacterAnimator characterAnimator;
 	[HideInInspector]
@@ -28,7 +29,6 @@ public class CharacterObject : MonoBehaviour {
 	public List<ActiveSkillData> activeSkills = new List<ActiveSkillData>();
 
 	[HeaderAttribute("Components")]
-	public Image sprite;
 	public SlotColumn column;
 	public ButtonLane lane;
 	public GameObject inactiveMask;
@@ -77,6 +77,7 @@ public class CharacterObject : MonoBehaviour {
 
 	void init(CharacterData data) {
         gameObject.GetComponent<CharacterSprite>().Set_Race_Sprites(data.raca);
+        gameObject.GetComponent<CharacterSprite>().Set_Weapon(data.weapon);
         //sprite = sprite.GetComponentInChildren<Image>();
         //sprite.sprite = data.sprite;
     }
@@ -85,6 +86,7 @@ public class CharacterObject : MonoBehaviour {
 		health = this.GetComponent<CharacterHealth>();
         characterAnimator = this.GetComponent<CharacterAnimator>();
 		soundManager = this.GetComponent<CharacterSound>();
+		sprite = this.GetComponent<CharacterSprite>();
 		// status = this.GetComponent<CharacterStatus>();
 	}
 

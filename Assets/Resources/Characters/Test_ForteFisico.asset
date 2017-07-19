@@ -20,7 +20,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9a31a97b7a04a3441a0bb6f764fd754f, type: 2}
   skillsActive:
   - {fileID: 11400000, guid: bee7a9881fb78d14d984e9a80ca62291, type: 2}
-  weapon: {fileID: 11400000, guid: f1d74e815f7f6e5498fb8bd7681cde96, type: 2}
+  weapon: {fileID: 11400000, guid: de7a7818be33cdf46a491039a27925e8, type: 2}
   VIT: 50
   FOR: 24
   DEF: 33

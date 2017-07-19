@@ -13,9 +13,13 @@ public class WeaponData : ScriptableObject {
 	public AttackKind att = AttackKind.PHYSICAL;
 
 	[RangeAttribute(0, 30)]
-	public int damage = 1;
+	public int damageMin = 1;
+	[RangeAttribute(0, 30)]
+	public int damageMax = 1;
 	[RangeAttribute(0, 1)]
-	public float accuracy = 0.5f;
+	public float accuracyMin = 0.7f;
+	[RangeAttribute(0, 1)]
+	public float accuracyMax = 0.9f;
 	[RangeAttribute(0, 1)]
 	public float criticalBonus = 0.5f;
 }
