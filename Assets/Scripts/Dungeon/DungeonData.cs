@@ -22,17 +22,21 @@ public class DungeonTileData {
 
 	public bool bottomConnection;
 	public bool rightConnection;
+	public bool currentPlayerTile;
 
 	public DungeonTileData(
 		DungeonTileType kind,
 		int linha, int coluna,
 		bool bottom, bool right,
-		bool explored) {
+		bool explored,
+		bool currentPlayerTile) {
+			
 		this.kind = kind;
 		this.linha = linha;
 		this.coluna = coluna;
 		this.bottomConnection = bottom;
 		this.rightConnection = right;
 		this.explored = explored;
+		this.currentPlayerTile = currentPlayerTile;
 	}
 }

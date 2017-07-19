@@ -15,6 +15,8 @@ public class DungeonGenerator : MonoBehaviour {
 	GameObject dungeonConnectionsContainer;
 	[SerializeField]
 	GameObject dungeonConnectionsPrefab;
+	[SerializeField]
+	DungeonExplorator dungeonExplorator;
 
 	DungeonData currentDungeon;
 
@@ -36,6 +38,9 @@ public class DungeonGenerator : MonoBehaviour {
 			this.linhas = currentDungeon.linhas;
 			this.colunas = currentDungeon.colunas;
 			
+			dungeonExplorator.Set_Linhas_Colunas(linhas, colunas);
+			dungeonExplorator.Populate_Explorators();
+
 			Populate_Tiles();
 			Reset_Connections();
 
@@ -54,7 +59,9 @@ public class DungeonGenerator : MonoBehaviour {
 					dungeonRoomPrefab,
 					dungeonRoomContainer.transform,
 					false);
-				go.GetComponentInChildren<DungeonTile>().Set_Pos(i, j);
+				var tile = go.GetComponentInChildren<DungeonTile>();
+				tile.Set_Pos(i, j);
+
 				go.name = "Tile #" + (i * colunas + j);
 			}
 		}
@@ -76,14 +83,18 @@ public class DungeonGenerator : MonoBehaviour {
 				var obj = dungeonRoomContainer.transform.GetChild(dt.linha * colunas + dt.coluna);
 				var tile = obj.GetComponentInChildren<DungeonTile>();
 
+				tile.Reset();
+
 				tile.linha = dt.linha;
 				tile.coluna = dt.coluna;
 				tile.explored = dt.explored;
 
+				tile.Set_Player_Tile(dt.currentPlayerTile);
 				tile.Set_Type(dt.kind);
 			}
 
 			foreach (DungeonTileData dt in dg.dungeonTiles) {
+				dungeonExplorator.Show_Arrows(Get_Player_Tile());
 				Toggle_Connection_Bottom(dt.linha, dt.coluna, dt.bottomConnection);
 				Toggle_Connection_Right(dt.linha, dt.coluna, dt.rightConnection);
 			}
@@ -109,7 +120,8 @@ public class DungeonGenerator : MonoBehaviour {
 							tile.linha, tile.coluna,
 							tile.bottomConnection,
 							tile.rightConnection,
-							tile.explored
+							tile.explored,
+							tile.Get_Is_Player_Tile()
 						)
 					);
 
@@ -123,7 +135,7 @@ public class DungeonGenerator : MonoBehaviour {
 
 			Save_Dungeon_To_Disk(dg);
 
-			print("Saved!");
+			// print("Saved!");
 
 			return dg;
 		}
@@ -162,7 +174,7 @@ public class DungeonGenerator : MonoBehaviour {
 			var file = stream.ReadToEnd();
 			stream.Close();
 			
-			print("Stream: " + file.ToString());
+			// print("Stream: " + file.ToString());
 
 			if (file.Length == 0) {
 				return false;
@@ -205,9 +217,16 @@ public class DungeonGenerator : MonoBehaviour {
 			}
 		}
 
+		void Reset_Tiles() {
+			foreach (Transform t in dungeonRoomContainer.transform) {
+				t.GetComponentInChildren<DungeonTile>().Reset();
+			}
+		}
+
 		public void Generate_Dungeon() {
 			int[,] matrix = new int[linhas, colunas];
 			Reset_Connections();
+			Reset_Tiles();
 
 			//position start room
 			int start_linha, start_coluna, start_pos;
@@ -305,6 +324,8 @@ public class DungeonGenerator : MonoBehaviour {
 			}
 
 			Apply_Matrix(matrix);
+			Get_Start_Tile().Set_Player_Tile(true);
+			dungeonExplorator.Show_Arrows(Get_Start_Tile());
 
 			current_linha = esquerda_linha;
 			current_coluna = esquerda_coluna;
@@ -379,6 +400,7 @@ public class DungeonGenerator : MonoBehaviour {
 				Generate_Dungeon();
 			}
 			
+			dungeonExplorator.Show_Arrows(Get_Player_Tile());
 			Serialize_Dungeon();
 		}
 	#endregion
@@ -489,6 +511,19 @@ public class DungeonGenerator : MonoBehaviour {
 			return null;
 		}
 
+		DungeonTile Get_Player_Tile() {
+			for (int i = 0; i < dungeonRoomContainer.transform.childCount; i++) {
+				var aux = dungeonRoomContainer.transform.GetChild(i).GetComponent<DungeonTile>();
+				if (aux.Get_Is_Player_Tile()) {
+					return aux;
+				}
+			}
+
+			Debug.Log("No player found!");
+			Debug.Break();
+			return null;
+		}
+
 		DungeonTile Get_Random_Tile() {
 			return Get_Tile(
 				Get_Random_Linha(),
@@ -517,7 +552,7 @@ public class DungeonGenerator : MonoBehaviour {
 			return trajeto;
 		}
 
-		DungeonTile Get_Tile(int linha, int coluna) {
+		public DungeonTile Get_Tile(int linha, int coluna) {
 			return dungeonRoomContainer.transform.GetChild(
 				linha * colunas +
 				coluna

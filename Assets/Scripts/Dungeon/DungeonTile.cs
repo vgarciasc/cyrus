@@ -7,26 +7,34 @@ public enum DungeonTileType {
 	INACTIVE,
 	ACTIVE,
 	START,
-	BOSS,
+	BOSS
 };
 
 [ExecuteInEditMode]
 public class DungeonTile : MonoBehaviour {
-	Image img;
+	[SerializeField]
+	Image tileImage;
+	[SerializeField]
+	Image playerIcon;
+
 	public DungeonTileType type;
 	public int linha;
 	public int coluna;
 	public bool explored;
+	
+	[SerializeField]
+	bool currentPlayerTile = false;
 
 	public bool bottomConnection = false;
 	public bool rightConnection = false;
 
 	void Start() {
-		Init();
+		Reset();
 	}
 
-	void Init() {
-		img	= this.GetComponentInChildren<Image>();
+	public void Reset() {
+		Set_Player_Tile(false);
+
 		bottomConnection = false;
 		rightConnection = false;
 	}
@@ -37,20 +45,18 @@ public class DungeonTile : MonoBehaviour {
 	}
 
 	public void Set_Type(DungeonTileType type) {
-		Init();
-
 		this.type = type;
-		Update_Color();
+		Update_Appearance();
 
 		if (type == DungeonTileType.INACTIVE) {
-			img.enabled = false;
+			tileImage.enabled = false;
 		}
 		else {
-			img.enabled = true;
+			tileImage.enabled = true;
 		}
 	}
 
-	void Update_Color() {
+	void Update_Appearance() {
 		Color color = Color.white;
 
 		switch (type) {
@@ -65,6 +71,15 @@ public class DungeonTile : MonoBehaviour {
 				break;
 		}
 
-		img.color = color;
+		tileImage.color = color;
+	}
+
+	public void Set_Player_Tile(bool value) {
+		currentPlayerTile = value;
+		playerIcon.enabled = currentPlayerTile;
+	}
+
+	public bool Get_Is_Player_Tile() {
+		return currentPlayerTile;
 	}
 }
