@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Custom/Encounter Data")]
-public class EncounterData : ScriptableObject {
+[System.Serializable]
+public class EncounterData {
 	public string encounterName = "DEFAULT ENCOUNTER";
 	
 	[Header("Enemies")]

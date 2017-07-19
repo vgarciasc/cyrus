@@ -45,6 +45,11 @@ MonoBehaviour:
   slotUpper: {fileID: 0}
   target: {fileID: 0}
   slotBuff: {fileID: 0}
+  spritesBySize:
+  - {fileID: 21300000, guid: d96c8014bbd7a8846a4295758869b310, type: 3}
+  - {fileID: 21300000, guid: a945b4b92c1cc024fbcca8636da12759, type: 3}
+  - {fileID: 21300000, guid: a945b4b92c1cc024fbcca8636da12759, type: 3}
+  - {fileID: 21300000, guid: c3a9d63feba21da429216afac9bc00a5, type: 3}
 --- !u!114 &114230729225727552
 MonoBehaviour:
   m_ObjectHideFlags: 1

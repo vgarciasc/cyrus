@@ -10,7 +10,6 @@ public class SlotColumn : MonoBehaviour {
 	public List<Slot> slots = new List<Slot>();
 	public List<SlotForeground> slotsForeground = new List<SlotForeground>();
 	public List<SlotBackground> slotsBackground = new List<SlotBackground>();
-	public List<CharacterData> characters = new List<CharacterData>();
 	public List<CharacterObject> charObj = new List<CharacterObject>();
 
 	int groups = -1;
@@ -22,9 +21,21 @@ public class SlotColumn : MonoBehaviour {
 		// StartCoroutine(dasd());
 	}
 
+	void Update() {
+		if (Input.GetKeyDown(KeyCode.F)) {
+			kill_slot(get_charobj_by_index(0));
+		}
+	}
+
 	IEnumerator dasd() {
-		yield return new WaitForSeconds(2.0f);
-		kill_slot(2);
+		yield return new WaitForSeconds(2f);
+		kill_slot(get_charobj_by_index(0));
+		yield return new WaitForSeconds(2f);
+		kill_slot(get_charobj_by_index(0));
+		yield return new WaitForSeconds(2f);
+		kill_slot(get_charobj_by_index(0));
+		yield return new WaitForSeconds(2f);
+		kill_slot(get_charobj_by_index(0));
 	}
 
 	void init_slots() {
@@ -42,7 +53,7 @@ public class SlotColumn : MonoBehaviour {
 		EncounterData encounter;
 
 		if (encounterManager != null) {
-			encounter = encounterManager.currentEncounter;
+			encounter = encounterManager.Generate_Encounter();
 		}
 		else {
 			Debug.Log("Encounter Manager not found. Using the default in Arena Manager.");
@@ -52,16 +63,15 @@ public class SlotColumn : MonoBehaviour {
 		List<CharacterData> encounterCharacters =
 		    enemyColumn ? encounter.enemies : encounter.allies;
 
-		for (int i = 0; i < characters.Count; i++) {
+		for (int i = 0; i < 4; i++) {
 			charObj[i].set_data(i, encounterCharacters[i]);
-			charObj[i].transform.position = slots[i].get_character_position();
+			charObj[i].transform.position = slots[i].get_character_position(1);
 			
 			charObj[i].click_event += register_click;
 		}
 	}
 	
-	public void kill_slot(CharacterObject co) {
-		
+	public void kill_slot(CharacterObject co) {		
 		List<SlotBackground> sb = new List<SlotBackground>();
 		foreach (SlotBackground s in slotsBackground) {
 			if (s.gameObject.activeSelf) {
@@ -76,16 +86,13 @@ public class SlotColumn : MonoBehaviour {
 			}
 		}
 
-		sb[cb.IndexOf(co)].kill();
+		get_slotbg_by_charobj(co).kill();
 		co.kill();
 
 		kill_slot(get_slotID_by_charobj(co));
 	}
 
-	public void kill_slot(int slotID) {
-		// get_slotbg_by_charobj(get_charobj_by_slotID(slotID)).kill();
-		// get_charobj_by_slotID(slotID).kill();
-
+	void kill_slot(int slotID) {
 		List<int> real_IDs = new List<int>();		
 		foreach (Slot s in slots) {
 			if (s.charID != slots[slotID].charID && 
@@ -97,16 +104,11 @@ public class SlotColumn : MonoBehaviour {
 		//real_IDs is a list with the set IDs that still exist
 		//ex: {1, 2, 3, 4} => kill 3 => {1, 2, 4}
 		//ex: {1, 2, 2, 4} => kill 2 => {1, 4}
-		
-		// for (int i = 0; i < slotsBackground.Count; i++) {
-		// 	if (!real_IDs.Contains(i)) {
-		// 		slotsBackground[i].gameObject.SetActive(false);
-		// 	}
-		// }
 
 		//everyone was killed
-		if (groups-- == 0) {
-			Debug.Log("everyone is dead");
+		if (groups-- == 1) {
+			// Debug.Log("everyone is dead");
+			UnityEngine.SceneManagement.SceneManager.LoadScene("Dungeon");
 			return;
 		}
 
@@ -153,15 +155,15 @@ public class SlotColumn : MonoBehaviour {
 		switch (groups) {
 			case 4:
 				for (int i = 0; i < slots.Count; i++) {
-					charObj[i].set_new_pos(slots[i].get_character_position());
+					charObj[i].set_new_pos(slots[i].get_character_position(1));
 					slotsBackground[i].set_new_pos(slots[i].transform.position);
 				}
 				break;
 			case 3:
-				get_charobj_by_index(0).set_new_pos(slots[0].get_character_position());
-				get_charobj_by_index(1).set_new_pos(slots[1].get_character_position() +
-					(slots[2].get_character_position() - slots[1].get_character_position()) / 2);
-				get_charobj_by_index(2).set_new_pos(slots[3].get_character_position());
+				get_charobj_by_index(0).set_new_pos(slots[0].get_character_position(2));
+				get_charobj_by_index(1).set_new_pos(slots[1].get_character_position(2) +
+					(slots[2].get_character_position(2) - slots[1].get_character_position(2)) / 2);
+				get_charobj_by_index(2).set_new_pos(slots[3].get_character_position(2));
 
 				if (death)  {
 					get_slotbg_by_index(1).resize(2);
@@ -174,10 +176,10 @@ public class SlotColumn : MonoBehaviour {
 
 				break;
 			case 2:
-				get_charobj_by_index(0).set_new_pos(slots[0].get_character_position() +
-					(slots[1].get_character_position() - slots[0].get_character_position()) / 2);
-				get_charobj_by_index(1).set_new_pos(slots[2].get_character_position() +
-					(slots[3].get_character_position() - slots[2].get_character_position()) / 2);
+				get_charobj_by_index(0).set_new_pos(slots[0].get_character_position(3) +
+					(slots[1].get_character_position(3) - slots[0].get_character_position(3)) / 2);
+				get_charobj_by_index(1).set_new_pos(slots[2].get_character_position(3) +
+					(slots[3].get_character_position(3) - slots[2].get_character_position(3)) / 2);
 
 				if (death)  {
 					get_slotbg_by_index(0).resize(2);
@@ -191,8 +193,8 @@ public class SlotColumn : MonoBehaviour {
 
 				break;
 			case 1:
-				get_charobj_by_index(0).set_new_pos(slots[1].get_character_position() +
-					(slots[2].get_character_position() - slots[1].get_character_position()) / 2);
+				get_charobj_by_index(0).set_new_pos(slots[1].get_character_position(1) +
+					(slots[2].get_character_position(1) - slots[1].get_character_position(1)) / 2);				
 
 				if (death)  {
 					get_slotbg_by_index(0).resize(4);
@@ -232,9 +234,6 @@ public class SlotColumn : MonoBehaviour {
 		Debug.Log("Error searching for charObj in slotID " + slotID);
 		return null;
 	}
-
-	// public SlotBackground get_slotbg_by_slotID(int slotID) {
-	// }
 
 	public void toggle_all_lanes(bool value) {
 		foreach (CharacterObject co in charObj) {
@@ -376,7 +375,9 @@ public class SlotColumn : MonoBehaviour {
 	public CharacterObject get_charobj_by_index(int index) {
 		List<CharacterObject> cb = new List<CharacterObject>();
 		foreach (CharacterObject c in charObj) {
-			if (!c.is_dead()) {
+			if (c.gameObject.activeSelf
+			// !c.is_dead()
+			) {
 				cb.Add(c);
 			}
 		}

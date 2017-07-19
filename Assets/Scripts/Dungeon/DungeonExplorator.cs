@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DungeonExplorator : MonoBehaviour {
 
 	int linhas;
 	int colunas;
-
+	
+	[SerializeField]
+	Text alertText;
 	[SerializeField]
 	GameObject dungeonExploratorContainer;
 	[SerializeField]
@@ -93,9 +97,12 @@ public class DungeonExplorator : MonoBehaviour {
 		}
 
 		new_tile.Set_Player_Tile(true);
-		Show_Arrows(new_tile);
+		Reset_Explorators();
+		// Show_Arrows(new_tile);
 		gen.Update_Visible_Connections(new_tile);
 		gen.Set_Adjacent_Semi_Explored(new_tile);
+
+		Handle_Tile_Event(new_tile);
 	}
 
 	public void Set_Player_Tile(DungeonTile tile) {
@@ -108,5 +115,46 @@ public class DungeonExplorator : MonoBehaviour {
 		Show_Arrows(tile);
 		gen.Update_Visible_Connections(tile);
 		gen.Set_Adjacent_Semi_Explored(tile);
+	}
+
+	void Handle_Tile_Event(DungeonTile tile) {
+		switch (tile.type) {
+			case DungeonTileType.ACTIVE:
+				float chance = Random.Range(0.2f, 0.4f);
+				float dice = Random.Range(0f, 1f);
+				if (dice <= chance) {
+					StartCoroutine(Go_Encounter(tile));
+				} else {
+					StartCoroutine(No_Encounter(tile));
+				}
+				break;
+		}
+	}
+
+	IEnumerator Go_Encounter(DungeonTile tile) {
+		alertText.text = ".";
+		yield return new WaitForSeconds(0.5f);
+		alertText.text = "..";
+		yield return new WaitForSeconds(0.5f);
+		alertText.text = "...";
+		yield return new WaitForSeconds(0.5f);
+		alertText.text = "!!!!!! BATTLE";
+		gen.Save_State();
+
+		yield return new WaitForSeconds(2f);
+
+		SceneManager.LoadScene("MainScene");
+	}
+
+	IEnumerator No_Encounter(DungeonTile tile) {
+		alertText.text = ".";
+		yield return new WaitForSeconds(0.5f);
+		alertText.text = "..";
+		yield return new WaitForSeconds(0.5f);
+		alertText.text = "...";
+		yield return new WaitForSeconds(0.5f);
+		alertText.text = "Nothing.";
+		Show_Arrows(tile);
+		gen.Save_State();
 	}
 }

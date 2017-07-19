@@ -5,22 +5,29 @@ using UnityEngine.SceneManagement;
 
 public class EncounterManager : MonoBehaviour {
 	public static EncounterManager getEncounterManager() {
-		return (EncounterManager) HushPuppy.safeFindComponent("EncounterManager", "EncounterManager");
+		return (EncounterManager) HushPuppy.safeFindComponent("GameController", "EncounterManager");
 	}
 
-	public EncounterData currentEncounter;
-	
-	public void Initiate_Encounter(EncounterData encounter) {
-		currentEncounter = encounter;
+	public EncounterData currentEncounter = null;
+	public List<CharacterData> allies = new List<CharacterData>();
+	public List<CharacterData> randomPoolCharacters = new List<CharacterData>();
 
-		//destroys old copies
-		foreach (GameObject go in GameObject.FindGameObjectsWithTag("EncounterManager")) {
-			if (go != this.gameObject) {
-				Destroy(go);
-			}
+	public EncounterData Generate_Encounter() {
+		EncounterData enc = new EncounterData();
+
+		enc.allies = new List<CharacterData>();
+		enc.allies.AddRange(allies);
+		enc.encounterName = "Encounter #" + Random.Range(0, 255);
+		enc.enemies = new List<CharacterData>();
+
+		for (int i = 0; i < 4; i++) {
+			enc.enemies.Add(Generate_Character());
 		}
 
-		DontDestroyOnLoad(this.gameObject);
-		SceneManager.LoadScene("MainScene");
+		return enc;
+	}
+
+	CharacterData Generate_Character() {
+		return randomPoolCharacters[Random.Range(0, randomPoolCharacters.Count)];
 	}
 }

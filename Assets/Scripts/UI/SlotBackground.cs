@@ -26,7 +26,8 @@ public class SlotBackground : MonoBehaviour {
 		Color.magenta
 	};
 
-	List<Texture2D> spritesBySize = new List<Texture2D>(); 
+	[SerializeField]
+	List<Sprite> spritesBySize = new List<Sprite>(); 
 
 	public void set_new_pos(Vector3 position) {
 		this.transform.DOMove(position, CharacterObject.swapWaitTime);
@@ -50,9 +51,7 @@ public class SlotBackground : MonoBehaviour {
 	}
 
 	public void resize(int multiplier) {
-		/*
-		this.GetComponent<SpriteRenderer>().sprite = spritesBySize[multiplier];
-		 */
+		this.GetComponent<Image>().sprite = spritesBySize[multiplier - 1];
 		this.transform.DOScaleY(multiplier, 0.6f);
 	}
 
