@@ -28,21 +28,26 @@ public class DungeonExploratorTile : MonoBehaviour {
 
 	public void Set_Bottom(bool value) {
 		bottom = value;
-		bottomImage.enabled = bottom;
+		bottomImage.gameObject.SetActive(bottom);
 	}
 
 	public void Set_Right(bool value) {
 		right = value;
-		rightImage.enabled = right;
+		rightImage.gameObject.SetActive(right);
 	}
 
 	public void Set_Up(bool value) {
 		up = value;
-		upImage.enabled = up;
+		upImage.gameObject.SetActive(up);
 	}
 
 	public void Set_Left(bool value) {
 		left = value;
-		leftImage.enabled = left;
+		leftImage.gameObject.SetActive(left);
+	}
+
+	public void Move(int direcao) {
+		var exp = DungeonExplorator.Get_Dungeon_Explorator();
+		exp.Move_Player((Direcao) direcao);
 	}
 }

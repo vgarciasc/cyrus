@@ -20,10 +20,11 @@ public class DungeonTile : MonoBehaviour {
 	public DungeonTileType type;
 	public int linha;
 	public int coluna;
-	public bool explored;
 	
 	[SerializeField]
 	bool currentPlayerTile = false;
+	[SerializeField]
+	bool explored = false;
 
 	public bool bottomConnection = false;
 	public bool rightConnection = false;
@@ -34,6 +35,7 @@ public class DungeonTile : MonoBehaviour {
 
 	public void Reset() {
 		Set_Player_Tile(false);
+		Set_Explored(false);
 
 		bottomConnection = false;
 		rightConnection = false;
@@ -68,6 +70,11 @@ public class DungeonTile : MonoBehaviour {
 				break;
 			case DungeonTileType.ACTIVE:
 				color = new Color(0.32f, 0.32f, 0.32f, 1f);
+				if (!explored) {
+					// color /= 2f;
+					// color += new Color(0f, 0f, 0f, 1f);
+					color = Color.clear;
+				}
 				break;
 		}
 
@@ -77,9 +84,22 @@ public class DungeonTile : MonoBehaviour {
 	public void Set_Player_Tile(bool value) {
 		currentPlayerTile = value;
 		playerIcon.enabled = currentPlayerTile;
+		
+		if (value) {
+			Set_Explored(true);
+		}
 	}
 
 	public bool Get_Is_Player_Tile() {
 		return currentPlayerTile;
+	}
+
+	public void Set_Explored(bool value) {
+		explored = value;
+		Update_Appearance();
+	}
+
+	public bool Get_Explored() {
+		return explored;
 	}
 }

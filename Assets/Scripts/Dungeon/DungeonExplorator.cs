@@ -15,6 +15,10 @@ public class DungeonExplorator : MonoBehaviour {
 	[SerializeField]
 	DungeonGenerator gen;
 
+	public static DungeonExplorator Get_Dungeon_Explorator() {
+		return (DungeonExplorator) HushPuppy.safeFindComponent("GameController", "DungeonExplorator");
+	}
+
 	public void Set_Linhas_Colunas(int linhas, int colunas) {
 		this.linhas = linhas;
 		this.colunas = colunas;
@@ -65,5 +69,31 @@ public class DungeonExplorator : MonoBehaviour {
 			linha * colunas +
 			coluna
 		).GetComponentInChildren<DungeonExploratorTile>();
+	}
+
+	public void Move_Player(Direcao dir) {
+		var player = gen.Get_Player_Tile();
+		player.Set_Player_Tile(false);
+
+		DungeonTile new_tile = null;
+
+		switch (dir) {
+			case Direcao.BAIXO:
+				new_tile = gen.Get_Tile(player.linha + 1, player.coluna);
+				break;
+			case Direcao.CIMA:
+				new_tile = gen.Get_Tile(player.linha - 1, player.coluna);
+				break;
+			case Direcao.ESQUERDA:
+				new_tile = gen.Get_Tile(player.linha, player.coluna - 1);
+				break;
+			case Direcao.DIREITA:
+				new_tile = gen.Get_Tile(player.linha, player.coluna + 1);
+				break;
+		}
+
+		new_tile.Set_Player_Tile(true);
+		Show_Arrows(new_tile);
+		gen.Update_Visible_Connections(new_tile);
 	}
 }

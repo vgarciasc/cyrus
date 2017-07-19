@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
+public enum Direcao { CIMA, BAIXO, DIREITA, ESQUERDA };
+
 public class DungeonGenerator : MonoBehaviour {
 	public int linhas = 5;
 	public int colunas = 7;
@@ -87,7 +89,7 @@ public class DungeonGenerator : MonoBehaviour {
 
 				tile.linha = dt.linha;
 				tile.coluna = dt.coluna;
-				tile.explored = dt.explored;
+				tile.Set_Explored(dt.explored);
 
 				tile.Set_Player_Tile(dt.currentPlayerTile);
 				tile.Set_Type(dt.kind);
@@ -120,7 +122,7 @@ public class DungeonGenerator : MonoBehaviour {
 							tile.linha, tile.coluna,
 							tile.bottomConnection,
 							tile.rightConnection,
-							tile.explored,
+							tile.Get_Explored(),
 							tile.Get_Is_Player_Tile()
 						)
 					);
@@ -210,7 +212,6 @@ public class DungeonGenerator : MonoBehaviour {
 	#endregion
 
 	#region Generate Dungeon
-		enum Direcao { CIMA, BAIXO, DIREITA };
 		void Reset_Connections() {
 			foreach (Transform t in dungeonConnectionsContainer.transform) {
 				t.GetComponentInChildren<ConnectionTile>().Reset();
@@ -511,7 +512,7 @@ public class DungeonGenerator : MonoBehaviour {
 			return null;
 		}
 
-		DungeonTile Get_Player_Tile() {
+		public DungeonTile Get_Player_Tile() {
 			for (int i = 0; i < dungeonRoomContainer.transform.childCount; i++) {
 				var aux = dungeonRoomContainer.transform.GetChild(i).GetComponent<DungeonTile>();
 				if (aux.Get_Is_Player_Tile()) {
@@ -578,6 +579,13 @@ public class DungeonGenerator : MonoBehaviour {
 				//not a valid tile below
 				return;
 			}
+
+			if (!Get_Tile(linha, coluna).Get_Explored() &&
+				!Get_Tile(linha + 1, coluna).Get_Explored()) {
+				//both are not explored. connection is there, but not visible
+				Get_Tile(linha, coluna).bottomConnection = value;
+				return;
+			}
 			
 			Get_Connection(linha, coluna).Toggle_Bottom(value);
 			Get_Tile(linha, coluna).bottomConnection = value;
@@ -594,8 +602,29 @@ public class DungeonGenerator : MonoBehaviour {
 				return;
 			}
 
+			if (!Get_Tile(linha, coluna).Get_Explored() &&
+				!Get_Tile(linha, coluna + 1).Get_Explored()) {
+				//both are not explored. connection is there, but not visible
+				Get_Tile(linha, coluna).rightConnection = value;
+				return;
+			}
+
 			Get_Connection(linha, coluna).Toggle_Right(value);
 			Get_Tile(linha, coluna).rightConnection = value;
+		}
+
+		public void Update_Visible_Connections(DungeonTile tile) {
+			Toggle_Connection_Bottom(tile.linha, tile.coluna, tile.bottomConnection);
+			Toggle_Connection_Right(tile.linha, tile.coluna, tile.rightConnection);
+
+			if (tile.linha > 0) {
+				var above = Get_Tile(tile.linha - 1, tile.coluna);
+				Toggle_Connection_Bottom(tile.linha - 1, tile.coluna, above.bottomConnection);
+			}
+			if (tile.coluna > 0) {
+				var left = Get_Tile(tile.linha, tile.coluna - 1);
+				Toggle_Connection_Right(tile.linha, tile.coluna - 1, left.rightConnection);
+			}
 		}
 	#endregion
 
