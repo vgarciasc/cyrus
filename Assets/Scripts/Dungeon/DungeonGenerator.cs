@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -155,42 +156,23 @@ public class DungeonGenerator : MonoBehaviour {
 
 	#region JSON
 		string Get_Current_Dungeon_Path() {
-			var path = Application.persistentDataPath;
-			var aux = "\\Resources";
-			path += aux;
-
-			if (!System.IO.Directory.Exists(path)) {
-				System.IO.Directory.CreateDirectory(path);
-			}
-
-			aux = "\\Dungeons";
-			path += aux;
-
-			if (!System.IO.Directory.Exists(path)) {
-				System.IO.Directory.CreateDirectory(path);
-			}
-
-			aux = "\\Current_Dungeon.json";
-			path += aux;
-
-			if (!System.IO.File.Exists(path)) {
-				System.IO.File.Create(path);
-			}
+			print("Streaming Assets Path: " + Application.streamingAssetsPath);
+			var path = Application.streamingAssetsPath + "/Current_Dungeon.json";
 
 			return path;
 		}
 
 		bool Is_There_A_Current_Dungeon() {
-			var path = Get_Current_Dungeon_Path();
-			var stream = System.IO.File.OpenText(path);
-			var file = stream.ReadToEnd();
-			stream.Close();
+			// var path = Get_Current_Dungeon_Path();
+			// var stream = System.IO.File.OpenText(path);
+			// var file = stream.ReadToEnd();
+			// stream.Close();
 			
-			// print("Stream: " + file.ToString());
+			// // print("Stream: " + file.ToString());
 
-			if (file.Length == 0) {
-				return false;
-			}
+			// if (file.Length == 0) {
+			// 	return false;
+			// }
 
 			return true;
 		}
