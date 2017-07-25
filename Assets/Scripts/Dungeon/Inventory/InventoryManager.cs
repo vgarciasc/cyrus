@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InventoryManager : MonoBehaviour {
 
@@ -13,14 +14,32 @@ public class InventoryManager : MonoBehaviour {
 	[SerializeField]
 	GameObject bottomButtonsContainer;
 	[SerializeField]
+	InventoryData inventoryData;
 
 	public static InventoryManager Get_Inventory_Manager() {
 		return (InventoryManager) HushPuppy.safeFindComponent("GameController", "InventoryManager");
 	}
 
 	void Start() {
-		inventory.SetActive(false);
-		bottomButtonsContainer.SetActive(true);
+		if (inventory != null)
+			inventory.SetActive(false);
+		if (bottomButtonsContainer != null)
+			bottomButtonsContainer.SetActive(true);
+	}
+
+	void Update() {
+		if (Input.GetKeyDown(KeyCode.E)) {
+			ItemData item = new ItemData();
+			item.nome = "Item #" + Time.timeSinceLevelLoad;
+			item.sprite_name = "Sword2";
+			
+			if (inventoryData == null) {
+				inventoryData = Load_Inventory_From_Disk();
+			}
+
+			item.ID = inventoryData.items.Count;
+			Add_Item(item);
+		}
 	}
 
 	public void Toggle_Inventory() {
@@ -68,6 +87,7 @@ public class InventoryManager : MonoBehaviour {
 		HushPuppy.destroyChildren(itemContainer);
 
 		InventoryData ivt = Load_Inventory_From_Disk();
+		List<int> equipped = TeamManager.Get_Team_Manager().All_Equipped_Weapon_IDs();
 
 		foreach (ItemData id in ivt.items) {
 			GameObject go = Instantiate(
@@ -76,14 +96,52 @@ public class InventoryManager : MonoBehaviour {
 				false	
 			);
 
-			go.GetComponentInChildren<InventoryItemUI>().Initialize(id);
+			var iiui = go.GetComponentInChildren<InventoryItemUI>();
+			iiui.Initialize(id);
+
+			if (equipped.Contains(id.ID)) {
+				iiui.Set_Equipped(true);
+			}
 		}
 	}
 
 	public void Add_Item(ItemData item) {
 		InventoryData ivt = Load_Inventory_From_Disk();
+		for (int i = 0; i < ivt.items.Count; i++) {
+			if (ivt.items[i].ID == item.ID) {
+				print("Inventory already has an item of ID #" + item.ID + ". This should not be happening.");
+				return;
+			}
+		}
+
 		ivt.items.Add(item);
 
 		Save_Inventory_To_Disk(ivt);
+	}
+
+	public int Get_New_ID() {
+		InventoryData ivt = Get_Inventory();
+		return ivt.items.Count;
+	}
+
+	public ItemData Get_Item_By_ID(int ID) {
+		InventoryData ivt = Get_Inventory();
+
+		for (int i = 0; i < ivt.items.Count; i++) {
+			if (ivt.items[i].ID == ID) {
+				return ivt.items[i];
+			}
+		}
+
+		print("There is no item with ID #" + ID + " in the inventory.");
+		return null;
+	}
+
+	InventoryData Get_Inventory() {
+		if (inventoryData == null || inventoryData.items.Count == 0) {
+			inventoryData = Load_Inventory_From_Disk();
+		}
+
+		return inventoryData;
 	}
 }

@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType { WEAPON };
+public enum ItemType { WEAPON, TREASURE };
 
 [System.Serializable]
 public class ItemData {
+	public int ID;
 	public string nome;
 	public string sprite_name;
-	// public ItemType type = ItemType.WEAPON;
+	public ItemType type = ItemType.WEAPON;
 
-	// [Header("Weapon Attributes")]
-	// public WeaponKind kind = WeaponKind.DEFAULT;
-	// public AttackKind att = AttackKind.PHYSICAL;
-	// public int damage;
-	// public float accuracy;
-	// public float criticalBonus;
+	[Header("Weapon Attributes")]
+	public WeaponKind kind = WeaponKind.DEFAULT;
+	public AttackKind att = AttackKind.PHYSICAL;
+	public int damage;
+	public float accuracy;
+	public float criticalBonus;
 }
 
 [System.Serializable]

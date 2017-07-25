@@ -20,4 +20,10 @@ public class InventoryItemUI : MonoBehaviour {
 		itemName.text = item.nome;
 		// sprite.sprite = item.sprite;
 	}
+
+	public void Set_Equipped(bool value) {
+		if (value) {
+			itemName.color = Color.gray;	
+		}
+	}
 }

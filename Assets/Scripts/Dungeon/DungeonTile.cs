@@ -41,6 +41,7 @@ public class DungeonTile : MonoBehaviour {
 		Set_Player_Tile(false);
 		Set_Explored(false);
 		Set_Semi_Explored(false);
+		Set_Treasure(false);
 
 		bottomConnection = false;
 		rightConnection = false;
@@ -130,6 +131,6 @@ public class DungeonTile : MonoBehaviour {
 	}
 
 	public bool Get_Treasure() {
-		return semiExplored;
+		return treasure;
 	}
 }

@@ -8,8 +8,7 @@ public class CharacterObject : MonoBehaviour {
 	public int charID = -1;
 	public bool invertedSprite = false;
 
-	[HideInInspector]
-	public CharacterData data;
+	public CharacterDataJSON data;
 	[HideInInspector]
 	public CharacterHealth health;
 	[HideInInspector]
@@ -19,7 +18,7 @@ public class CharacterObject : MonoBehaviour {
 	[HideInInspector]
 	public CharacterSound soundManager;
     [HideInInspector]
-	public WeaponData weapon;
+	public ItemData weapon;
 	[HideInInspector]
 	public bool is_blocking = false;
 
@@ -51,19 +50,27 @@ public class CharacterObject : MonoBehaviour {
 	}
 
 	#region setters
-	public void set_data(int charID, CharacterData data) {
+	public void set_data(int charID, CharacterDataJSON json) {
 		this.charID = charID;
-		this.data = data;
-		this.weapon = data.weapon;
+		this.data = json;
+		this.weapon = InventoryManager.Get_Inventory_Manager().Get_Item_By_ID(data.weapon_ID);
 
 		activeSkills.Clear();
-		foreach (ActiveSkillData asd in data.skillsActive) {
-			activeSkills.Add(Instantiate(asd));
+		foreach (string asd in data.skillsActive) {
+			activeSkills.Add(
+				Instantiate(
+					Resources.Load<ActiveSkillData>("Skills\\Active\\" + asd)
+				)
+			);
 		}
 
 		passiveSkills.Clear();
-		foreach (PassiveSkillData psd in data.skillsPassive) {
-			passiveSkills.Add(Instantiate(psd));
+		foreach (string psd in data.skillsPassive) {
+			passiveSkills.Add(
+				Instantiate(
+					Resources.Load<PassiveSkillData>("Skills\\Passive\\" + psd)
+				)
+			);
 		}
 
 		health.init(data);
@@ -75,11 +82,11 @@ public class CharacterObject : MonoBehaviour {
 		this.transform.DOMove(position, swapWaitTime);
 	}
 
-	void init(CharacterData data) {
+	void init(CharacterDataJSON data) {
         gameObject.GetComponent<CharacterSprite>().Set_Race_Sprites(data.raca);
-        gameObject.GetComponent<CharacterSprite>().Set_Weapon(data.weapon);
-        //sprite = sprite.GetComponentInChildren<Image>();
-        //sprite.sprite = data.sprite;
+        gameObject.GetComponent<CharacterSprite>().Set_Weapon(
+			InventoryManager.Get_Inventory_Manager().Get_Item_By_ID(data.weapon_ID)
+		);
     }
 
 	void init_references() {

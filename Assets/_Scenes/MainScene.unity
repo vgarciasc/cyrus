@@ -42,7 +42,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 11
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -54,7 +54,7 @@ LightmapSettings:
     m_EnableBakedLightmaps: 0
     m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
-    serializedVersion: 8
+    serializedVersion: 9
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
@@ -87,7 +87,7 @@ LightmapSettings:
     m_PVRFilteringAtrousNormalSigma: 1
     m_PVRFilteringAtrousPositionSigma: 1
   m_LightingDataAsset: {fileID: 0}
-  m_ShadowMaskMode: 2
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -4544,11 +4544,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 782985112}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1081504433}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &783921691
@@ -5567,6 +5567,8 @@ GameObject:
   - component: {fileID: 1081504443}
   - component: {fileID: 1081504444}
   - component: {fileID: 1081504445}
+  - component: {fileID: 1081504446}
+  - component: {fileID: 1081504447}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -5600,7 +5602,9 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1771862577}
+  - {fileID: 782985117}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5781,16 +5785,156 @@ MonoBehaviour:
     enemies: []
     allies: []
   allies:
-  - {fileID: 11400000, guid: 434b63829cf7eef47823b783c8a43c8a, type: 2}
-  - {fileID: 11400000, guid: 51f5763a154821240b7b3c9eb9cafaf4, type: 2}
-  - {fileID: 11400000, guid: 029c0f28b9f6c1a42be7caa62241b801, type: 2}
-  - {fileID: 11400000, guid: be1c08868d481eb4a966087e19d9031b, type: 2}
+  - nome: 
+    classe: 0
+    raca: 0
+    skillsPassive: []
+    skillsActive: []
+    weapon_ID: 0
+    VIT: 5
+    FOR: 5
+    DEF: 5
+    INT: 5
+    RES: 5
+    AGI: 5
+    DES: 5
+  - nome: 
+    classe: 0
+    raca: 0
+    skillsPassive: []
+    skillsActive: []
+    weapon_ID: 0
+    VIT: 5
+    FOR: 5
+    DEF: 5
+    INT: 5
+    RES: 5
+    AGI: 5
+    DES: 5
+  - nome: 
+    classe: 0
+    raca: 0
+    skillsPassive: []
+    skillsActive: []
+    weapon_ID: 0
+    VIT: 5
+    FOR: 5
+    DEF: 5
+    INT: 5
+    RES: 5
+    AGI: 5
+    DES: 5
+  - nome: 
+    classe: 0
+    raca: 0
+    skillsPassive: []
+    skillsActive: []
+    weapon_ID: 0
+    VIT: 5
+    FOR: 5
+    DEF: 5
+    INT: 5
+    RES: 5
+    AGI: 5
+    DES: 5
   randomPoolCharacters:
-  - {fileID: 11400000, guid: 434b63829cf7eef47823b783c8a43c8a, type: 2}
-  - {fileID: 11400000, guid: 029c0f28b9f6c1a42be7caa62241b801, type: 2}
-  - {fileID: 11400000, guid: 51f5763a154821240b7b3c9eb9cafaf4, type: 2}
-  - {fileID: 11400000, guid: 443652142cc2ce746a950be2e7c1d053, type: 2}
-  - {fileID: 11400000, guid: be1c08868d481eb4a966087e19d9031b, type: 2}
+  - nome: 
+    classe: 0
+    raca: 0
+    skillsPassive: []
+    skillsActive: []
+    weapon_ID: 0
+    VIT: 5
+    FOR: 5
+    DEF: 5
+    INT: 5
+    RES: 5
+    AGI: 5
+    DES: 5
+  - nome: 
+    classe: 0
+    raca: 0
+    skillsPassive: []
+    skillsActive: []
+    weapon_ID: 0
+    VIT: 5
+    FOR: 5
+    DEF: 5
+    INT: 5
+    RES: 5
+    AGI: 5
+    DES: 5
+  - nome: 
+    classe: 0
+    raca: 0
+    skillsPassive: []
+    skillsActive: []
+    weapon_ID: 0
+    VIT: 5
+    FOR: 5
+    DEF: 5
+    INT: 5
+    RES: 5
+    AGI: 5
+    DES: 5
+  - nome: 
+    classe: 0
+    raca: 0
+    skillsPassive: []
+    skillsActive: []
+    weapon_ID: 0
+    VIT: 5
+    FOR: 5
+    DEF: 5
+    INT: 5
+    RES: 5
+    AGI: 5
+    DES: 5
+  - nome: 
+    classe: 0
+    raca: 0
+    skillsPassive: []
+    skillsActive: []
+    weapon_ID: 0
+    VIT: 5
+    FOR: 5
+    DEF: 5
+    INT: 5
+    RES: 5
+    AGI: 5
+    DES: 5
+--- !u!114 &1081504446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1081504431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a248b3a119be3fb45a2f9852ecfd0473, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 0}
+  itemContainer: {fileID: 0}
+  inventory: {fileID: 0}
+  bottomButtonsContainer: {fileID: 0}
+  inventoryData:
+    items: []
+--- !u!114 &1081504447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1081504431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 547a7ed27fb23424d9997de5a4736cb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamOverview: {fileID: 0}
+  teamMembersContainer: {fileID: 0}
+  bottomButtons: {fileID: 0}
+  characterData: {fileID: 0}
 --- !u!1 &1088595870
 GameObject:
   m_ObjectHideFlags: 0
@@ -9314,12 +9458,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1771862574}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_Father: {fileID: 1081504433}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1775496106
 GameObject:
@@ -10669,7 +10813,7 @@ RectTransform:
   - {fileID: 1907639958}
   - {fileID: 1548843584}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

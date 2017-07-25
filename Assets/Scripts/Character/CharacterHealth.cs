@@ -33,7 +33,7 @@ public class CharacterHealth : MonoBehaviour {
 		// }
 	}
 
-	public void init(CharacterData data) {
+	public void init(CharacterDataJSON data) {
 		this.max = data.VIT;
 		this.hp = max;
 		updateIndicator();

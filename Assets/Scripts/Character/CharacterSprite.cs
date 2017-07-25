@@ -98,7 +98,7 @@ public class CharacterSprite : MonoBehaviour {
 		return pool[Random.Range(0, pool.Count)];
 	}
 
-	public void Set_Weapon(WeaponData data) {
-		weapon.sprite = data.sprite;
+	public void Set_Weapon(ItemData data) {
+		weapon.sprite = Resources.Load<Sprite>("Sprites\\Weapon\\" + data.sprite_name);
 	}
 }

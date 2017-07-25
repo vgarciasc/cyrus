@@ -14,9 +14,6 @@ public class CharacterData : ScriptableObject {
 	public List<PassiveSkillData> skillsPassive = new List<PassiveSkillData>();
 	public List<ActiveSkillData> skillsActive = new List<ActiveSkillData>();
 
-	//TEMPORARIO
-	public WeaponData weapon;
-
 	[Header("Atributos")]
 	public int VIT = 5;
 	public int FOR = 5;

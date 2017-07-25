@@ -56,8 +56,6 @@ public class StatsManager : MonoBehaviour {
 			aux += focused.data.nome.ToString().ToUpper();
 			aux += "<color=gray>\n\n" + focused.data.classe.ToString().ToLower() + "</color>";
 			characterName.text = aux;
-
-			statsPortrait.sprite = focused.data.sprite;
 			
 			aux = "";
 			aux += "HP: <color=gray>" + focused.health.hp + "/" + focused.status.getVIT();

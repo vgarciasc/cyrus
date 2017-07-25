@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class DungeonExplorator : MonoBehaviour {
 
@@ -11,6 +10,8 @@ public class DungeonExplorator : MonoBehaviour {
 
 	InventoryManager inventoryManager;
 	
+	[SerializeField]
+	SceneLoader sceneLoader;
 	[SerializeField]
 	Text alertText;
 	[SerializeField]
@@ -136,10 +137,13 @@ public class DungeonExplorator : MonoBehaviour {
 					if (tile.Get_Treasure()) {
 						tile.Set_Treasure(false);
 						alertText.text = "You got a treasure.";
+						Show_Arrows(tile);
+						InventoryManager.Get_Inventory_Manager().Add_Item(Generate_Treasure());
+						gen.Save_State();
 						return;
 					}
 
-					float chance = Random.Range(0.2f, 0.4f);
+					float chance = Random.Range(0.2f, 0.8f);
 					float dice = Random.Range(0f, 1f);
 					if (dice <= chance) {
 						StartCoroutine(Go_Encounter(tile));
@@ -152,29 +156,37 @@ public class DungeonExplorator : MonoBehaviour {
 
 		IEnumerator Go_Encounter(DungeonTile tile) {
 			alertText.text = ".";
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(0.1f);
 			alertText.text = "..";
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(0.1f);
 			alertText.text = "...";
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(0.1f);
 			alertText.text = "!!!!!! BATTLE";
 			gen.Save_State();
+			sceneLoader.Exit_Dungeon_Scene();
 
 			yield return new WaitForSeconds(2f);
 
-			SceneManager.LoadScene("MainScene");
+			sceneLoader.Load_Scene("MainScene");
 		}
 
 		IEnumerator No_Encounter(DungeonTile tile) {
 			alertText.text = ".";
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(0.1f);
 			alertText.text = "..";
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(0.1f);
 			alertText.text = "...";
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(0.1f);
 			alertText.text = "Nothing.";
 			Show_Arrows(tile);
 			gen.Save_State();
+		}
+
+		ItemData Generate_Treasure() {
+			ItemData item = new ItemData();
+			item.nome = "Tesouro #" + Time.timeSinceLevelLoad;
+			item.ID = InventoryManager.Get_Inventory_Manager().Get_New_ID();
+			return item;
 		}
 
 	#endregion

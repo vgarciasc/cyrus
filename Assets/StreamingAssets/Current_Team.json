@@ -1,0 +1,89 @@
+{
+    "database": [],
+    "current_team": [
+        {
+            "nome": "unidade #1",
+            "classe": 3,
+            "raca": 0,
+            "skillsPassive": [
+                "Proteger",
+                "Provocar_1",
+                "Provocar_2",
+                "Parry_1",
+                "Parry_2"
+            ],
+            "skillsActive": [],
+            "weapon_ID": 0,
+            "VIT": 30,
+            "FOR": 30,
+            "DEF": 25,
+            "INT": 0,
+            "RES": 17,
+            "AGI": 22,
+            "DES": 24
+        },
+        {
+            "nome": "unidade #2",
+            "classe": 3,
+            "raca": 2,
+            "skillsPassive": [
+                "Proteger",
+                "Provocar_1",
+                "Provocar_2",
+                "Parry_1",
+                "Parry_2"
+            ],
+            "skillsActive": [],
+            "weapon_ID": 0,
+            "VIT": 30,
+            "FOR": 30,
+            "DEF": 25,
+            "INT": 0,
+            "RES": 17,
+            "AGI": 22,
+            "DES": 24
+        },
+        {
+            "nome": "unidade #3",
+            "classe": 3,
+            "raca": 1,
+            "skillsPassive": [
+                "Proteger",
+                "Provocar_1",
+                "Provocar_2",
+                "Parry_1",
+                "Parry_2"
+            ],
+            "skillsActive": [],
+            "weapon_ID": 0,
+            "VIT": 30,
+            "FOR": 30,
+            "DEF": 25,
+            "INT": 0,
+            "RES": 17,
+            "AGI": 22,
+            "DES": 24
+        },
+        {
+            "nome": "unidade #4",
+            "classe": 3,
+            "raca": 1,
+            "skillsPassive": [
+                "Proteger",
+                "Provocar_1",
+                "Provocar_2",
+                "Parry_1",
+                "Parry_2"
+            ],
+            "skillsActive": [],
+            "weapon_ID": 0,
+            "VIT": 30,
+            "FOR": 30,
+            "DEF": 25,
+            "INT": 0,
+            "RES": 17,
+            "AGI": 22,
+            "DES": 24
+        }
+    ]
+}

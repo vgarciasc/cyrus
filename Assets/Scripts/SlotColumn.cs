@@ -49,6 +49,17 @@ public class SlotColumn : MonoBehaviour {
 	}
 
 	void init_characters() {
+		if (!enemyColumn) {
+			List<CharacterDataJSON> team = TeamManager.Get_Team_Manager().Get_Current_Team();
+			for (int i = 0; i < 4; i++) {
+				charObj[i].set_data(i, team[i]);
+				charObj[i].transform.position = slots[i].get_character_position(1);
+				
+				charObj[i].click_event += register_click;
+			}
+			return;
+		}
+
 		EncounterManager encounterManager = EncounterManager.getEncounterManager();
 		EncounterData encounter;
 
@@ -60,7 +71,7 @@ public class SlotColumn : MonoBehaviour {
 			encounter = ArenaManager.getArenaManager().defaultEncounter;
 		}
 
-		List<CharacterData> encounterCharacters =
+		List<CharacterDataJSON> encounterCharacters =
 		    enemyColumn ? encounter.enemies : encounter.allies;
 
 		for (int i = 0; i < 4; i++) {
@@ -106,7 +117,7 @@ public class SlotColumn : MonoBehaviour {
 		//ex: {1, 2, 2, 4} => kill 2 => {1, 4}
 
 		//everyone was killed
-		if (groups-- == 1) {
+		if (groups-- == 1 && enemyColumn) {
 			// Debug.Log("everyone is dead");
 			UnityEngine.SceneManagement.SceneManager.LoadScene("Dungeon");
 			return;
