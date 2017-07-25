@@ -86,8 +86,6 @@ public class DungeonGenerator : MonoBehaviour {
 
 	#region Serialization
 		void Unserialize_Dungeon(DungeonData dg) {
-			DungeonTile playerTile = null;
-
 			foreach (DungeonTileData dt in dg.dungeonTiles) {
 				var obj = dungeonRoomContainer.transform.GetChild(dt.linha * colunas + dt.coluna);
 				var tile = obj.GetComponentInChildren<DungeonTile>();
@@ -96,6 +94,8 @@ public class DungeonGenerator : MonoBehaviour {
 
 				tile.linha = dt.linha;
 				tile.coluna = dt.coluna;
+
+				tile.Set_Treasure(dt.treasure);
 				tile.Set_Explored(dt.explored);
 				tile.Set_Semi_Explored(dt.semiExplored);
 
@@ -132,6 +132,7 @@ public class DungeonGenerator : MonoBehaviour {
 							tile.linha, tile.coluna,
 							tile.bottomConnection,
 							tile.rightConnection,
+							tile.Get_Treasure(),
 							tile.Get_Explored(),
 							tile.Get_Semi_Explored(),
 							tile.Get_Is_Player_Tile()
@@ -179,7 +180,7 @@ public class DungeonGenerator : MonoBehaviour {
 
 		void Save_Dungeon_To_Disk(DungeonData dg) {
 			var path = Get_Current_Dungeon_Path();
-			var json = JsonUtility.ToJson(dg);
+			var json = JsonUtility.ToJson(dg, true);
 
 			System.IO.StreamWriter sw = System.IO.File.CreateText(path);
 			sw.Close();
@@ -391,6 +392,8 @@ public class DungeonGenerator : MonoBehaviour {
 			if (main_rooms.Count < 10) {
 				Generate_Dungeon();
 			}
+
+			Place_Treasures(main_rooms);
 			
 			dungeonExplorator.Set_Player_Tile(Get_Start_Tile());
 			Serialize_Dungeon();
@@ -623,6 +626,25 @@ public class DungeonGenerator : MonoBehaviour {
 				Toggle_Connection_Right(tile.linha, tile.coluna - 1, left.rightConnection);
 			}
 		}
+	#endregion
+
+	#region Treasure
+		void Place_Treasures(List<DungeonTile> tiles) {
+			int numTreasures = 2;
+			for (int i = 0; i < numTreasures; i++) {
+				DungeonTile tile;
+
+				do {
+					tile = tiles[Random.Range(0, tiles.Count)];
+				} while (!
+					(tile.type == DungeonTileType.ACTIVE &&
+					!tile.Get_Treasure())
+				);
+
+				tile.Set_Treasure(true);
+			}
+		}
+
 	#endregion
 
 	void Print_Matrix(int[,] matrix) {

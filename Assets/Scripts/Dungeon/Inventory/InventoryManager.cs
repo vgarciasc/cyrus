@@ -14,6 +14,10 @@ public class InventoryManager : MonoBehaviour {
 	GameObject bottomButtonsContainer;
 	[SerializeField]
 
+	public static InventoryManager Get_Inventory_Manager() {
+		return (InventoryManager) HushPuppy.safeFindComponent("GameController", "InventoryManager");
+	}
+
 	void Start() {
 		inventory.SetActive(false);
 		bottomButtonsContainer.SetActive(true);

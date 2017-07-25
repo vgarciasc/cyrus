@@ -16,6 +16,7 @@ public class DungeonData : ScriptableObject {
 public class DungeonTileData {
 	public DungeonTileType kind;
 	
+	public bool treasure;
 	public bool explored;
 	public bool semiExplored;
 	public int linha;
@@ -29,6 +30,7 @@ public class DungeonTileData {
 		DungeonTileType kind,
 		int linha, int coluna,
 		bool bottom, bool right,
+		bool treasure,
 		bool explored,
 		bool semiExplored,
 		bool currentPlayerTile) {
@@ -38,6 +40,7 @@ public class DungeonTileData {
 		this.coluna = coluna;
 		this.bottomConnection = bottom;
 		this.rightConnection = right;
+		this.treasure = treasure;
 		this.explored = explored;
 		this.semiExplored = semiExplored;
 		this.currentPlayerTile = currentPlayerTile;

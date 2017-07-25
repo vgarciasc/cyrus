@@ -26,6 +26,8 @@ public class DungeonTile : MonoBehaviour {
 	[SerializeField]
 	bool explored = false;
 	[SerializeField]
+	bool treasure = false;
+	[SerializeField]
 	bool semiExplored = false;
 
 	public bool bottomConnection = false;
@@ -119,6 +121,15 @@ public class DungeonTile : MonoBehaviour {
 	}
 
 	public bool Get_Semi_Explored() {
+		return semiExplored;
+	}
+
+	public void Set_Treasure(bool value) {
+		treasure = value;
+		Update_Appearance();
+	}
+
+	public bool Get_Treasure() {
 		return semiExplored;
 	}
 }
