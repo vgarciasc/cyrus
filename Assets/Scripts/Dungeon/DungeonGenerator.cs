@@ -156,7 +156,7 @@ public class DungeonGenerator : MonoBehaviour {
 
 	#region JSON
 		string Get_Current_Dungeon_Path() {
-			print("Streaming Assets Path: " + Application.streamingAssetsPath);
+			// print("Streaming Assets Path: " + Application.streamingAssetsPath);
 			var path = Application.streamingAssetsPath + "/Current_Dungeon.json";
 
 			return path;
@@ -187,10 +187,9 @@ public class DungeonGenerator : MonoBehaviour {
 
 			#if UNITY_EDITOR
 				UnityEditor.AssetDatabase.Refresh();
-				// UnityEditor.AssetDatabase.SaveAssets();
 			#endif
 
-			print("Saved state!");
+			// print("Saved state!");
 		}
 
 		DungeonData Load_Dungeon_From_Disk() {
