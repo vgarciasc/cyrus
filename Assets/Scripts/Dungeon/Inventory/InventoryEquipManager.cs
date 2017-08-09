@@ -108,5 +108,7 @@ public class InventoryEquipManager : MonoBehaviour {
 
 	public void Equip_Weapon() {
 		team.Equip_Weapon(current_character, current_equippable_weapon.ID);
+		Exit_Equip_Mode();
+		inventory.Toggle_Inventory();
 	}
 }

@@ -133,7 +133,6 @@ public class DungeonExplorator : MonoBehaviour {
 		void Handle_Tile_Event(DungeonTile tile) {
 			switch (tile.type) {
 				case DungeonTileType.ACTIVE:
-
 					if (tile.Get_Treasure()) {
 						tile.Set_Treasure(false);
 						alertText.text = "You got a treasure.";
@@ -143,13 +142,16 @@ public class DungeonExplorator : MonoBehaviour {
 						return;
 					}
 
-					float chance = Random.Range(0.2f, 0.8f);
+					float chance = Random.Range(0.2f, 0.2f);
 					float dice = Random.Range(0f, 1f);
 					if (dice <= chance) {
 						StartCoroutine(Go_Encounter(tile));
 					} else {
 						StartCoroutine(No_Encounter(tile));
 					}
+					break;
+				case DungeonTileType.BOSS:
+					StartCoroutine(Boss_Encounter(tile));
 					break;
 			}
 		}
@@ -180,6 +182,18 @@ public class DungeonExplorator : MonoBehaviour {
 			alertText.text = "Nothing.";
 			Show_Arrows(tile);
 			gen.Save_State();
+		}
+
+		IEnumerator Boss_Encounter(DungeonTile tile) {
+			EncounterManager.boss_encounter = true;
+
+			alertText.text = "Boss.";
+			gen.Save_State();
+			sceneLoader.Exit_Dungeon_Scene();
+
+			yield return new WaitForSeconds(2f);
+
+			sceneLoader.Load_Scene("MainScene");
 		}
 
 		ItemData Generate_Treasure() {

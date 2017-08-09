@@ -144,4 +144,11 @@ public class InventoryManager : MonoBehaviour {
 
 		return inventoryData;
 	}
+
+	public void Add_Combat_Treasure() {
+		ItemData loot = new ItemData();
+		loot.ID = Get_New_ID();
+		loot.nome = "Combat Loot #" + Time.timeSinceLevelLoad;
+		Add_Item(loot);
+	}
 }

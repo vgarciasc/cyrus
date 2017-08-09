@@ -14,6 +14,8 @@ public class SlotColumn : MonoBehaviour {
 
 	int groups = -1;
 
+	bool in_boss = false;
+
 	void Awake() {
 		init_slots();
 		init_characters();
@@ -74,11 +76,19 @@ public class SlotColumn : MonoBehaviour {
 		List<CharacterDataJSON> encounterCharacters =
 		    enemyColumn ? encounter.enemies : encounter.allies;
 
-		for (int i = 0; i < 4; i++) {
+		if (EncounterManager.boss_encounter) {
+			EncounterManager.boss_encounter = false;
+			in_boss = true;
+		}
+
+		for (int i = 0; i < encounterCharacters.Count; i++) {
 			charObj[i].set_data(i, encounterCharacters[i]);
 			charObj[i].transform.position = slots[i].get_character_position(1);
 			
 			charObj[i].click_event += register_click;
+		}
+		for (int i = encounterCharacters.Count; i < 4; i++) {
+			kill_slot(get_charobj_by_index(0));
 		}
 	}
 	
@@ -119,6 +129,11 @@ public class SlotColumn : MonoBehaviour {
 		//everyone was killed
 		if (groups-- == 1 && enemyColumn) {
 			// Debug.Log("everyone is dead");
+			if (in_boss) {
+				Application.Quit();
+			}
+			
+			InventoryManager.Get_Inventory_Manager().Add_Combat_Treasure();
 			UnityEngine.SceneManagement.SceneManager.LoadScene("Dungeon");
 			return;
 		}

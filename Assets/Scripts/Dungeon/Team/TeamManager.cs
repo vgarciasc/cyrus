@@ -9,6 +9,8 @@ public class TeamManager : MonoBehaviour {
 	Transform teamMembersContainer;
 	[SerializeField]
 	GameObject bottomButtons;
+	[SerializeField]
+	DungeonCharacterStatsManager dcsm;
 	
 	public CharacterData characterData;
 
@@ -26,8 +28,9 @@ public class TeamManager : MonoBehaviour {
 		if (teamMembersContainer != null)
 			Populate_Roster();
 
-		var dcsm = DungeonCharacterStatsManager.Get_DCSM();
-		dcsm.Switch_Details(false);
+		if (dcsm != null) {
+			dcsm.Switch_Details(false);
+		}
 	}
 
 	public void Toggle_Team_Overview() {

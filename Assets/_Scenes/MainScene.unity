@@ -5903,6 +5903,24 @@ MonoBehaviour:
     RES: 5
     AGI: 5
     DES: 5
+  boss_json:
+    nome: Boss
+    classe: 5
+    raca: 2
+    skillsPassive:
+    - AtaqueFurtivo_1
+    - AtaqueFurtivo_2
+    - Condenar
+    - Desarmar
+    skillsActive: []
+    weapon_ID: 0
+    VIT: 5
+    FOR: 5
+    DEF: 5
+    INT: 5
+    RES: 5
+    AGI: 5
+    DES: 5
 --- !u!114 &1081504446
 MonoBehaviour:
   m_ObjectHideFlags: 0

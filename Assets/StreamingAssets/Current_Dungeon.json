@@ -138,19 +138,19 @@
         {
             "kind": 1,
             "treasure": false,
-            "explored": false,
+            "explored": true,
             "semiExplored": true,
             "linha": 1,
             "coluna": 5,
             "bottomConnection": true,
             "rightConnection": true,
-            "currentPlayerTile": false
+            "currentPlayerTile": true
         },
         {
             "kind": 3,
             "treasure": false,
-            "explored": false,
-            "semiExplored": false,
+            "explored": true,
+            "semiExplored": true,
             "linha": 1,
             "coluna": 6,
             "bottomConnection": false,
@@ -221,7 +221,7 @@
             "coluna": 5,
             "bottomConnection": false,
             "rightConnection": true,
-            "currentPlayerTile": true
+            "currentPlayerTile": false
         },
         {
             "kind": 1,
