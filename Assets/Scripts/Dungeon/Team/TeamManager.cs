@@ -25,11 +25,18 @@ public class TeamManager : MonoBehaviour {
 			bottomButtons.SetActive(true);
 		if (teamMembersContainer != null)
 			Populate_Roster();
+
+		var dcsm = DungeonCharacterStatsManager.Get_DCSM();
+		dcsm.Switch_Details(false);
 	}
 
 	public void Toggle_Team_Overview() {
 		teamOverview.SetActive(!teamOverview.activeSelf);
 		bottomButtons.SetActive(!teamOverview.activeSelf);
+	}
+
+	public void Enter_Details() {
+		teamOverview.SetActive(!teamOverview.activeSelf);
 	}
 
 	#region Serialization

@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Custom/Passive Skill Data")]
-public class PassiveSkillData : ScriptableObject {
+public class PassiveSkillData : SkillData {
 	public enum TriggerOperation {AND, OR};
-
-	public string title = "";
 
 	public List<Trigger> triggers = new List<Trigger>();
 	public TriggerOperation operation;
 
 	public List<Effect> effects = new List<Effect>();
+}
+
+public class SkillData : ScriptableObject {
+	public string title = "DEFAULT";
+	public string description = "default";
 }

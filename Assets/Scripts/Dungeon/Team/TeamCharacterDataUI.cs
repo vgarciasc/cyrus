@@ -57,4 +57,10 @@ public class TeamCharacterDataUI : MonoBehaviour {
 		float time = 0.5f;
 		this.transform.DOMoveY(position.y, time);
 	}
+
+	public void Enter_Details() {
+		var dscm = DungeonCharacterStatsManager.Get_DCSM();
+		TeamManager.Get_Team_Manager().Enter_Details();
+		dscm.Initialize(json);
+	}
 }
