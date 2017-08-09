@@ -11,10 +11,18 @@ public class TeamCharacterDataUI : MonoBehaviour {
 	Text characterName;
 	[SerializeField]
 	Image weaponSprite;
+	[SerializeField]
+	Image overlay;
+	[SerializeField]
+	Image selectedBackground;
+	[SerializeField]
+	Image unselectedBackground;
+
+	[HideInInspector]
+	public bool swap_selected = false;
 
 	CharacterDataJSON json;
 	public int position = -1;
-	public bool swap_selected = false;
 
 	public void Initialize(int position, CharacterDataJSON json) {
 		this.position = position;
@@ -25,10 +33,13 @@ public class TeamCharacterDataUI : MonoBehaviour {
 			"Sprites\\" + json.raca.ToString() + "\\" + 
 			json.raca.ToString().ToUpper() + "_headLINE"
 		);
-		weaponSprite.sprite = Resources.Load<Sprite>(
-			"Sprites\\Weapon\\" + 
-			InventoryManager.Get_Inventory_Manager().Get_Item_By_ID(json.weapon_ID).sprite_name
-		);
+		
+		if (weaponSprite != null) {
+			weaponSprite.sprite = Resources.Load<Sprite>(
+				"Sprites\\Weapon\\" + 
+				InventoryManager.Get_Inventory_Manager().Get_Item_By_ID(json.weapon_ID).sprite_name
+			);
+		}
 	}
 
 	public void Toggle_Character_For_Swap() {
@@ -62,5 +73,18 @@ public class TeamCharacterDataUI : MonoBehaviour {
 		var dscm = DungeonCharacterStatsManager.Get_DCSM();
 		TeamManager.Get_Team_Manager().Enter_Details();
 		dscm.Initialize(json);
+	}
+
+	public void Select_Equip() {
+		InventoryEquipManager.Get_Inventory_Equip_Manager().Select_Character_To_Equip(position);
+	}
+
+	public void Toggle_Character_For_Equip(bool value) {
+		unselectedBackground.enabled = !value;
+		selectedBackground.enabled = value;
+	}
+
+	public void Toggle_Character_Can_Equip(bool value) {
+		overlay.enabled = !value;
 	}
 }

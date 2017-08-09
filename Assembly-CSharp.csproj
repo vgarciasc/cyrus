@@ -71,6 +71,7 @@
      <Compile Include="Assets\Scripts\Dungeon\DungeonExploratorTile.cs" />
      <Compile Include="Assets\Scripts\Dungeon\DungeonGenerator.cs" />
      <Compile Include="Assets\Scripts\Dungeon\DungeonTile.cs" />
+     <Compile Include="Assets\Scripts\Dungeon\Inventory\InventoryEquipManager.cs" />
      <Compile Include="Assets\Scripts\Dungeon\Inventory\InventoryItemUI.cs" />
      <Compile Include="Assets\Scripts\Dungeon\Inventory\InventoryManager.cs" />
      <Compile Include="Assets\Scripts\Dungeon\Inventory\ItemData.cs" />
@@ -84,6 +85,7 @@
      <Compile Include="Assets\Scripts\EnemyManager.cs" />
      <Compile Include="Assets\Scripts\HealManager.cs" />
      <Compile Include="Assets\Scripts\HushPuppy.cs" />
+     <Compile Include="Assets\Scripts\ResourceLoader.cs" />
      <Compile Include="Assets\Scripts\SceneLoader.cs" />
      <Compile Include="Assets\Scripts\Skills\ActiveSkillData.cs" />
      <Compile Include="Assets\Scripts\Skills\ActiveSkillManager.cs" />

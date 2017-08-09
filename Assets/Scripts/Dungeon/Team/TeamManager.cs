@@ -33,6 +33,10 @@ public class TeamManager : MonoBehaviour {
 	public void Toggle_Team_Overview() {
 		teamOverview.SetActive(!teamOverview.activeSelf);
 		bottomButtons.SetActive(!teamOverview.activeSelf);
+
+		if (teamOverview.activeSelf) {
+			Populate_Roster();
+		}
 	}
 
 	public void Enter_Details() {
@@ -187,6 +191,16 @@ public class TeamManager : MonoBehaviour {
 		}
 
 		return output;
+	}
+
+	public void Equip_Weapon(CharacterDataJSON character, int weapon_id) {
+		print(
+			"Character #" + database.current_team.IndexOf(character) + " had weapon #" +
+			database.current_team[database.current_team.IndexOf(character)].weapon_ID +
+			", now has weapon #" + weapon_id
+		);
+		database.current_team[database.current_team.IndexOf(character)].weapon_ID = weapon_id;
+		Save_Unsaved_Changes();
 	}
 
 	public void Save_Unsaved_Changes() {

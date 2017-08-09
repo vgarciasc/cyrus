@@ -7,23 +7,36 @@ public class InventoryItemUI : MonoBehaviour {
 	[SerializeField]
 	Text itemName;
 	[SerializeField]
-	Text action;
+	Text actionText;
+	[SerializeField]
+	Image actionImage;
 	[SerializeField]
 	Image sprite;
 
 	ItemData item;
+	bool equippable = true;
 
 	public void Initialize(ItemData item) {
 		this.item = item;
 
-		action.text = "Equipar";
+		actionText.text = "Equipar";
+		actionImage.color = HushPuppy.getColorWithOpacity(actionImage.color, 1f);
 		itemName.text = item.nome;
 		// sprite.sprite = item.sprite;
 	}
 
 	public void Set_Equipped(bool value) {
-		if (value) {
-			itemName.color = Color.gray;	
+		equippable = !value;
+
+		if (!equippable) {
+			itemName.color = Color.gray;
+			actionImage.color = HushPuppy.getColorWithOpacity(actionImage.color, 0.5f);
+		}
+	}
+
+	public void Enter_Equip_Mode() {
+		if (equippable) {
+			InventoryEquipManager.Get_Inventory_Equip_Manager().Enter_Equip_Mode(item);
 		}
 	}
 }
