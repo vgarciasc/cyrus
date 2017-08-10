@@ -144,7 +144,7 @@
             "coluna": 5,
             "bottomConnection": true,
             "rightConnection": true,
-            "currentPlayerTile": true
+            "currentPlayerTile": false
         },
         {
             "kind": 3,
@@ -221,7 +221,7 @@
             "coluna": 5,
             "bottomConnection": false,
             "rightConnection": true,
-            "currentPlayerTile": false
+            "currentPlayerTile": true
         },
         {
             "kind": 1,
